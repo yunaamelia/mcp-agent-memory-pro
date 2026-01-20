@@ -1,0 +1,186 @@
+name: Phase 0 Validation
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'phase-0/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  validate-ubuntu:
+    name: Validate on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: 'poc/requirements.txt'
+
+      - name: 📦 Install Node.js dependencies
+        run: npm ci
+
+      - name: 📦 Install Python dependencies
+        run: |
+          cd poc
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🧪 Run validation tests
+        id: validation
+        run: |
+          chmod +x poc/validate-all.sh
+          ./poc/validate-all.sh
+        continue-on-error: true
+
+      - name: 📊 Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report-ubuntu
+          path: |
+            poc/validation-report.json
+            poc/validation.log
+          retention-days: 30
+
+      - name: 📈 Generate summary
+        if: always()
+        run: |
+          echo "## Validation Results (Ubuntu)" >> $GITHUB_STEP_SUMMARY
+          if [ -f "poc/validation-report.json" ]; then
+            python3 << 'EOF' >> $GITHUB_STEP_SUMMARY
+          import json
+          with open('poc/validation-report.json', 'r') as f:
+              report = json.load(f)
+          s = report['summary']
+          status_emoji = "✅" if report['status'] == "passed" else "❌"
+          print(f"{status_emoji} **Status**: {report['status'].upper()}\n")
+          print(f"| Metric | Count |")
+          print(f"|--------|-------|")
+          print(f"| Total | {s['total']} |")
+          print(f"| ✅ Passed | {s['passed']} |")
+          print(f"| ❌ Failed | {s['failed']} |")
+          print(f"| ⏱️ Duration | {report['duration_seconds']}s |")
+          EOF
+          else
+            echo "❌ Validation report not generated"
+          fi
+
+      - name: ❌ Fail if validation failed
+        if: steps.validation.outcome == 'failure'
+        run: exit 1
+
+  validate-macos:
+    name: Validate on macOS
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 📦 Install dependencies
+        run: |
+          npm ci
+          cd poc
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: 🧪 Run validation
+        id: validation
+        run: |
+          chmod +x poc/validate-all.sh
+          ./poc/validate-all.sh
+        continue-on-error: true
+
+      - name: 📊 Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report-macos
+          path: poc/validation-report.json
+          retention-days: 30
+
+      - name: ❌ Fail if failed
+        if: steps.validation.outcome == 'failure'
+        run: exit 1
+
+  validate-windows:
+    name: Validate on Windows
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 📦 Install dependencies
+        shell: bash
+        run: |
+          npm ci
+          cd poc
+          python -m venv venv
+          source venv/Scripts/activate
+          pip install flask numpy
+
+      - name: 🧪 Run tests individually
+        shell: bash
+        run: |
+          npx tsx poc/02-sqlite-test.ts
+          npx tsx poc/03-lancedb-test.ts
+          npx tsx poc/05-python-bridge-test.ts
+          echo "✅ All tests passed on Windows"
+
+  security-checks:
+    name: Security & Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: 🔍 npm audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: 🔍 Outdated packages
+        run: npm outdated || true

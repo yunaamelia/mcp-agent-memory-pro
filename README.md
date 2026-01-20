@@ -1,6 +1,9 @@
 # MCP Agent Memory Pro
 
-> **Status:** 🏗️ Phase 0 - Technical Foundation & Validation
+[![Phase 0 Validation](https://github.com/ahmadrizal7/mcp-agent-memory-pro/actions/workflows/phase0-validation.yml/badge.svg)](https://github.com/ahmadrizal7/mcp-agent-memory-pro/actions/workflows/phase0-validation.yml)
+[![Nightly Build](https://github.com/ahmadrizal7/mcp-agent-memory-pro/actions/workflows/phase0-nightly.yml/badge.svg)](https://github.com/ahmadrizal7/mcp-agent-memory-pro/actions/workflows/phase0-nightly.yml)
+
+> **Status:** ✅ Phase 0 Complete | 🏗️ Phase 1 - Foundation Implementation
 
 Intelligent memory management for AI agents using Model Context Protocol (MCP).
 

@@ -1,0 +1,73 @@
+name: Phase 0 Nightly Validation
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly-validation:
+    name: Nightly Full Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: |
+          npm ci
+          cd poc
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: 🧪 Run validation
+        id: validation
+        run: |
+          chmod +x poc/validate-all.sh
+          ./poc/validate-all.sh
+        continue-on-error: true
+
+      - name: 📊 Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-report-${{ github.run_number }}
+          path: |
+            poc/validation-report.json
+            poc/validation.log
+          retention-days: 90
+
+      - name: 🚨 Create issue if failed
+        if: steps.validation.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '## Nightly Validation Failed\n\n';
+            try {
+              const report = JSON.parse(fs.readFileSync('poc/validation-report.json', 'utf8'));
+              body += `**Duration**: ${report.duration_seconds}s\n\n`;
+              body += `### Summary\n- Total: ${report.summary.total}\n`;
+              body += `- ✅ Passed: ${report.summary.passed}\n`;
+              body += `- ❌ Failed: ${report.summary.failed}\n\n`;
+              body += `[View logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            } catch (e) {
+              body += `Error: ${e.message}`;
+            }
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[Phase 0] Nightly Failed - ${new Date().toISOString().split('T')[0]}`,
+              body: body,
+              labels: ['phase-0', 'ci-failure']
+            });

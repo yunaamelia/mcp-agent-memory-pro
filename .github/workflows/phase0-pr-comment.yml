@@ -1,0 +1,83 @@
+name: Phase 0 PR Comment
+
+on:
+  workflow_run:
+    workflows: ["Phase 0 Validation"]
+    types:
+      - completed
+
+jobs:
+  comment:
+    name: Comment on PR
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request'
+
+    permissions:
+      pull-requests: write
+      actions: read
+
+    steps:
+      - name: 📥 Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: validation-report-ubuntu
+          path: ./reports
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: 💬 Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            const pulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${context.payload.workflow_run.head_branch}`
+            });
+            
+            if (pulls.data.length === 0) return;
+            const pr = pulls.data[0];
+            
+            let body = '## 🤖 Phase 0 Validation Results\n\n';
+            try {
+              const report = JSON.parse(fs.readFileSync('reports/validation-report.json', 'utf8'));
+              const emoji = report.status === 'passed' ? '✅' : '❌';
+              body += `${emoji} **Status**: ${report.status.toUpperCase()}\n\n`;
+              body += `| Metric | Value |\n|--------|-------|\n`;
+              body += `| Total | ${report.summary.total} |\n`;
+              body += `| Passed | ${report.summary.passed} |\n`;
+              body += `| Failed | ${report.summary.failed} |\n`;
+              body += `| Duration | ${report.duration_seconds}s |\n`;
+            } catch (e) {
+              body += `⚠️ Report unavailable: ${e.message}`;
+            }
+            
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number
+            });
+            
+            const existing = comments.data.find(c => 
+              c.user.type === 'Bot' && c.body.includes('Phase 0 Validation')
+            );
+            
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: body
+              });
+            }
