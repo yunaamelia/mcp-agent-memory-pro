@@ -57,7 +57,7 @@ Linux: `~/.config/Claude/claude_desktop_config.json`
 
 ## Database Configuration
 
-The system uses SQLite with WAL mode for better performance: 
+The system uses SQLite with WAL mode for better performance:
 
 - **Database Path**: `$MCP_MEMORY_DATA_DIR/memories.db`
 - **Journal Mode**: WAL (Write-Ahead Logging)
@@ -66,7 +66,7 @@ The system uses SQLite with WAL mode for better performance:
 
 ## Vector Store Configuration
 
-LanceDB is used for vector storage: 
+LanceDB is used for vector storage:
 
 - **Storage Path**: `$MCP_MEMORY_DATA_DIR/vectors`
 - **Format**:  Disk-based (no separate server)

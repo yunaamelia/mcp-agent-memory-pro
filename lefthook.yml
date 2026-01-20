@@ -6,32 +6,33 @@ pre-commit:
       glob: "src/**/*.{ts,tsx}"
       run: npx eslint --fix --no-warn-ignored {staged_files}
       stage_fixed: true
+      skip_empty: true
 
     - name: prettier-ts
       glob: '*.{ts,tsx,js,jsx,json}'
       run: npx prettier --write {staged_files}
       stage_fixed: true
+      skip_empty: true
 
-    # Python
+    # Python - fast checks only (ruff is very fast)
     - name: ruff-check
       glob: '*.py'
       run: ruff check --fix {staged_files}
       stage_fixed: true
+      skip_empty: true
 
     - name: ruff-format
       glob: '*.py'
       run: ruff format {staged_files}
       stage_fixed: true
+      skip_empty: true
 
-    - name: mypy
-      glob: '*.py'
-      run: mypy {staged_files} --ignore-missing-imports
-
-    # Markdown
+    # Markdown - now installed locally
     - name: markdownlint
       glob: '*.md'
       run: npx markdownlint-cli --fix {staged_files}
       stage_fixed: true
+      skip_empty: true
 
 commit-msg:
   jobs:
@@ -45,4 +46,11 @@ pre-push:
       run: npx tsc --noEmit
 
     - name: python-tests
-      run: pytest tests/ -q --tb=short
+      run: uv run pytest tests/ -q --tb=short -x
+
+    # mypy moved here - too slow for pre-commit
+    - name: mypy
+      glob: '*.py'
+      run: mypy python/ --ignore-missing-imports --no-error-summary
+      skip_empty: true
+

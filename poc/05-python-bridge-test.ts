@@ -33,7 +33,7 @@ if __name__ == '__main__':
 const SERVER_PATH = join(process.cwd(), 'poc/temp_server.py');
 
 async function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function waitForServer(url: string, maxAttempts = 20): Promise<boolean> {
@@ -60,7 +60,7 @@ async function main(): Promise<void> {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 
-    pyProcess.stderr?.on('data', data => {
+    pyProcess.stderr?.on('data', (data) => {
       // Flask logs to stderr
     });
 
@@ -95,7 +95,7 @@ async function main(): Promise<void> {
     console.log(
       `  First 5 values: [${embedData.embedding
         .slice(0, 5)
-        .map(v => v.toFixed(4))
+        .map((v) => v.toFixed(4))
         .join(', ')}]`
     );
     console.log(`  Text length received: ${embedData.text_length}`);

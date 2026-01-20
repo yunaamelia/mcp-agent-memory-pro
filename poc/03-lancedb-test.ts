@@ -58,7 +58,7 @@ async function main() {
 
   // Verify results are ordered by distance
   if (results.length >= 2) {
-    const distances = results.map(r => r._distance ?? Infinity);
+    const distances = results.map((r) => r._distance ?? Infinity);
     if (distances[0] !== undefined && distances[0] <= (distances[1] ?? Infinity)) {
       console.log('\n✅ LanceDB test passed!');
     } else {
@@ -71,7 +71,7 @@ async function main() {
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('❌ LanceDB test failed:', err);
   process.exit(1);
 });

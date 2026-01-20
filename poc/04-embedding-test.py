@@ -3,13 +3,13 @@ Proof of Concept: Sentence Transformers embedding generation
 Validates: Model downloads and generates embeddings
 """
 
-from sentence_transformers import SentenceTransformer
-import numpy as np
 import time
+
+from sentence_transformers import SentenceTransformer
 
 print("✓ Loading model...")
 start = time.time()
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 load_time = time.time() - start
 print(f"  Model loaded in {load_time:.2f}s")
 
@@ -34,7 +34,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 similarities = cosine_similarity([embeddings[0]], embeddings)[0]
 print(f"  Query: '{texts[0]}'")
 for i, (text, sim) in enumerate(zip(texts, similarities)):
-    print(f"    {i+1}. {text[:40]:40s} | Similarity: {sim:.3f}")
+    print(f"    {i + 1}. {text[:40]:40s} | Similarity: {sim:.3f}")
 
 if similarities[1] > 0.5:
     print("\n✅ Embedding test passed! Semantically similar texts detected.")

@@ -1,0 +1,17 @@
+# Phase 3 - Cognitive Features Dependencies
+# Install with: uv pip install -r requirements-cognitive.txt
+
+# Graph algorithms
+networkx>=3.2.1
+
+# Machine learning / Clustering
+scikit-learn>=1.4.0
+hdbscan>=0.8.33
+umap-learn>=0.5.5
+
+# Scientific computing
+scipy>=1.11.4
+pandas>=2.1.4
+
+# Text similarity metrics
+textdistance>=4.6.0

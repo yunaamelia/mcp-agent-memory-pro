@@ -19,10 +19,12 @@ async function main() {
     logger.info('Checking embedding service availability...');
     try {
       await embeddingClient.waitForService(10, 1000);
-    } catch (error) {
+    } catch {
       logger.error('Embedding service is not available');
       logger.error('Please start the embedding service first: ');
-      logger.error('  cd python && source venv/bin/activate && uvicorn embedding_service:app --host 127.0.0.1 --port 5001');
+      logger.error(
+        '  cd python && source venv/bin/activate && uvicorn embedding_service:app --host 127.0.0.1 --port 5001'
+      );
       process.exit(1);
     }
 

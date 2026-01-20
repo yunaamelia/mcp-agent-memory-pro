@@ -1,0 +1,54 @@
+{
+  "test_memories": [
+    {
+      "id": "fixture-1",
+      "type": "code",
+      "source": "ide",
+      "content": "async function authenticateUser(credentials) { return jwt.sign(credentials); }",
+      "project": "auth-service",
+      "language": "javascript",
+      "tags": ["auth", "security", "jwt"]
+    },
+    {
+      "id": "fixture-2",
+      "type": "code",
+      "source": "ide",
+      "content": "class UserManager { constructor() { this.users = []; } async addUser(user) { this.users.push(user); } }",
+      "project": "user-service",
+      "language": "javascript",
+      "tags": ["user", "manager"]
+    },
+    {
+      "id": "fixture-3",
+      "type": "conversation",
+      "source": "chat",
+      "content": "We decided to use React with TypeScript for the frontend and implement JWT-based authentication.",
+      "project": "frontend",
+      "tags": ["decision", "architecture"]
+    },
+    {
+      "id": "fixture-4",
+      "type": "command",
+      "source": "terminal",
+      "content": "npm install react typescript @types/react",
+      "project": "frontend",
+      "tags": ["setup"]
+    },
+    {
+      "id": "fixture-5",
+      "type": "note",
+      "source": "manual",
+      "content": "Remember to add error handling for the authentication flow and implement rate limiting.",
+      "project": "auth-service",
+      "tags": ["todo", "security"]
+    }
+  ],
+  "expected_entities": {
+    "fixture-1": ["function:authenticateUser", "concept:jwt", "concept:authentication"],
+    "fixture-2": ["class:UserManager", "function:addUser"]
+  },
+  "scoring_expectations": {
+    "high_importance": ["fixture-1", "fixture-2", "fixture-5"],
+    "low_importance": ["fixture-4"]
+  }
+}
