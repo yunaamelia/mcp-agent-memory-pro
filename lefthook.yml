@@ -46,7 +46,7 @@ pre-push:
       run: npx tsc --noEmit
 
     - name: python-tests
-      run: uv run pytest tests/ -q --tb=short -x
+      run: python/venv/bin/python -m pytest tests/ -q --tb=short -x
 
     # mypy - disabled temporarily due to many type annotation issues
     # - name: mypy
