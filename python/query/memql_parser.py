@@ -37,8 +37,8 @@ class MemQLParser:
         ORDER = CaselessKeyword("ORDER")
         BY = CaselessKeyword("BY")
         LIMIT = CaselessKeyword("LIMIT")
-        GROUP = CaselessKeyword("GROUP")
-        HAVING = CaselessKeyword("HAVING")
+        CaselessKeyword("GROUP")
+        CaselessKeyword("HAVING")
         AND = CaselessKeyword("AND")
         OR = CaselessKeyword("OR")
 
@@ -49,16 +49,21 @@ class MemQLParser:
         number = Combine(Word(nums) + Opt(Literal(".") + Word(nums)))
 
         # SELECT clause
-        select_list = (
-            Literal("*") |
-            DelimitedList(identifier)
-        )
+        select_list = Literal("*") | DelimitedList(identifier)
 
         # FROM clause
         from_clause = FROM + identifier
 
         # WHERE clause
-        comparison_op = Literal("=") | Literal("!=") | Literal(">") | Literal("<") | Literal(">=") | Literal("<=") | CaselessKeyword("LIKE")
+        comparison_op = (
+            Literal("=")
+            | Literal("!=")
+            | Literal(">")
+            | Literal("<")
+            | Literal(">=")
+            | Literal("<=")
+            | CaselessKeyword("LIKE")
+        )
         condition = Group(identifier + comparison_op + (string_value | number))
         where_clause = WHERE + condition + ((AND | OR) + condition)[...]
 
@@ -71,23 +76,24 @@ class MemQLParser:
 
         # Complete query
         self.query_expr = (
-            SELECT + Group(select_list)("select") +
-            from_clause("from") +
-            Opt(where_clause)("where") +
-            Opt(order_clause)("order") +
-            Opt(limit_clause)("limit")
+            SELECT
+            + Group(select_list)("select")
+            + from_clause("from")
+            + Opt(where_clause)("where")
+            + Opt(order_clause)("order")
+            + Opt(limit_clause)("limit")
         )
 
     def parse(self, query: str) -> dict[str, Any]:
         """
         Parse MemQL query
-        
+
         Args:
             query: MemQL query string
-        
+
         Returns:
             Parsed query structure
-        
+
         Examples:
             SELECT * FROM memories WHERE type = 'code' ORDER BY importance DESC LIMIT 10
             SELECT content, project FROM memories WHERE importance > 0.8
@@ -97,17 +103,17 @@ class MemQLParser:
             result = self.query_expr.parse_string(query, parse_all=True)
 
             parsed = {
-                'select': list(result.select),
-                'from': result['from'][1],
-                'where': self._parse_where(result.get('where', [])),
-                'order': self._parse_order(result.get('order', [])),
-                'limit': int(result.get('limit', [None, None])[1]) if result.get('limit') else None
+                "select": list(result.select),
+                "from": result["from"][1],
+                "where": self._parse_where(result.get("where", [])),
+                "order": self._parse_order(result.get("order", [])),
+                "limit": int(result.get("limit", [None, None])[1]) if result.get("limit") else None,
             }
 
             return parsed
 
         except ParseException as e:
-            raise ValueError(f"MemQL syntax error at position {e.loc}: {e.msg}")
+            raise ValueError(f"MemQL syntax error at position {e.loc}: {e.msg}") from e
 
     def _parse_where(self, where_clause) -> dict[str, Any] | None:
         """Parse WHERE clause"""
@@ -120,22 +126,15 @@ class MemQLParser:
 
         # Extract conditions and logical operators
         for item in where_clause:
-            if isinstance(item, str) and item.upper() in ['AND', 'OR']:
+            if isinstance(item, str) and item.upper() in ["AND", "OR"]:
                 operators.append(item.upper())
-            elif hasattr(item, 'asList'):
-                conditions.append({
-                    'field': item[0],
-                    'operator':  item[1],
-                    'value': item[2]
-                })
+            elif hasattr(item, "asList"):
+                conditions.append({"field": item[0], "operator": item[1], "value": item[2]})
 
         if len(conditions) == 1:
             return conditions[0]
 
-        return {
-            'conditions': conditions,
-            'operators':  operators
-        }
+        return {"conditions": conditions, "operators": operators}
 
     def _parse_order(self, order_clause) -> dict[str, Any] | None:
         """Parse ORDER BY clause"""
@@ -145,19 +144,16 @@ class MemQLParser:
 
         # Extract field and direction
         field = None
-        direction = 'ASC'
+        direction = "ASC"
 
         for item in order_clause:
             if isinstance(item, str):
-                if item.upper() in ['ASC', 'DESC']:
+                if item.upper() in ["ASC", "DESC"]:
                     direction = item.upper()
-                elif item.upper() not in ['ORDER', 'BY']:
+                elif item.upper() not in ["ORDER", "BY"]:
                     field = item
 
         if not field:
             return None
 
-        return {
-            'field': field,
-            'direction':  direction
-        }
+        return {"field": field, "direction": direction}

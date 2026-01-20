@@ -1,0 +1,103 @@
+{
+  "name": "mcp-memory-vscode",
+  "displayName": "MCP Agent Memory",
+  "description": "Intelligent memory system for developers",
+  "version": "1.0.0",
+  "publisher": "mcp-memory",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mcp-memory.search",
+        "title": "MCP Memory: Search Memories"
+      },
+      {
+        "command": "mcp-memory.store",
+        "title": "MCP Memory: Store Selection"
+      },
+      {
+        "command": "mcp-memory.recall",
+        "title": "MCP Memory: Recall Context"
+      },
+      {
+        "command": "mcp-memory.suggestions",
+        "title": "MCP Memory: Get Suggestions"
+      },
+      {
+        "command": "mcp-memory.dashboard",
+        "title": "MCP Memory: Open Dashboard"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mcp-memory-sidebar",
+          "title": "MCP Memory",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "mcp-memory-sidebar": [
+        {
+          "id": "mcp-memory-tree",
+          "name": "Memories"
+        },
+        {
+          "id": "mcp-memory-suggestions",
+          "name": "Suggestions"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "mcp-memory.search",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m"
+      },
+      {
+        "command": "mcp-memory.store",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s",
+        "when": "editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "MCP Memory",
+      "properties": {
+        "mcp-memory.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "MCP Memory API URL"
+        },
+        "mcp-memory.autoRecall": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically recall relevant memories"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

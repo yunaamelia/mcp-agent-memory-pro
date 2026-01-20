@@ -2,7 +2,7 @@ import os
 import sqlite3
 import sys
 import unittest
-from datetime import datetime
+from datetime import UTC, datetime
 
 # Add python directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../python")))
@@ -50,7 +50,7 @@ class TestDashboard(unittest.TestCase):
         """)
 
         # Add sample data
-        now = int(datetime.now().timestamp() * 1000)
+        now = int(datetime.now(UTC).timestamp() * 1000)
         day = 24 * 60 * 60 * 1000
 
         memories = [

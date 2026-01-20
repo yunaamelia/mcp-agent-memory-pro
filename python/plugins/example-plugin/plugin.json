@@ -1,0 +1,8 @@
+{
+  "id": "example-plugin",
+  "name": "Example Plugin",
+  "version": "1.0.0",
+  "description": "An example plugin showing the plugin system",
+  "author": "MCP Memory",
+  "hooks": ["before_store", "after_search"]
+}

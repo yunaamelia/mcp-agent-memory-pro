@@ -16,9 +16,9 @@ def get_db():
 
 
 @router.get("/health")
-async def health_check(db: sqlite3.Connection = Depends(get_db)):
+async def health_check(db: sqlite3.Connection = Depends(get_db)):  # noqa: B008
     try:
-        cursor = db.execute("SELECT 1")
+        db.execute("SELECT 1")
         return {"status": "ok", "database": "connected"}
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Database error: {e!s}")
+        raise HTTPException(status_code=503, detail=f"Database error: {e!s}") from e

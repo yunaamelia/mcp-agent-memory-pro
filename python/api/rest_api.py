@@ -22,8 +22,9 @@ from data_management.export_service import ExportService
 from monitoring.health_monitor import HealthMonitor
 
 # Constants
-DB_PATH = os.getenv('MCP_MEMORY_DB_PATH', 'data/memories.db')
-DATA_DIR = os.getenv('MCP_MEMORY_DATA_DIR', 'data')
+DB_PATH = os.getenv("MCP_MEMORY_DB_PATH", "data/memories.db")
+DATA_DIR = os.getenv("MCP_MEMORY_DATA_DIR", "data")
+
 
 # API Models
 class MemoryQuery(BaseModel):
@@ -32,13 +33,13 @@ class MemoryQuery(BaseModel):
 
 
 class ExportRequest(BaseModel):
-    format: str = 'json'  # json, csv
+    format: str = "json"  # json, csv
     filters: dict | None = None
 
 
 class HealthResponse(BaseModel):
     status: str
-    database:  dict
+    database: dict
     storage: dict
 
 
@@ -46,7 +47,7 @@ class HealthResponse(BaseModel):
 app = FastAPI(
     title="MCP Agent Memory Pro API",
     description="REST API for MCP Agent Memory Pro",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # Add CORS
@@ -80,6 +81,7 @@ async def verify_api_key(x_api_key: str = Header(None)):
 
 # Routes
 
+
 @app.get("/")
 async def root():
     """API root"""
@@ -90,13 +92,13 @@ async def root():
             "health": "/health",
             "analytics": "/analytics/overview",
             "memories": "/memories",
-            "export": "/export"
-        }
+            "export": "/export",
+        },
     }
 
 
 @app.get("/health")
-async def health(conn: sqlite3.Connection = Depends(get_db)):
+async def health(conn: sqlite3.Connection = Depends(get_db)):  # noqa: B008
     """Health check endpoint"""
 
     monitor = HealthMonitor(conn, Path(DATA_DIR))
@@ -107,8 +109,8 @@ async def health(conn: sqlite3.Connection = Depends(get_db)):
 
 @app.get("/analytics/overview")
 async def analytics_overview(
-    conn: sqlite3.Connection = Depends(get_db),
-    authenticated: bool = Depends(verify_api_key)
+    conn: sqlite3.Connection = Depends(get_db),  # noqa: B008
+    authenticated: bool = Depends(verify_api_key),
 ):
     """Get analytics overview"""
 
@@ -125,34 +127,28 @@ async def analytics_overview(
 @app.get("/analytics/timeline")
 async def analytics_timeline(
     days: int = 30,
-    conn: sqlite3.Connection = Depends(get_db),
-    authenticated: bool = Depends(verify_api_key)
+    conn: sqlite3.Connection = Depends(get_db),  # noqa: B008
+    authenticated: bool = Depends(verify_api_key),
 ):
     """Get activity timeline"""
 
     service = DashboardService(conn)
     timeline = service.get_activity_timeline(days)
 
-    return {
-        "days": days,
-        "timeline":  timeline
-    }
+    return {"days": days, "timeline": timeline}
 
 
-@app. get("/analytics/projects")
+@app.get("/analytics/projects")
 async def analytics_projects(
-    conn: sqlite3.Connection = Depends(get_db),
-    authenticated: bool = Depends(verify_api_key)
+    conn: sqlite3.Connection = Depends(get_db),  # noqa: B008
+    authenticated: bool = Depends(verify_api_key),
 ):
     """Get project breakdown"""
 
     service = DashboardService(conn)
     projects = service.get_project_breakdown()
 
-    return {
-        "projects": projects,
-        "count": len(projects)
-    }
+    return {"projects": projects, "count": len(projects)}
 
 
 @app.get("/memories")
@@ -160,8 +156,8 @@ async def list_memories(
     limit: int = 10,
     type: str | None = None,
     project: str | None = None,
-    conn: sqlite3.Connection = Depends(get_db),
-    authenticated: bool = Depends(verify_api_key)
+    conn: sqlite3.Connection = Depends(get_db),  # noqa: B008
+    authenticated: bool = Depends(verify_api_key),
 ):
     """List memories with filters"""
 
@@ -174,7 +170,7 @@ async def list_memories(
 
     if project:
         query += " AND project = ?"
-        params. append(project)
+        params.append(project)
 
     query += " ORDER BY timestamp DESC LIMIT ?"
     params.append(limit)
@@ -182,21 +178,18 @@ async def list_memories(
     cursor = conn.execute(query, params)
     memories = [dict(row) for row in cursor.fetchall()]
 
-    return {
-        "memories": memories,
-        "count": len(memories)
-    }
+    return {"memories": memories, "count": len(memories)}
 
 
 @app.get("/memories/{memory_id}")
 async def get_memory(
-    memory_id:  str,
-    conn: sqlite3.Connection = Depends(get_db),
-    authenticated: bool = Depends(verify_api_key)
+    memory_id: str,
+    conn: sqlite3.Connection = Depends(get_db),  # noqa: B008
+    authenticated: bool = Depends(verify_api_key),
 ):
     """Get specific memory"""
 
-    cursor = conn.execute('SELECT * FROM memories WHERE id = ? ', (memory_id,))
+    cursor = conn.execute("SELECT * FROM memories WHERE id = ? ", (memory_id,))
     memory = cursor.fetchone()
 
     if not memory:
@@ -208,18 +201,18 @@ async def get_memory(
 @app.post("/export")
 async def export_data(
     request: ExportRequest,
-    conn: sqlite3.Connection = Depends(get_db),
-    authenticated: bool = Depends(verify_api_key)
+    conn: sqlite3.Connection = Depends(get_db),  # noqa: B008
+    authenticated: bool = Depends(verify_api_key),
 ):
     """Export data"""
 
     service = ExportService(conn)
 
-    output_path = Path(DATA_DIR) / 'exports' / f'export_{int(time.time())}.{request.format}'
+    output_path = Path(DATA_DIR) / "exports" / f"export_{int(time.time())}.{request.format}"
 
-    if request.format == 'json':
+    if request.format == "json":
         result = service.export_to_json(str(output_path), request.filters)
-    elif request.format == 'csv':
+    elif request.format == "csv":
         result = service.export_to_csv(str(output_path), request.filters)
     else:
         raise HTTPException(status_code=400, detail="Invalid format")
@@ -229,8 +222,8 @@ async def export_data(
 
 @app.get("/stats")
 async def get_stats(
-    conn: sqlite3.Connection = Depends(get_db),
-    authenticated: bool = Depends(verify_api_key)
+    conn: sqlite3.Connection = Depends(get_db),  # noqa: B008
+    authenticated: bool = Depends(verify_api_key),
 ):
     """Get statistics"""
 
@@ -243,10 +236,11 @@ async def get_stats(
     return {
         "overview": service.get_overview(),
         "usage": service.get_usage_stats(),
-        "health": health
+        "health": health,
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8000)

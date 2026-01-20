@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MCP Memory</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 MCP Memory</h1>
+    
+    <div class="search-section">
+      <input type="text" id="searchInput" placeholder="Search memories...">
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <div class="actions">
+      <button id="savePageBtn" class="primary">💾 Save Page</button>
+      <button id="saveSelectionBtn">📝 Save Selection</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-label">Total Memories:</span>
+        <span class="stat-value" id="totalMemories">-</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Today:</span>
+        <span class="stat-value" id="todayCount">-</span>
+      </div>
+    </div>
+
+    <div id="results" class="results"></div>
+
+    <div class="footer">
+      <a href="#" id="dashboardLink">Open Dashboard</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

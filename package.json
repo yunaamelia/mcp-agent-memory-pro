@@ -49,7 +49,11 @@
     "test:cognitive-all": "uv run python tests/cognitive/test_all_cognitive.py",
     "test:cognitive-integration": "npx tsx tests/validation/test-cognitive-integration.ts",
     "test:cognitive-perf": "uv run python tests/validation/test-cognitive-performance.py",
-    "test:phase3-tools": "npx tsx tests/validation/test-phase3-tools.ts"
+    "test:phase3-tools": "npx tsx tests/validation/test-phase3-tools.ts",
+    "validate:phase5": "python3 scripts/validate_phase5.py",
+    "test:phase5": "pytest tests/phase5/",
+    "build:vscode": "cd extensions/vscode && npm install && npm run compile",
+    "build:browser": "cd extensions/browser && zip -r mcp-memory-extension.zip . -x '*.git*'"
   },
   "keywords": [
     "mcp",

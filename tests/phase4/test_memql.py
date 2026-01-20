@@ -4,6 +4,7 @@ Test MemQL Query Language
 """
 
 import sys
+from contextlib import suppress
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
@@ -93,10 +94,8 @@ def test_memql_executor():
 
     print("  ✓ Query executed")
     print(f"    Results: {result['count']}")
-    try:
+    with suppress(KeyError):
         print(f"    SQL: {result['sql']}")
-    except KeyError:
-        pass  # SQL might not be in result for some implementations
 
     for row in result["results"]:
         print(f"      - {row['id']}: {row['content'][:30]}...")

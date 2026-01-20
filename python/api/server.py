@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Add python directory to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from api.routes import analytics, health, query
+from api.routes import advanced, analytics, health, query
 
 app = FastAPI(
     title="MCP Agent Memory Pro API",
@@ -29,6 +29,7 @@ app.add_middleware(
 app.include_router(health.router, tags=["Health"])
 app.include_router(query.router, prefix="/api/v1", tags=["Query"])
 app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
+app.include_router(advanced.router, prefix="/api/v1", tags=["Advanced"])
 
 
 @app.get("/")

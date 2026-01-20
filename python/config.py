@@ -9,7 +9,8 @@ load_dotenv()
 # Paths
 BASE_DIR = Path(__file__).parent.parent
 DATA_DIR = Path(os.getenv("MCP_MEMORY_DATA_DIR", BASE_DIR / "data"))
-DB_PATH = DATA_DIR / "memories.db"
+_db_env = os.getenv("MCP_MEMORY_DB_PATH")
+DB_PATH = Path(_db_env) if _db_env else DATA_DIR / "memories.db"
 
 # Embedding Service (Phase 1)
 MODEL_NAME = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")

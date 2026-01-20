@@ -6,7 +6,7 @@ Test Export and Import
 import json
 import sqlite3
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
@@ -65,7 +65,7 @@ def test_export_import():
     conn.execute("CREATE TABLE IF NOT EXISTS memory_entities (memory_id TEXT, entity_id TEXT)")
 
     # Insert test data
-    now = int(datetime.now().timestamp() * 1000)
+    now = int(datetime.now(UTC).timestamp() * 1000)
 
     conn.execute(
         """

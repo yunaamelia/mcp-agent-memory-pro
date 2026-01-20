@@ -31,10 +31,15 @@ import { handleMemoryExport, MEMORY_EXPORT_TOOL } from './tools/memory_export.js
 import { handleMemoryHealth, MEMORY_HEALTH_TOOL } from './tools/memory_health.js';
 import { handleMemoryDashboard, MEMORY_DASHBOARD_TOOL } from './tools/memory_dashboard.js';
 
+// Phase 5 tools
+import { handleMemoryPredict, MEMORY_PREDICT_TOOL } from './tools/memory_predict.js';
+import { handleMemoryAutomate, MEMORY_AUTOMATE_TOOL } from './tools/memory_automate.js';
+import { handleMemoryProfile, MEMORY_PROFILE_TOOL } from './tools/memory_profile.js';
+
 import { logger } from './utils/logger.js';
 
 export async function initializeServer(server: Server) {
-  logger.info('Initializing MCP server tools...');
+  logger.info('Initializing MCP server with all tools...');
 
   // Register tool list handler
   server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -70,6 +75,11 @@ export async function initializeServer(server: Server) {
         MEMORY_EXPORT_TOOL,
         MEMORY_HEALTH_TOOL,
         MEMORY_DASHBOARD_TOOL,
+
+        // Phase 5: Advanced Intelligence (3 tools)
+        MEMORY_PREDICT_TOOL,
+        MEMORY_AUTOMATE_TOOL,
+        MEMORY_PROFILE_TOOL,
       ],
     };
   });
@@ -93,7 +103,7 @@ export async function initializeServer(server: Server) {
         case 'memory_insights':
           return await handleMemoryInsights(args);
 
-        // Phase 3 - These need wrappers as they return raw data
+        // Phase 3
         case 'memory_recall_context': {
           const params = memoryRecallContextSchema.parse(args);
           const result = await recallContext(params);
@@ -126,6 +136,14 @@ export async function initializeServer(server: Server) {
         case 'memory_dashboard':
           return await handleMemoryDashboard(args);
 
+        // Phase 5
+        case 'memory_predict':
+          return await handleMemoryPredict(args);
+        case 'memory_automate':
+          return await handleMemoryAutomate(args);
+        case 'memory_profile':
+          return await handleMemoryProfile(args);
+
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
@@ -154,10 +172,19 @@ export async function initializeServer(server: Server) {
     }
   });
 
-  logger.info('MCP server initialized successfully');
-  logger.info('Total tools available:  10');
-  logger.info('  Phase 1 (Foundation): 2 tools');
-  logger.info('  Phase 2 (Intelligence): 1 tool');
-  logger.info('  Phase 3 (Cognitive): 3 tools');
-  logger.info('  Phase 4 (Production): 4 tools');
+  logger.info('═══════════════════════════════════════════════════');
+  logger.info('MCP Agent Memory Pro - Fully Initialized');
+  logger.info('═══════════════════════════════════════════════════');
+  logger.info('Total Tools Available: 13');
+  logger.info('  Phase 1 (Foundation):        2 tools');
+  logger.info('  Phase 2 (Intelligence):      1 tool');
+  logger.info('  Phase 3 (Cognitive):         3 tools');
+  logger.info('  Phase 4 (Production):        4 tools');
+  logger.info('  Phase 5 (Advanced AI):       3 tools');
+  logger.info('═══════════════════════════════════════════════════');
+  logger.info('Background Workers:             7 workers');
+  logger.info('Cognitive Services:            9 services');
+  logger.info('Extensions:                    VSCode + Browser');
+  logger.info('Plugin System:                 Active');
+  logger.info('═══════════════════════════════════════════════════');
 }

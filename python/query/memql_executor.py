@@ -49,7 +49,7 @@ class MemQLExecutor:
 
         results = []
         for row in rows:
-            results.append(dict(zip(columns, row)))
+            results.append(dict(zip(columns, row, strict=False)))
 
         return {
             "query": query,
@@ -107,10 +107,7 @@ class MemQLExecutor:
             operator = where["operator"]
             value = where["value"]
 
-            if operator.upper() == "LIKE":
-                sql = f"{field} LIKE ?"
-            else:
-                sql = f"{field} {operator} ?"
+            sql = f"{field} LIKE ?" if operator.upper() == "LIKE" else f"{field} {operator} ?"
 
             params.append(value)
             return sql, params

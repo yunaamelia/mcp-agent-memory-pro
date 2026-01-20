@@ -15,3 +15,8 @@ export * from './memory_query.js';
 export * from './memory_export.js';
 export * from './memory_health.js';
 export * from './memory_dashboard.js';
+
+// Phase 5
+export * from './memory_predict.js';
+export * from './memory_automate.js';
+export * from './memory_profile.js';

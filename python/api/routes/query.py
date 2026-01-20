@@ -22,7 +22,7 @@ def get_db():
 
 
 @router.post("/query/execute")
-async def execute_query(request: QueryRequest, db: sqlite3.Connection = Depends(get_db)):
+async def execute_query(request: QueryRequest, db: sqlite3.Connection = Depends(get_db)):  # noqa: B008
     try:
         executor = MemQLExecutor(db)
         result = executor.execute(request.query)
@@ -30,6 +30,6 @@ async def execute_query(request: QueryRequest, db: sqlite3.Connection = Depends(
             raise HTTPException(status_code=400, detail=result["error"])
         return result
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e

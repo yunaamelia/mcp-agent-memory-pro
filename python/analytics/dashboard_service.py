@@ -5,7 +5,7 @@ Provides comprehensive analytics data
 
 import sqlite3
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 
@@ -85,7 +85,7 @@ class DashboardService:
     def get_activity_timeline(self, days: int = 30) -> list[dict[str, Any]]:
         """Get activity timeline"""
 
-        cutoff = int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp() * 1000)
+        cutoff = int((datetime.now(UTC) - timedelta(days=days)).timestamp() * 1000)
 
         cursor = self.conn.execute(
             """
@@ -129,7 +129,7 @@ class DashboardService:
         """Get breakdown by project"""
 
         cursor = self.conn.execute("""
-            SELECT 
+            SELECT
                 project,
                 COUNT(*) as memory_count,
                 AVG(importance_score) as avg_importance,
@@ -151,10 +151,14 @@ class DashboardService:
                     "avg_importance": round(row["avg_importance"], 3),
                     "total_accesses": row["total_accesses"],
                     # Handle possible NULL if no memories for project (though WHERE filters this) or python errors on timestamp conversion
-                    "first_memory": datetime.fromtimestamp(row["first_memory"] / 1000, timezone.utc).isoformat()
+                    "first_memory": datetime.fromtimestamp(
+                        row["first_memory"] / 1000, UTC
+                    ).isoformat()
                     if row["first_memory"]
                     else None,
-                    "last_memory": datetime.fromtimestamp(row["last_memory"] / 1000, timezone.utc).isoformat()
+                    "last_memory": datetime.fromtimestamp(
+                        row["last_memory"] / 1000, UTC
+                    ).isoformat()
                     if row["last_memory"]
                     else None,
                     "active_days": (row["last_memory"] - row["first_memory"])
@@ -170,7 +174,7 @@ class DashboardService:
         """Get usage statistics"""
 
         cursor = self.conn.execute("""
-            SELECT 
+            SELECT
                 COUNT(*) as total_memories,
                 SUM(access_count) as total_accesses,
                 AVG(access_count) as avg_accesses,
@@ -225,7 +229,7 @@ class DashboardService:
         metrics["unaccessed_important"] = cursor.fetchone()["count"]
 
         # Old short-term memories
-        week_ago = int((datetime.now(timezone.utc) - timedelta(days=7)).timestamp() * 1000)
+        week_ago = int((datetime.now(UTC) - timedelta(days=7)).timestamp() * 1000)
         cursor = self.conn.execute(
             """
             SELECT COUNT(*) as count
