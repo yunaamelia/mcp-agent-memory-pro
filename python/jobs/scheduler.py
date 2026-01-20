@@ -5,7 +5,7 @@ Schedules and manages background worker jobs
 
 import logging
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -116,7 +116,7 @@ class WorkerScheduler:
         self.logger.info(f"Running worker: {worker_name}")
 
         result = worker.run()
-        self.last_results[worker_name] = {"timestamp": datetime.now().isoformat(), "result": result}
+        self.last_results[worker_name] = {"timestamp": datetime.now(UTC).isoformat(), "result": result}
 
         if result["success"]:
             self.logger.info(f"Worker {worker_name} completed successfully")

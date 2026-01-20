@@ -1,0 +1,21 @@
+# Phase 5 - Machine Learning & Advanced Features
+# tensorflow==2.18.0  # Removing pinned version to allow pip to find compatible one, or use a newer one
+tensorflow
+scikit-learn
+xgboost
+lightgbm
+joblib
+
+# NLP & Text Processing
+transformers
+sentence-transformers
+nltk
+
+# Caching & Performance
+diskcache
+cachetools
+
+# Monitoring
+py-spy
+memory-profiler
+line-profiler

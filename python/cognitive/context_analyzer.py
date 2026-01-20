@@ -6,7 +6,7 @@ Understands current work context and proactively recalls relevant memories
 import json
 import sqlite3
 from collections import Counter
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -50,7 +50,7 @@ class ContextAnalyzer:
             Context analysis with active projects, entities, patterns
         """
         cutoff_time = int(
-            (datetime.now() - timedelta(minutes=recent_window_minutes)).timestamp() * 1000
+            (datetime.now(UTC) - timedelta(minutes=recent_window_minutes)).timestamp() * 1000
         )
 
         conn = self._get_db_connection()
@@ -188,7 +188,7 @@ class ContextAnalyzer:
 
             # Exclude very recent (already in context window)
             recent_cutoff = int(
-                (datetime.now() - timedelta(minutes=exclude_recent_minutes)).timestamp() * 1000
+                (datetime.now(UTC) - timedelta(minutes=exclude_recent_minutes)).timestamp() * 1000
             )
             conditions.append("timestamp < ?")
             params.append(recent_cutoff)

@@ -1,0 +1,102 @@
+apiVersion: v1
+kind:  Namespace
+metadata:
+  name:  mcp-memory
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mcp-data
+  namespace: mcp-memory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcp-config
+  namespace: mcp-memory
+data:
+  LOG_LEVEL: "info"
+  WORKERS_ENABLED: "true"
+  MCP_MEMORY_DATA_DIR: "/app/data"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-memory
+  namespace: mcp-memory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp-memory
+  template:
+    metadata:
+      labels:
+        app: mcp-memory
+    spec:
+      containers:
+      - name: mcp-memory
+        image: mcp-agent-memory-pro:latest
+        ports:
+        - containerPort:  8000
+          name: api
+        - containerPort: 5001
+          name: embedding
+        envFrom:
+        - configMapRef:
+            name: mcp-config
+        volumeMounts:
+        - name:  data
+          mountPath: /app/data
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 40
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 20
+          periodSeconds: 10
+      volumes:
+      - name:  data
+        persistentVolumeClaim:
+          claimName:  mcp-data
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-memory-service
+  namespace: mcp-memory
+spec: 
+  selector:
+    app:  mcp-memory
+  ports: 
+  - name: api
+    protocol: TCP
+    port: 8000
+    targetPort: 8000
+  - name: embedding
+    protocol:  TCP
+    port: 5001
+    targetPort: 5001
+  type: ClusterIP

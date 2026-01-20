@@ -4,7 +4,7 @@ Periodically analyzes memory patterns and stores insights
 """
 
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -146,7 +146,7 @@ class PatternAnalyzerWorker(BaseWorker):
         if existing:
             return  # Skip duplicate
 
-        now = int(datetime.now().timestamp() * 1000)
+        now = int(datetime.now(UTC).timestamp() * 1000)
 
         conn.execute(
             """
@@ -179,7 +179,7 @@ class PatternAnalyzerWorker(BaseWorker):
         if existing:
             return
 
-        now = int(datetime.now().timestamp() * 1000)
+        now = int(datetime.now(UTC).timestamp() * 1000)
 
         conn.execute(
             """
@@ -203,7 +203,7 @@ class PatternAnalyzerWorker(BaseWorker):
         content += f"Direction: {direction} ({ratio:+.1%})\n"
         content += f"Activity: {trend.get('total_count', 0)} memories over {trend.get('period_days', 30)} days\n"
 
-        content_hash = hashlib.sha256((content + str(datetime.now().date())).encode()).hexdigest()
+        content_hash = hashlib.sha256((content + str(datetime.now(UTC).date())).encode()).hexdigest()
 
         # One trend insight per project per day
         existing = conn.execute(
@@ -213,7 +213,7 @@ class PatternAnalyzerWorker(BaseWorker):
         if existing:
             return
 
-        now = int(datetime.now().timestamp() * 1000)
+        now = int(datetime.now(UTC).timestamp() * 1000)
 
         conn.execute(
             """

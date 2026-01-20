@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mcp-memory: 
+    build: 
+      context: ../..
+      dockerfile: deployment/docker/Dockerfile
+    container_name: mcp-agent-memory-pro
+    ports: 
+      - "8000:8000"  # REST API
+      - "5001:5001"  # Embedding service
+    volumes:
+      - mcp-data:/app/data
+      - mcp-logs:/app/data/worker_logs
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - MCP_MEMORY_DATA_DIR=/app/data
+      - WORKERS_ENABLED=true
+    restart: unless-stopped
+    healthcheck:
+      test:  ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  mcp-data: 
+    driver: local
+  mcp-logs:
+    driver: local

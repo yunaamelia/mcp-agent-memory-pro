@@ -7,7 +7,7 @@ import contextlib
 import hashlib
 import json
 import sqlite3
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -185,7 +185,7 @@ class ConsolidationService:
             import uuid
 
             abstraction_id = str(uuid.uuid4())
-            now = int(datetime.now().timestamp() * 1000)
+            now = int(datetime.now(UTC).timestamp() * 1000)
 
             content = f"# {title}\n\n{summary}\n\n---\nAbstraction of {len(memories)} memories."
             content_hash = hashlib.sha256(content.encode()).hexdigest()
@@ -246,7 +246,7 @@ class ConsolidationService:
 
         try:
             cutoff = int(
-                (datetime.now() - __import__("datetime").timedelta(days=max_age_days)).timestamp()
+                (datetime.now(UTC) - __import__("datetime").timedelta(days=max_age_days)).timestamp()
                 * 1000
             )
 
@@ -525,7 +525,7 @@ class ConsolidationService:
 
         # Create new memory
         new_id = str(uuid.uuid4())
-        now = int(datetime.now().timestamp() * 1000)
+        now = int(datetime.now(UTC).timestamp() * 1000)
         content_hash = hashlib.sha256(combined_content.encode()).hexdigest()
 
         conn.execute(

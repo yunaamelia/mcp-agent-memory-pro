@@ -8,7 +8,7 @@ import sqlite3
 import sys
 import time
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -90,7 +90,7 @@ class BaseWorker(ABC):
         """
         start_time = time.time()
         self.metrics["runs"] += 1
-        self.metrics["last_run"] = datetime.utcnow().isoformat()
+        self.metrics["last_run"] = datetime.now(UTC).isoformat()
 
         self.logger.info(f"Starting {self.name}...")
 

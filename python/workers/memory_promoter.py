@@ -4,7 +4,7 @@ Promotes memories between tiers (Short → Working → Long)
 """
 
 import sys
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -41,7 +41,7 @@ class MemoryPromoterWorker(BaseWorker):
             # ================================================================
 
             short_term_cutoff = int(
-                (datetime.now() - timedelta(days=SHORT_TERM_DAYS)).timestamp() * 1000
+                (datetime.now(UTC) - timedelta(days=SHORT_TERM_DAYS)).timestamp() * 1000
             )
 
             # Get candidates for working memory
@@ -79,7 +79,7 @@ class MemoryPromoterWorker(BaseWorker):
             # ================================================================
 
             working_term_cutoff = int(
-                (datetime.now() - timedelta(days=WORKING_TERM_DAYS)).timestamp() * 1000
+                (datetime.now(UTC) - timedelta(days=WORKING_TERM_DAYS)).timestamp() * 1000
             )
 
             # Get candidates for long-term memory
@@ -110,7 +110,7 @@ class MemoryPromoterWorker(BaseWorker):
 
             # Archive very old, low-importance, unaccessed short-term memories
             archive_cutoff = int(
-                (datetime.now() - timedelta(days=SHORT_TERM_DAYS * 3)).timestamp() * 1000
+                (datetime.now(UTC) - timedelta(days=SHORT_TERM_DAYS * 3)).timestamp() * 1000
             )
 
             cursor = conn.execute(

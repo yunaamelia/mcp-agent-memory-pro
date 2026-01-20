@@ -10,7 +10,6 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
 
 from cognitive.clustering_service import ClusteringService

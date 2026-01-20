@@ -113,7 +113,7 @@ class SuggestionEngine:
 
         try:
             threshold_time = int(
-                (datetime.now() - timedelta(days=days_threshold)).timestamp() * 1000
+                (datetime.now(timezone.utc) - timedelta(days=days_threshold)).timestamp() * 1000
             )
 
             # Build query for high-importance, unaccessed memories
@@ -146,8 +146,8 @@ class SuggestionEngine:
 
                 # Calculate days since access
                 if memory.get("last_accessed"):
-                    last_accessed = datetime.fromtimestamp(memory["last_accessed"] / 1000)
-                    days_since = (datetime.now() - last_accessed).days
+                    last_accessed = datetime.fromtimestamp(memory["last_accessed"] / 1000, timezone.utc)
+                    days_since = (datetime.now(timezone.utc) - last_accessed).days
                 else:
                     days_since = 9999
 
@@ -401,7 +401,7 @@ class SuggestionEngine:
         self, conn: sqlite3.Connection, project: str | None
     ) -> list[dict[str, Any]]:
         """Find repeated error patterns"""
-        week_ago = int((datetime.now() - timedelta(days=7)).timestamp() * 1000)
+        week_ago = int((datetime.now(timezone.utc) - timedelta(days=7)).timestamp() * 1000)
 
         query = """
             SELECT content, COUNT(*) as count
@@ -439,7 +439,7 @@ class SuggestionEngine:
         self, conn: sqlite3.Connection, project: str | None
     ) -> list[dict[str, Any]]:
         """Find important memories that haven't been accessed"""
-        month_ago = int((datetime.now() - timedelta(days=30)).timestamp() * 1000)
+        month_ago = int((datetime.now(timezone.utc) - timedelta(days=30)).timestamp() * 1000)
 
         query = """
             SELECT id, content, importance_score

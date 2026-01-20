@@ -3,7 +3,7 @@ pre-commit:
   jobs:
     # TypeScript/JavaScript
     - name: eslint
-      glob: "src/**/*.{ts,tsx}"
+      glob: 'src/**/*.{ts,tsx}'
       run: npx eslint --fix --no-warn-ignored {staged_files}
       stage_fixed: true
       skip_empty: true
@@ -53,4 +53,3 @@ pre-push:
     #   glob: '*.py'
     #   run: mypy python/ --ignore-missing-imports --no-error-summary
     #   skip_empty: true
-

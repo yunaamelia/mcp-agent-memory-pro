@@ -48,7 +48,7 @@ class PatternDetector:
         conn = self._get_db_connection()
 
         try:
-            cutoff_time = int((datetime.now() - timedelta(days=days)).timestamp() * 1000)
+            cutoff_time = int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp() * 1000)
 
             patterns = []
 
@@ -88,8 +88,8 @@ class PatternDetector:
             anomalies = []
 
             # Compare recent activity to baseline
-            recent_cutoff = int((datetime.now() - timedelta(days=days)).timestamp() * 1000)
-            baseline_start = int((datetime.now() - timedelta(days=days * 4)).timestamp() * 1000)
+            recent_cutoff = int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp() * 1000)
+            baseline_start = int((datetime.now(timezone.utc) - timedelta(days=days * 4)).timestamp() * 1000)
 
             # Analyze activity volume
             volume_anomalies = self._detect_volume_anomalies(
@@ -127,7 +127,7 @@ class PatternDetector:
         conn = self._get_db_connection()
 
         try:
-            int((datetime.now() - timedelta(days=days)).timestamp() * 1000)
+            int((datetime.now(timezone.utc) - timedelta(days=days)).timestamp() * 1000)
 
             # Divide into periods
             period_days = days // 4
@@ -135,10 +135,10 @@ class PatternDetector:
 
             for i in range(4):
                 period_end = int(
-                    (datetime.now() - timedelta(days=i * period_days)).timestamp() * 1000
+                    (datetime.now(timezone.utc) - timedelta(days=i * period_days)).timestamp() * 1000
                 )
                 period_start = int(
-                    (datetime.now() - timedelta(days=(i + 1) * period_days)).timestamp() * 1000
+                    (datetime.now(timezone.utc) - timedelta(days=(i + 1) * period_days)).timestamp() * 1000
                 )
 
                 # Count memories in period
@@ -245,7 +245,7 @@ class PatternDetector:
             )
 
             # Recent activity (last 24h)
-            day_ago = int((datetime.now() - timedelta(days=1)).timestamp() * 1000)
+            day_ago = int((datetime.now(timezone.utc) - timedelta(days=1)).timestamp() * 1000)
             cursor = conn.execute(
                 """
                 SELECT COUNT(*) as count
@@ -321,7 +321,7 @@ class PatternDetector:
         day_counts: Counter[int] = Counter()
 
         for row in cursor.fetchall():
-            dt = datetime.fromtimestamp(row["timestamp"] / 1000)
+            dt = datetime.fromtimestamp(row["timestamp"] / 1000, timezone.utc)
             hour_counts[dt.hour] += 1
             day_counts[dt.weekday()] += 1
 

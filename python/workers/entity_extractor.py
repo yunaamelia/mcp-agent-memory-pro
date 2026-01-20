@@ -5,7 +5,7 @@ Extracts entities from memories and builds knowledge graph
 
 import json
 import sys
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -41,7 +41,7 @@ class EntityExtractorWorker(BaseWorker):
                 ORDER BY importance_score DESC, timestamp DESC
                 LIMIT ?
                 """,
-                (int((datetime.now() - timedelta(days=30)).timestamp() * 1000), BATCH_SIZE),
+                (int((datetime.now(UTC) - timedelta(days=30)).timestamp() * 1000), BATCH_SIZE),
             )
 
             memories = cursor.fetchall()
@@ -90,7 +90,7 @@ class EntityExtractorWorker(BaseWorker):
                         )
 
                         # Insert/update entities table
-                        now = int(datetime.now().timestamp())
+                        now = int(datetime.now(UTC).timestamp())
 
                         for entity in entities:
                             entity_id = f"{entity['type']}:{entity['name']}"

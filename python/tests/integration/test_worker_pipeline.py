@@ -7,7 +7,7 @@ import os
 import sqlite3
 import sys
 import unittest
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 # Add python dir to path
@@ -72,10 +72,10 @@ class TestWorkerPipeline(unittest.TestCase):
             ('mem_2', 'note', 'terminal', 'todo list', ?, ?, 0, NULL, 'short')
         """,
             (
-                datetime.now().timestamp(),
-                datetime.now().timestamp(),
-                (datetime.now() - timedelta(days=5)).timestamp(),
-                (datetime.now() - timedelta(days=5)).timestamp(),
+                datetime.now(UTC).timestamp(),
+                datetime.now(UTC).timestamp(),
+                (datetime.now(UTC) - timedelta(days=5)).timestamp(),
+                (datetime.now(UTC) - timedelta(days=5)).timestamp(),
             ),
         )
         self.conn.commit()
@@ -123,7 +123,7 @@ class TestWorkerPipeline(unittest.TestCase):
         # Let's hack Mem 1 to be old enough so it gets promoted to working due to high score
         self.conn.execute(
             "UPDATE memories SET created_at = ? WHERE id = 'mem_1'",
-            ((datetime.now() - timedelta(days=3)).timestamp(),),
+            ((datetime.now(UTC) - timedelta(days=3)).timestamp(),),
         )
         self.conn.commit()
 

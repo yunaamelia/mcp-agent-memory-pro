@@ -1,12 +1,36 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
+
+// Phase 1 tools
 import { handleStoreMemory, STORE_MEMORY_TOOL } from './tools/store.js';
 import { handleSearchMemory, SEARCH_MEMORY_TOOL } from './tools/search.js';
+
+// Phase 2 tools
 import { handleMemoryInsights, MEMORY_INSIGHTS_TOOL } from './tools/memory_insights.js';
-// Phase 3 imports
-import { memoryRecallContextTool, recallContext } from './tools/memory_recall_context.js';
-import { memorySuggestionsTool, getSuggestions } from './tools/memory_suggestions.js';
-import { memoryAnalyticsTool, getAnalytics } from './tools/memory_analytics.js';
+
+// Phase 3 tools
+import {
+  recallContext,
+  memoryRecallContextTool,
+  memoryRecallContextSchema,
+} from './tools/memory_recall_context.js';
+import {
+  getSuggestions,
+  memorySuggestionsTool,
+  memorySuggestionsSchema,
+} from './tools/memory_suggestions.js';
+import {
+  getAnalytics,
+  memoryAnalyticsTool,
+  memoryAnalyticsSchema,
+} from './tools/memory_analytics.js';
+
+// Phase 4 tools
+import { handleMemoryQuery, MEMORY_QUERY_TOOL } from './tools/memory_query.js';
+import { handleMemoryExport, MEMORY_EXPORT_TOOL } from './tools/memory_export.js';
+import { handleMemoryHealth, MEMORY_HEALTH_TOOL } from './tools/memory_health.js';
+import { handleMemoryDashboard, MEMORY_DASHBOARD_TOOL } from './tools/memory_dashboard.js';
+
 import { logger } from './utils/logger.js';
 
 export async function initializeServer(server: Server) {
@@ -17,12 +41,35 @@ export async function initializeServer(server: Server) {
     logger.debug('Listing available tools');
     return {
       tools: [
-        STORE_MEMORY_TOOL, // Phase 1
-        SEARCH_MEMORY_TOOL, // Phase 1
-        MEMORY_INSIGHTS_TOOL, // Phase 2
-        memoryRecallContextTool, // Phase 3
-        memorySuggestionsTool, // Phase 3
-        memoryAnalyticsTool, // Phase 3
+        // Phase 1: Foundation (2 tools)
+        STORE_MEMORY_TOOL,
+        SEARCH_MEMORY_TOOL,
+
+        // Phase 2: Intelligence (1 tool)
+        MEMORY_INSIGHTS_TOOL,
+
+        // Phase 3: Cognitive (3 tools)
+        {
+          name: memoryRecallContextTool.name,
+          description: memoryRecallContextTool.description,
+          inputSchema: memoryRecallContextTool.inputSchema,
+        },
+        {
+          name: memorySuggestionsTool.name,
+          description: memorySuggestionsTool.description,
+          inputSchema: memorySuggestionsTool.inputSchema,
+        },
+        {
+          name: memoryAnalyticsTool.name,
+          description: memoryAnalyticsTool.description,
+          inputSchema: memoryAnalyticsTool.inputSchema,
+        },
+
+        // Phase 4: Production (4 tools)
+        MEMORY_QUERY_TOOL,
+        MEMORY_EXPORT_TOOL,
+        MEMORY_HEALTH_TOOL,
+        MEMORY_DASHBOARD_TOOL,
       ],
     };
   });
@@ -36,38 +83,48 @@ export async function initializeServer(server: Server) {
 
     try {
       switch (name) {
+        // Phase 1
         case 'memory_store':
           return await handleStoreMemory(args);
-
         case 'memory_search':
           return await handleSearchMemory(args);
 
-        case 'memory_insights': // Phase 2
+        // Phase 2
+        case 'memory_insights':
           return await handleMemoryInsights(args);
 
+        // Phase 3 - These need wrappers as they return raw data
         case 'memory_recall_context': {
-          // Phase 3
-          const result = await recallContext((args as any) ?? {});
+          const params = memoryRecallContextSchema.parse(args);
+          const result = await recallContext(params);
           return {
-            content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+            content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
           };
         }
-
         case 'memory_suggestions': {
-          // Phase 3
-          const result = await getSuggestions((args as any) ?? {});
+          const params = memorySuggestionsSchema.parse(args);
+          const result = await getSuggestions(params);
           return {
-            content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
+            content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+          };
+        }
+        case 'memory_analytics': {
+          const params = memoryAnalyticsSchema.parse(args);
+          const result = await getAnalytics(params);
+          return {
+            content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
           };
         }
 
-        case 'memory_analytics': {
-          // Phase 3
-          const result = await getAnalytics((args as any) ?? {});
-          return {
-            content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
-          };
-        }
+        // Phase 4
+        case 'memory_query':
+          return await handleMemoryQuery(args);
+        case 'memory_export':
+          return await handleMemoryExport(args);
+        case 'memory_health':
+          return await handleMemoryHealth(args);
+        case 'memory_dashboard':
+          return await handleMemoryDashboard(args);
 
         default:
           throw new Error(`Unknown tool: ${name}`);
@@ -98,4 +155,9 @@ export async function initializeServer(server: Server) {
   });
 
   logger.info('MCP server initialized successfully');
+  logger.info('Total tools available:  10');
+  logger.info('  Phase 1 (Foundation): 2 tools');
+  logger.info('  Phase 2 (Intelligence): 1 tool');
+  logger.info('  Phase 3 (Cognitive): 3 tools');
+  logger.info('  Phase 4 (Production): 4 tools');
 }

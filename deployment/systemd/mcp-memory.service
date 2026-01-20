@@ -1,0 +1,32 @@
+[Unit]
+Description=MCP Agent Memory Pro
+After=network.target
+
+[Service]
+Type=forking
+User=mcp-memory
+Group=mcp-memory
+WorkingDirectory=/opt/mcp-agent-memory-pro
+
+# Start services
+ExecStart=/opt/mcp-agent-memory-pro/scripts/start-services.sh
+ExecStartPost=/opt/mcp-agent-memory-pro/scripts/start-workers.sh
+
+# Stop services
+ExecStop=/opt/mcp-agent-memory-pro/scripts/stop-workers.sh
+ExecStopPost=/opt/mcp-agent-memory-pro/scripts/stop-services.sh
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+# Environment
+Environment="NODE_ENV=production"
+Environment="LOG_LEVEL=info"
+
+[Install]
+WantedBy=multi-user.target

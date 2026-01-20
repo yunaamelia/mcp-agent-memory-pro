@@ -4,7 +4,7 @@ Builds relationships between entities based on co-occurrence
 """
 
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -68,7 +68,7 @@ class GraphBuilderWorker(BaseWorker):
                         relationships[pair]["strength"] += strength
 
             # Insert/update relationships
-            now = int(datetime.now().timestamp())
+            now = int(datetime.now(UTC).timestamp())
             processed = 0
 
             for (source_id, target_id), data in relationships.items():

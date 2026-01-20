@@ -5,7 +5,7 @@ Test Importance Scorer
 import sqlite3
 import sys
 import unittest
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 # Add python dir to path
@@ -46,8 +46,8 @@ class TestImportanceScorer(unittest.TestCase):
             "type": "code",
             "source": "manual",
             "access_count": 10,
-            "created_at": datetime.now().timestamp(),
-            "timestamp": datetime.now().timestamp(),
+            "created_at": datetime.now(UTC).timestamp(),
+            "timestamp": datetime.now(UTC).timestamp(),
             "project": "core_system",
             "file_path": "/src/core.py",
             "tags": ["critical", "core"],
@@ -63,8 +63,8 @@ class TestImportanceScorer(unittest.TestCase):
             "type": "command",
             "source": "terminal",
             "access_count": 0,
-            "created_at": datetime.now().timestamp() - 86400 * 30,  # Old
-            "timestamp": datetime.now().timestamp() - 86400 * 30,
+            "created_at": datetime.now(UTC).timestamp() - 86400 * 30,  # Old
+            "timestamp": datetime.now(UTC).timestamp() - 86400 * 30,
             "project": None,
             "file_path": None,
             "tags": [],

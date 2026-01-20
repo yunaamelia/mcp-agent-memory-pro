@@ -5,7 +5,7 @@ Summarizes long-term memories using Claude API
 
 import json
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -95,7 +95,7 @@ class SummarizerWorker(BaseWorker):
                     if summary and summary_length < original_length:
                         # Create new summarized memory
                         summarized_id = f"{memory_dict['id']}_summary"
-                        now = int(datetime.now().timestamp() * 1000)
+                        now = int(datetime.now(UTC).timestamp() * 1000)
 
                         # Insert summarized version
                         conn.execute(

@@ -6,7 +6,7 @@ Calculates memory importance based on multiple factors
 import logging
 import math
 import sqlite3
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 import numpy as np
@@ -53,7 +53,7 @@ class ImportanceScoringService:
         # Ensure access_count and created_at have defaults if missing
         access_count = memory.get("access_count", 0) or 0
         created_at = (
-            memory.get("created_at", datetime.now().timestamp()) or datetime.now().timestamp()
+            memory.get("created_at", datetime.now(UTC).timestamp()) or datetime.now(UTC).timestamp()
         )
 
         engagement = self._calculate_engagement(access_count, created_at)
@@ -62,7 +62,7 @@ class ImportanceScoringService:
 
         # 4. Temporal Relevance (15%)
         timestamp = (
-            memory.get("timestamp", datetime.now().timestamp()) or datetime.now().timestamp()
+            memory.get("timestamp", datetime.now(UTC).timestamp()) or datetime.now(UTC).timestamp()
         )
         recency = self._calculate_recency(timestamp)
         scores.append(recency)
@@ -146,7 +146,7 @@ class ImportanceScoringService:
             return 0.2
 
         # Age in days
-        age_days = (datetime.now().timestamp() - created_at) / 86400
+        age_days = (datetime.now(UTC).timestamp() - created_at) / 86400
 
         if age_days <= 0:
             return 0.5  # Too new to judge
@@ -170,7 +170,7 @@ class ImportanceScoringService:
         if timestamp > 1e12:  # Likely milliseconds
             timestamp = timestamp / 1000
 
-        now = datetime.now().timestamp()
+        now = datetime.now(UTC).timestamp()
         age_seconds = now - timestamp
 
         # Bounds check to prevent overflow
