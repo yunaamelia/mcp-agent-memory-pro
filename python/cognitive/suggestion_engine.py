@@ -5,7 +5,7 @@ Generates proactive suggestions based on memory patterns and context
 
 import json
 import sqlite3
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -113,7 +113,7 @@ class SuggestionEngine:
 
         try:
             threshold_time = int(
-                (datetime.now(timezone.utc) - timedelta(days=days_threshold)).timestamp() * 1000
+                (datetime.now(UTC) - timedelta(days=days_threshold)).timestamp() * 1000
             )
 
             # Build query for high-importance, unaccessed memories
@@ -146,8 +146,8 @@ class SuggestionEngine:
 
                 # Calculate days since access
                 if memory.get("last_accessed"):
-                    last_accessed = datetime.fromtimestamp(memory["last_accessed"] / 1000, timezone.utc)
-                    days_since = (datetime.now(timezone.utc) - last_accessed).days
+                    last_accessed = datetime.fromtimestamp(memory["last_accessed"] / 1000, UTC)
+                    days_since = (datetime.now(UTC) - last_accessed).days
                 else:
                     days_since = 9999
 
@@ -222,9 +222,12 @@ class SuggestionEngine:
 
                 if focus_topic and focus_topic.lower() in content_lower:
                     relevance_score = 0.8
-                elif context and context.get("context_type"):
-                    if context["context_type"] in content_lower:
-                        relevance_score = 0.5
+                elif (
+                    context
+                    and context.get("context_type")
+                    and context["context_type"] in content_lower
+                ):
+                    relevance_score = 0.5
 
                 if relevance_score > 0:
                     recommendations.append(
@@ -293,18 +296,17 @@ class SuggestionEngine:
                 }
             )
 
-        elif context_type == "coding":
-            if context.get("active_entities"):
-                suggestions.append(
-                    {
-                        "type": "pattern_suggestion",
-                        "title": "Review related code patterns",
-                        "description": f"Working with: {', '.join(context['active_entities'][:3])}. Check past implementations for patterns.",
-                        "priority": 6,
-                        "action": "search_implementations",
-                        "reason": "Active entities detected",
-                    }
-                )
+        elif context_type == "coding" and context.get("active_entities"):
+            suggestions.append(
+                {
+                    "type": "pattern_suggestion",
+                    "title": "Review related code patterns",
+                    "description": f"Working with: {', '.join(context['active_entities'][:3])}. Check past implementations for patterns.",
+                    "priority": 6,
+                    "action": "search_implementations",
+                    "reason": "Active entities detected",
+                }
+            )
 
         return suggestions[:limit]
 
@@ -401,7 +403,7 @@ class SuggestionEngine:
         self, conn: sqlite3.Connection, project: str | None
     ) -> list[dict[str, Any]]:
         """Find repeated error patterns"""
-        week_ago = int((datetime.now(timezone.utc) - timedelta(days=7)).timestamp() * 1000)
+        week_ago = int((datetime.now(UTC) - timedelta(days=7)).timestamp() * 1000)
 
         query = """
             SELECT content, COUNT(*) as count
@@ -439,7 +441,7 @@ class SuggestionEngine:
         self, conn: sqlite3.Connection, project: str | None
     ) -> list[dict[str, Any]]:
         """Find important memories that haven't been accessed"""
-        month_ago = int((datetime.now(timezone.utc) - timedelta(days=30)).timestamp() * 1000)
+        month_ago = int((datetime.now(UTC) - timedelta(days=30)).timestamp() * 1000)
 
         query = """
             SELECT id, content, importance_score
