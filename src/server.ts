@@ -17,12 +17,12 @@ export async function initializeServer(server: Server) {
     logger.debug('Listing available tools');
     return {
       tools: [
-        STORE_MEMORY_TOOL,              // Phase 1
-        SEARCH_MEMORY_TOOL,             // Phase 1
-        MEMORY_INSIGHTS_TOOL,           // Phase 2
-        memoryRecallContextTool,        // Phase 3
-        memorySuggestionsTool,          // Phase 3
-        memoryAnalyticsTool,            // Phase 3
+        STORE_MEMORY_TOOL, // Phase 1
+        SEARCH_MEMORY_TOOL, // Phase 1
+        MEMORY_INSIGHTS_TOOL, // Phase 2
+        memoryRecallContextTool, // Phase 3
+        memorySuggestionsTool, // Phase 3
+        memoryAnalyticsTool, // Phase 3
       ],
     };
   });
@@ -45,24 +45,27 @@ export async function initializeServer(server: Server) {
         case 'memory_insights': // Phase 2
           return await handleMemoryInsights(args);
 
-        case 'memory_recall_context': { // Phase 3
-          const result = await recallContext(args ?? {});
+        case 'memory_recall_context': {
+          // Phase 3
+          const result = await recallContext((args as any) ?? {});
           return {
-            content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
           };
         }
 
-        case 'memory_suggestions': { // Phase 3
-          const result = await getSuggestions(args ?? {});
+        case 'memory_suggestions': {
+          // Phase 3
+          const result = await getSuggestions((args as any) ?? {});
           return {
-            content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
           };
         }
 
-        case 'memory_analytics': { // Phase 3
-          const result = await getAnalytics(args ?? {});
+        case 'memory_analytics': {
+          // Phase 3
+          const result = await getAnalytics((args as any) ?? {});
           return {
-            content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+            content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }],
           };
         }
 

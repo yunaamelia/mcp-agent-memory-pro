@@ -685,6 +685,7 @@ This example shows a more complete orchestration with **pre-flight checks**, **c
 - Otherwise: invoke the sub-agent using the wrapper prompt and capture its summary.
 - Mark as **SUCCESS** or **FAILED**.
 - If the step is **Required** and failed: stop the pipeline and write a failure summary.
+
 1. End with a final summary section (overall status, artifacts, next actions).
 
 **Sub-agent invocation prompt (example):**
