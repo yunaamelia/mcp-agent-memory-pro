@@ -10,13 +10,15 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
+    "validate": "./poc/validate-all.sh",
+    "validate:quick": "./scripts/check-env.sh",
     "poc:mcp": "tsx poc/01-mcp-hello.ts",
     "poc:sqlite": "tsx poc/02-sqlite-test.ts",
     "poc:lance": "tsx poc/03-lancedb-test.ts",
-    "poc:embedding": "cd poc && python 04-embedding-test.py",
+    "poc:embedding": "cd poc && source venv/bin/activate && python 04-embedding-test.py",
     "poc:bridge": "tsx poc/05-python-bridge-test.ts",
     "poc:all": "npm run poc:sqlite && npm run poc:lance && npm run poc:bridge",
-    "clean": "rm -rf poc/data dist"
+    "clean": "./scripts/cleanup.sh"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
