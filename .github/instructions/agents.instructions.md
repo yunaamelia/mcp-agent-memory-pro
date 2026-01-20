@@ -5,7 +5,8 @@ applyTo: '**/*.agent.md'
 
 # Custom Agent File Guidelines
 
-Instructions for creating effective and maintainable custom agent files that provide specialized expertise for specific development tasks in GitHub Copilot.
+Instructions for creating effective and maintainable custom agent files that provide specialized expertise for
+specific development tasks in GitHub Copilot.
 
 ## Project Context
 
@@ -88,20 +89,27 @@ infer: true
 
 - Enable guided sequential workflows that transition between agents with suggested next steps
 - List of handoff configurations, each specifying a target agent and optional prompt
-- After a chat response completes, handoff buttons appear allowing users to move to the next agent
+- After a chat response completes, handoff buttons appear allowing users to move to the next
+  agent
 - Only supported in VS Code (version 1.106+)
 - See "Handoffs Configuration" section below for details
 
 ## Handoffs Configuration
 
-Handoffs enable you to create guided sequential workflows that transition seamlessly between custom agents. This is useful for orchestrating multi-step development workflows where users can review and approve each step before moving to the next one.
+Handoffs enable you to create guided sequential workflows that transition seamlessly between custom
+agents. This is useful for orchestrating multi-step development workflows where users can review
+and approve each step before moving to the next one.
 
 ### Common Handoff Patterns
 
-- **Planning → Implementation**: Generate a plan in a planning agent, then hand off to an implementation agent to start coding
-- **Implementation → Review**: Complete implementation, then switch to a code review agent to check for quality and security issues
-- **Write Failing Tests → Write Passing Tests**: Generate failing tests, then hand off to implement the code that makes those tests pass
-- **Research → Documentation**: Research a topic, then transition to a documentation agent to write guides
+- **Planning → Implementation**: Generate a plan in a planning agent, then hand off to an
+  implementation agent to start coding
+- **Implementation → Review**: Complete implementation, then switch to a code review agent to check
+  for quality and security issues
+- **Write Failing Tests → Write Passing Tests**: Generate failing tests, then hand off to implement
+  the code that makes those tests pass
+- **Research → Documentation**: Research a topic, then transition to a documentation agent to write
+  guides
 
 ### Handoff Frontmatter Structure
 
@@ -129,7 +137,7 @@ handoffs:
 Each handoff in the list must include the following properties:
 
 | Property | Type | Required | Description |
-|----------|------|----------|-------------|
+| -------- | ------ | -------- | ----------- |
 | `label` | string | Yes | The display text shown on the handoff button in the chat interface |
 | `agent` | string | Yes | The target agent identifier to switch to (name or filename without `.agent.md`) |
 | `prompt` | string | No | The prompt text to pre-fill in the target agent's chat input |
@@ -137,10 +145,14 @@ Each handoff in the list must include the following properties:
 
 ### Handoff Behavior
 
-- **Button Display**: Handoff buttons appear as interactive suggestions after a chat response completes
-- **Context Preservation**: When users select a handoff button, they switch to the target agent with conversation context maintained
-- **Pre-filled Prompt**: If a `prompt` is specified, it appears pre-filled in the target agent's chat input
-- **Manual vs Auto**: When `send: false`, users must review and manually send the pre-filled prompt; when `send: true`, the prompt is automatically submitted
+- **Button Display**: Handoff buttons appear as interactive suggestions after a chat response
+  completes
+- **Context Preservation**: When users select a handoff button, they switch to the target agent
+  with conversation context maintained
+- **Pre-filled Prompt**: If a `prompt` is specified, it appears pre-filled in the target agent's
+  chat input
+- **Manual vs Auto**: When `send: false`, users must review and manually send the pre-filled
+  prompt; when `send: true`, the prompt is automatically submitted
 
 ### Handoff Configuration Guidelines
 
@@ -293,7 +305,7 @@ tools: []
 All aliases are case-insensitive:
 
 | Alias | Alternative Names | Category | Description |
-|-------|------------------|----------|-------------|
+| ------- | ----------------- | ---------- | ----------- |
 | `execute` | shell, Bash, powershell | Shell execution | Execute commands in appropriate shell |
 | `read` | Read, NotebookRead, view | File reading | Read file contents |
 | `edit` | Edit, MultiEdit, Write, NotebookEdit | File editing | Edit and modify files |
@@ -339,7 +351,8 @@ The recommended approach is **prompt-based orchestration**:
 
 - The orchestrator defines a step-by-step workflow in natural language.
 - Each step is delegated to a specialized agent.
-- The orchestrator passes only the essential context (e.g., base path, identifiers) and requires each sub-agent to read its own `.agent.md` spec for tools/constraints.
+- The orchestrator passes only the essential context (e.g., base path, identifiers) and requires
+  each sub-agent to read its own `.agent.md` spec for tools/constraints.
 
 ### How It Works
 
@@ -369,7 +382,8 @@ IMPORTANT:
 - Return a clear summary (actions taken + files produced/modified + issues).
 ```
 
-Optional: if you need a lightweight, structured wrapper for traceability, embed a small JSON block in the prompt (still human-readable and tool-agnostic):
+Optional: if you need a lightweight, structured wrapper for traceability, embed a small JSON block
+in the prompt (still human-readable and tool-agnostic):
 
 ```text
 {
@@ -384,13 +398,15 @@ Optional: if you need a lightweight, structured wrapper for traceability, embed 
 
 For maintainable orchestrators, document these structural elements:
 
-- **Dynamic parameters**: what values are extracted from the user (e.g., `projectName`, `fileName`, `basePath`).
+- **Dynamic parameters**: what values are extracted from the user (e.g., `projectName`, `fileName`,
+  `basePath`).
 - **Sub-agent registry**: a list/table mapping each step to `agentName` + `agentSpecPath`.
 - **Step ordering**: explicit sequence (Step 1 → Step N).
 - **Trigger conditions** (optional but recommended): define when a step runs vs is skipped.
 - **Logging strategy** (optional but recommended): a single log/report file updated after each step.
 
-Avoid embedding orchestration “code” (JavaScript, Python, etc.) inside the orchestrator prompt; prefer deterministic, tool-driven coordination.
+Avoid embedding orchestration "code" (JavaScript, Python, etc.) inside the orchestrator prompt;
+prefer deterministic, tool-driven coordination.
 
 ### Basic Pattern
 
@@ -432,7 +448,9 @@ Expected: write ${basePath}/analysis/report.md
 
 ### ⚠️ Tool Availability Requirement
 
-**Critical**: If a sub-agent requires specific tools (e.g., `edit`, `execute`, `search`), the orchestrator must include those tools in its own `tools` list. Sub-agents cannot access tools that aren't available to their parent orchestrator.
+**Critical**: If a sub-agent requires specific tools (e.g., `edit`, `execute`, `search`), the
+orchestrator must include those tools in its own `tools` list. Sub-agents cannot access tools that
+aren't available to their parent orchestrator.
 
 **Example**:
 
@@ -441,22 +459,27 @@ Expected: write ${basePath}/analysis/report.md
 tools: ['read', 'edit', 'search', 'execute', 'agent']
 ```
 
-The orchestrator's tool permissions act as a ceiling for all invoked sub-agents. Plan your tool list carefully to ensure all sub-agents have the tools they need.
+The orchestrator's tool permissions act as a ceiling for all invoked sub-agents. Plan your tool
+list carefully to ensure all sub-agents have the tools they need.
 
 ### ⚠️ Important Limitation
 
-**Sub-agent orchestration is NOT suitable for large-scale data processing.** Avoid using multi-step sub-agent pipelines when:
+**Sub-agent orchestration is NOT suitable for large-scale data processing.** Avoid using
+multi-step sub-agent pipelines when:
 
 - Processing hundreds or thousands of files
 - Handling large datasets
 - Performing bulk transformations on big codebases
 - Orchestrating more than 5-10 sequential steps
 
-Each sub-agent invocation adds latency and context overhead. For high-volume processing, implement logic directly in a single agent instead. Use orchestration only for coordinating specialized tasks on focused, manageable datasets.
+Each sub-agent invocation adds latency and context overhead. For high-volume processing, implement
+logic directly in a single agent instead. Use orchestration only for coordinating specialized tasks
+on focused, manageable datasets.
 
 ## Agent Prompt Structure
 
-The markdown content below the frontmatter defines the agent's behavior, expertise, and instructions. Well-structured prompts typically include:
+The markdown content below the frontmatter defines the agent's behavior, expertise, and
+instructions. Well-structured prompts typically include:
 
 1. **Agent Identity and Role**: Who the agent is and its primary role
 2. **Core Responsibilities**: What specific tasks the agent performs
@@ -474,7 +497,9 @@ The markdown content below the frontmatter defines the agent's behavior, experti
 
 ## Variable Definition and Extraction
 
-Agents can define dynamic parameters to extract values from user input and use them throughout the agent's behavior and sub-agent communications. This enables flexible, context-aware agents that adapt to user-provided data.
+Agents can define dynamic parameters to extract values from user input and use them throughout the
+agent's behavior and sub-agent communications. This enables flexible, context-aware agents that
+adapt to user-provided data.
 
 ### When to Use Variables
 
@@ -594,7 +619,8 @@ Process the **${projectName}** project located at `${basePath}`.
 
 #### Passing Variables to Sub-Agents
 
-When invoking a sub-agent, pass all context through substituted variables in the prompt. Prefer passing **paths and identifiers**, not entire file contents.
+When invoking a sub-agent, pass all context through substituted variables in the prompt. Prefer
+passing **paths and identifiers**, not entire file contents.
 
 Example (prompt template):
 
@@ -615,7 +641,9 @@ Task:
 4. Return a concise summary (files created/updated, key decisions, issues).
 ```
 
-The sub-agent receives all necessary context embedded in the prompt. Variables are resolved before sending the prompt, so the sub-agent works with concrete paths and values, not variable placeholders.
+The sub-agent receives all necessary context embedded in the prompt. Variables are resolved before
+sending the prompt, so the sub-agent works with concrete paths and values, not variable
+placeholders.
 
 ### Real-World Example: Code Review Orchestrator
 
@@ -650,7 +678,8 @@ Output: projects/${repositoryName}/pr-${prNumber}/final-review.md
 
 #### Example: Conditional Step Orchestration (Code Review)
 
-This example shows a more complete orchestration with **pre-flight checks**, **conditional steps**, and **required vs optional** behavior.
+This example shows a more complete orchestration with **pre-flight checks**, **conditional steps**,
+and **required vs optional** behavior.
 
 **Dynamic parameters (inputs):**
 
@@ -661,13 +690,14 @@ This example shows a more complete orchestration with **pre-flight checks**, **c
 **Pre-flight checks (recommended):**
 
 - Verify expected folders/files exist (e.g., `${basePath}/changes/`, `${basePath}/reports/`).
-- Detect high-level characteristics that influence step triggers (e.g., repo language, presence of `package.json`, `pom.xml`, `requirements.txt`, test folders).
+- Detect high-level characteristics that influence step triggers (e.g., repo language, presence of
+  `package.json`, `pom.xml`, `requirements.txt`, test folders).
 - Log the findings once at the start.
 
 **Step trigger conditions:**
 
 | Step | Status | Trigger Condition | On Failure |
-|------|--------|-------------------|-----------|
+| ---- | ------ | ----------------- | ---------- |
 | 1: Security Review | **Required** | Always run | Stop pipeline |
 | 2: Dependency Audit | Optional | If a dependency manifest exists (`package.json`, `pom.xml`, etc.) | Continue |
 | 3: Test Coverage Check | Optional | If test projects/files are present | Continue |
@@ -1056,4 +1086,5 @@ Each level can override settings from previous levels.
 - ❌ Cannot configure MCP servers at repository level
 - ⚠️ Some properties may behave differently
 
-When creating agents for multiple environments, focus on common properties and test in all target environments. Use `target` property to create environment-specific agents when necessary.
+When creating agents for multiple environments, focus on common properties and test in all target
+environments. Use `target` property to create environment-specific agents when necessary.
