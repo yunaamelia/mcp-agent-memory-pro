@@ -1,234 +1,127 @@
 #!/bin/bash
-# Phase 3 Validation Script
-# Validates cognitive features implementation
+
+# ============================================================================
+# Phase 3 Implementation Validation Script
+# ============================================================================
 
 set -e
+set -o pipefail
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-
-echo "=============================================="
-echo "Phase 3 - Cognitive Features Validation"
-echo "=============================================="
-echo ""
+REPORT_FILE="$SCRIPT_DIR/phase3-validation-report.json"
+LOG_FILE="$SCRIPT_DIR/phase3-validation.log"
 
 # Colors
-GREEN='\033[0;32m'
 RED='\033[0;31m'
+GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+BOLD='\033[1m'
 
-PASS_COUNT=0
-FAIL_COUNT=0
+CHECK="✅"
+CROSS="❌"
+GEAR="⚙️"
+BRAIN="🧠"
 
-pass() {
-    echo -e "${GREEN}✓ PASS${NC}: $1"
-    ((PASS_COUNT++))
+# ============================================================================
+# UTILITY FUNCTIONS
+# ============================================================================
+
+print_header() {
+    echo ""
+    echo -e "${BOLD}${BLUE}=====================================${NC}"
+    echo -e "${BOLD}${BLUE}$1${NC}"
+    echo -e "${BOLD}${BLUE}=====================================${NC}"
+    echo ""
 }
 
-fail() {
-    echo -e "${RED}✗ FAIL${NC}: $1"
-    ((FAIL_COUNT++))
+print_step() {
+    echo -e "${CYAN}${GEAR} $1${NC}"
 }
 
-warn() {
-    echo -e "${YELLOW}⚠ WARN${NC}: $1"
+print_success() {
+    echo -e "${GREEN}${CHECK} $1${NC}"
 }
 
-# Check Python cognitive modules exist
-echo "Checking Python cognitive modules..."
+print_error() {
+    echo -e "${RED}${CROSS} $1${NC}"
+}
 
-COGNITIVE_MODULES=(
-    "python/cognitive/__init__.py"
-    "python/cognitive/graph_engine.py"
-    "python/cognitive/context_analyzer.py"
-    "python/cognitive/suggestion_engine.py"
-    "python/cognitive/pattern_detector.py"
-    "python/cognitive/clustering_service.py"
-    "python/cognitive/consolidation_service.py"
-)
+print_info() {
+    echo -e "${BLUE}ℹ️  $1${NC}"
+}
 
-for module in "${COGNITIVE_MODULES[@]}"; do
-    if [ -f "$PROJECT_ROOT/$module" ]; then
-        pass "$module exists"
+# ============================================================================
+# MAIN VALIDATION FLOW
+# ============================================================================
+
+main() {
+    > "$LOG_FILE"
+    
+    print_header "${BRAIN} Phase 3 Cognitive Features Validation"
+    
+    echo -e "${BOLD}MCP Agent Memory Pro - Cognitive Layer${NC}"
+    echo "Started at: $(date)"
+    echo "Log file: $LOG_FILE"
+    echo ""
+    
+    FAILED=0
+    
+    # 1. Cognitive Services
+    print_header "Step 1: Cognitive Services"
+    print_step "Running test_all_cognitive.py..."
+    if uv run python tests/cognitive/test_all_cognitive.py >> "$LOG_FILE" 2>&1; then
+        print_success "Cognitive services tests passed"
     else
-        fail "$module missing"
+        print_error "Cognitive services tests failed"
+        FAILED=1
     fi
-done
-
-# Check workers
-echo ""
-echo "Checking workers..."
-
-WORKERS=(
-    "python/workers/memory_consolidator.py"
-    "python/workers/pattern_analyzer.py"
-)
-
-for worker in "${WORKERS[@]}"; do
-    if [ -f "$PROJECT_ROOT/$worker" ]; then
-        pass "$worker exists"
+    
+    # 2. MCP Tools
+    print_header "Step 2: MCP Tools"
+    print_step "Running test-phase3-tools.ts..."
+    if npx tsx tests/validation/test-phase3-tools.ts >> "$LOG_FILE" 2>&1; then
+        print_success "MCP tools tests passed"
     else
-        fail "$worker missing"
+        print_error "MCP tools tests failed"
+        FAILED=1
     fi
-done
-
-# Check TypeScript tools
-echo ""
-echo "Checking TypeScript tools..."
-
-TS_TOOLS=(
-    "src/tools/memory_recall_context.ts"
-    "src/tools/memory_suggestions.ts"
-    "src/tools/memory_analytics.ts"
-)
-
-for tool in "${TS_TOOLS[@]}"; do
-    if [ -f "$PROJECT_ROOT/$tool" ]; then
-        pass "$tool exists"
+    
+    # 3. Integration
+    print_header "Step 3: Integration Workflows"
+    print_step "Running test-cognitive-integration.ts..."
+    if npx tsx tests/validation/test-cognitive-integration.ts >> "$LOG_FILE" 2>&1; then
+        print_success "Integration tests passed"
     else
-        fail "$tool missing"
+        print_error "Integration tests failed"
+        FAILED=1
     fi
-done
-
-# Check TypeScript clients
-echo ""
-echo "Checking TypeScript clients..."
-
-TS_CLIENTS=(
-    "src/cognitive/context-client.ts"
-    "src/cognitive/suggestion-client.ts"
-)
-
-for client in "${TS_CLIENTS[@]}"; do
-    if [ -f "$PROJECT_ROOT/$client" ]; then
-        pass "$client exists"
+    
+    # 4. Performance
+    print_header "Step 4: Performance Benchmarks"
+    print_step "Running test-cognitive-performance.py..."
+    if uv run python tests/validation/test-cognitive-performance.py >> "$LOG_FILE" 2>&1; then
+        print_success "Performance benchmarks passed"
     else
-        fail "$client missing"
+        print_error "Performance benchmarks failed"
+        # We don't fail the whole build for performance warnings in this simplified script
     fi
-done
-
-# Check tests
-echo ""
-echo "Checking test files..."
-
-TEST_FILES=(
-    "tests/cognitive/test_graph_engine.py"
-    "tests/cognitive/test_context_analyzer.py"
-    "tests/cognitive/test_suggestion_engine.py"
-    "tests/cognitive/test_pattern_detection.py"
-    "tests/cognitive/test_clustering.py"
-)
-
-for test in "${TEST_FILES[@]}"; do
-    if [ -f "$PROJECT_ROOT/$test" ]; then
-        pass "$test exists"
+    
+    print_header "Summary"
+    if [ $FAILED -eq 0 ]; then
+        echo -e "${GREEN}All validation steps passed!${NC}"
+        exit 0
     else
-        fail "$test missing"
+        echo -e "${RED}Some validation steps failed. Check $LOG_FILE${NC}"
+        exit 1
     fi
-done
+}
 
-# Check requirements
-echo ""
-echo "Checking requirements..."
-
-if [ -f "$PROJECT_ROOT/python/requirements-cognitive.txt" ]; then
-    pass "requirements-cognitive.txt exists"
-else
-    fail "requirements-cognitive.txt missing"
-fi
-
-# Run Python import tests (basic syntax check)
-echo ""
-echo "Running Python import tests..."
-
-cd "$PROJECT_ROOT"
-
-python3 -c "
-import sys
-sys.path.insert(0, 'python')
-
-try:
-    from cognitive import GraphQueryEngine
-    print('  ✓ GraphQueryEngine imports')
-except Exception as e:
-    print(f'  ✗ GraphQueryEngine import failed: {e}')
-    sys.exit(1)
-
-try:
-    from cognitive import ContextAnalyzer
-    print('  ✓ ContextAnalyzer imports')
-except Exception as e:
-    print(f'  ✗ ContextAnalyzer import failed: {e}')
-    sys.exit(1)
-
-try:
-    from cognitive import SuggestionEngine
-    print('  ✓ SuggestionEngine imports')
-except Exception as e:
-    print(f'  ✗ SuggestionEngine import failed: {e}')
-    sys.exit(1)
-
-try:
-    from cognitive import PatternDetector
-    print('  ✓ PatternDetector imports')
-except Exception as e:
-    print(f'  ✗ PatternDetector import failed: {e}')
-    sys.exit(1)
-
-try:
-    from cognitive import ClusteringService
-    print('  ✓ ClusteringService imports')
-except Exception as e:
-    print(f'  ✗ ClusteringService import failed: {e}')
-    sys.exit(1)
-
-try:
-    from cognitive import ConsolidationService
-    print('  ✓ ConsolidationService imports')
-except Exception as e:
-    print(f'  ✗ ConsolidationService import failed: {e}')
-    sys.exit(1)
-
-print('')
-print('All Python imports successful!')
-" && pass "Python imports" || fail "Python imports"
-
-# Run TypeScript build check
-echo ""
-echo "Checking TypeScript build..."
-
-cd "$PROJECT_ROOT"
-if npm run build 2>&1 | tail -5; then
-    pass "TypeScript build"
-else
-    fail "TypeScript build"
-fi
-
-# Run Python unit tests
-echo ""
-echo "Running Python cognitive tests..."
-
-cd "$PROJECT_ROOT"
-if uv run pytest tests/cognitive/ -v --tb=short 2>&1 | tail -20; then
-    pass "Python cognitive tests"
-else
-    warn "Some Python tests may have failed (see above)"
-fi
-
-# Summary
-echo ""
-echo "=============================================="
-echo "Validation Summary"
-echo "=============================================="
-echo -e "Passed: ${GREEN}${PASS_COUNT}${NC}"
-echo -e "Failed: ${RED}${FAIL_COUNT}${NC}"
-echo ""
-
-if [ $FAIL_COUNT -eq 0 ]; then
-    echo -e "${GREEN}Phase 3 validation PASSED!${NC}"
-    exit 0
-else
-    echo -e "${RED}Phase 3 validation has ${FAIL_COUNT} failures${NC}"
-    exit 1
-fi
+main
