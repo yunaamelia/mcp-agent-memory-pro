@@ -1,9 +1,9 @@
 #!/usr/bin/env npx tsx
 
 import { handleStoreMemory } from '../../src/tools/store.js';
-import { handleMemoryRecallContext } from '../../src/tools/memory_recall_context.js';
-import { handleMemorySuggestions } from '../../src/tools/memory_suggestions.js';
-import { handleMemoryAnalytics } from '../../src/tools/memory_analytics.js';
+import { recallContext } from '../../src/tools/memory_recall_context.js';
+import { getSuggestions } from '../../src/tools/memory_suggestions.js';
+import { getAnalytics } from '../../src/tools/memory_analytics.js';
 import { initializeDatabase, closeDatabase, getDatabase } from '../../src/storage/database.js';
 import { initializeVectorStore } from '../../src/storage/vector-store.js';
 import { embeddingClient } from '../../src/services/embedding-client.js';
@@ -74,13 +74,12 @@ async function testCognitiveIntegration() {
     try {
       console.log('Phase: Analyze context and recall relevant memories\n');
 
-      const contextResult = await handleMemoryRecallContext({
+      const contextResult = await recallContext({
         recent_minutes: 30,
         limit: 10,
       });
 
-      // Use type assertion or safe access
-      const contextData = JSON.parse((contextResult as any).content[0].text);
+      const contextData = contextResult;
 
       console.log(`  Context active: ${contextData.context?.active ?? false}`);
       if (contextData.context?.active) {
@@ -117,13 +116,12 @@ async function testCognitiveIntegration() {
     console.log('Phase: Query graph analytics\n');
 
     try {
-      const graphAnalytics = await handleMemoryAnalytics({
+      const graphAnalytics = await getAnalytics({
         query_type: 'graph',
         limit: 10,
         days: 30,
       });
 
-      const graphData = JSON.parse((graphAnalytics as any).content[0].text);
       console.log(`  Graph analytics retrieved`);
       console.log('  ✓ Graph analytics generated\n');
     } catch (e) {
@@ -165,15 +163,14 @@ async function testCognitiveIntegration() {
     console.log('Phase: Detect patterns\n');
 
     try {
-      const patternAnalytics = await handleMemoryAnalytics({
+      const patternAnalytics = await getAnalytics({
         query_type: 'patterns',
         limit: 10,
         days: 30,
       });
 
-      const patternData = JSON.parse((patternAnalytics as any).content[0].text);
-      if (patternData.data && patternData.data.patterns) {
-        console.log(`  Patterns found: ${patternData.data.patterns.length || 0}`);
+      if (patternAnalytics.data && patternAnalytics.data.patterns) {
+        console.log(`  Patterns found: ${patternAnalytics.data.patterns.length || 0}`);
       }
       console.log('  ✓ Patterns detected\n');
     } catch (e) {
@@ -183,12 +180,11 @@ async function testCognitiveIntegration() {
     console.log('Phase: Generate proactive suggestions\n');
 
     try {
-      const suggestions = await handleMemorySuggestions({
+      const suggestions = await getSuggestions({
         limit: 10,
       });
 
-      const suggestData = JSON.parse((suggestions as any).content[0].text);
-      console.log(`  Suggestions generated: ${suggestData.suggestions?.length ?? 0}`);
+      console.log(`  Suggestions generated: ${suggestions.suggestions?.length ?? 0}`);
       console.log('  ✓ Suggestions generated\n');
     } catch (e) {
       console.log(`  ⚠ Suggestions skipped: ${e}`);
@@ -221,7 +217,7 @@ async function testCognitiveIntegration() {
     console.log('Phase: Detect clusters\n');
 
     try {
-      const clusterAnalytics = await handleMemoryAnalytics({
+      const clusterAnalytics = await getAnalytics({
         query_type: 'entities', // Simplified for this test as 'clusters' may not be in the enum or types
         limit: 10,
         days: 30,
@@ -242,28 +238,26 @@ async function testCognitiveIntegration() {
 
     try {
       // Step 1: Understand context
-      const finalContext = await handleMemoryRecallContext({
+      const finalContext = await recallContext({
         recent_minutes: 60,
         limit: 5,
       });
 
-      const finalContextData = JSON.parse((finalContext as any).content[0].text);
       console.log('Step 1: Context Understanding');
-      if (finalContextData.context?.active) {
-        console.log(`  ✓ Understood context: ${finalContextData.context.context_type}`);
+      if (finalContext.context?.active) {
+        console.log(`  ✓ Understood context: ${finalContext.context.context_type}`);
       } else {
         console.log('  ℹ No active context detected');
       }
 
       // Step 2: Get suggestions
-      const finalSuggestions = await handleMemorySuggestions({
+      const finalSuggestions = await getSuggestions({
         limit: 5,
       });
 
-      const finalSuggestData = JSON.parse((finalSuggestions as any).content[0].text);
       console.log('\nStep 2: Generated Suggestions');
-      if (finalSuggestData.suggestions && finalSuggestData.suggestions.length > 0) {
-        console.log(`  Generated ${finalSuggestData.suggestions.length} suggestions`);
+      if (finalSuggestions.suggestions && finalSuggestions.suggestions.length > 0) {
+        console.log(`  Generated ${finalSuggestions.suggestions.length} suggestions`);
         console.log('  ✓ Proactive assistance provided');
       } else {
         console.log('  ℹ No suggestions generated (expected with limited data)');
