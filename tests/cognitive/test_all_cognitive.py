@@ -10,6 +10,8 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
+
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
 
 from cognitive.clustering_service import ClusteringService
@@ -200,6 +202,17 @@ def setup_comprehensive_test_db():
 
     print(f"✓ Created test database at {test_db}\n")
     return str(test_db)
+
+
+
+@pytest.fixture
+def db_path():
+    path = setup_comprehensive_test_db()
+    yield path
+    # Cleanup
+    p = Path(path)
+    if p.exists():
+        p.unlink()
 
 
 def test_graph_engine(db_path):
