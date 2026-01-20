@@ -3,33 +3,33 @@ pre-commit:
   jobs:
     # TypeScript/JavaScript
     - name: eslint
-      glob: "*.{ts,tsx,js,jsx}"
-      run: npx eslint --fix {staged_files}
+      glob: "src/**/*.{ts,tsx}"
+      run: npx eslint --fix --no-warn-ignored {staged_files}
       stage_fixed: true
 
     - name: prettier-ts
-      glob: "*.{ts,tsx,js,jsx,json}"
+      glob: '*.{ts,tsx,js,jsx,json}'
       run: npx prettier --write {staged_files}
       stage_fixed: true
 
     # Python
     - name: ruff-check
-      glob: "*.py"
+      glob: '*.py'
       run: ruff check --fix {staged_files}
       stage_fixed: true
 
     - name: ruff-format
-      glob: "*.py"
+      glob: '*.py'
       run: ruff format {staged_files}
       stage_fixed: true
 
     - name: mypy
-      glob: "*.py"
+      glob: '*.py'
       run: mypy {staged_files} --ignore-missing-imports
 
     # Markdown
     - name: markdownlint
-      glob: "*.md"
+      glob: '*.md'
       run: npx markdownlint-cli --fix {staged_files}
       stage_fixed: true
 

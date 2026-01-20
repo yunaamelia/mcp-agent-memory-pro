@@ -6,6 +6,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 # Database Best Practices
 
 ## Prisma Setup
+
 - Use proper schema design
 - Implement proper migrations
 - Use proper relation definitions
@@ -14,6 +15,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Use proper client setup
 
 ## Prisma Models
+
 - Use proper model naming
 - Implement proper relations
 - Use proper field types
@@ -22,6 +24,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Use proper enums
 
 ## Prisma Queries
+
 - Use proper query optimization
 - Implement proper filtering
 - Use proper relations loading
@@ -30,6 +33,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Use proper aggregations
 
 ## Supabase Setup
+
 - Configure proper project setup
 - Implement proper authentication
 - Use proper database setup
@@ -38,6 +42,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Use proper client setup
 
 ## Supabase Security
+
 - Implement proper RLS policies
 - Use proper authentication
 - Configure proper permissions
@@ -46,6 +51,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Use proper encryption
 
 ## Supabase Queries
+
 - Use proper query optimization
 - Implement proper filtering
 - Use proper joins
@@ -54,6 +60,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Use proper functions
 
 ## Database Design
+
 - Use proper normalization
 - Implement proper indexing
 - Use proper constraints
@@ -62,6 +69,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Use proper data types
 
 ## Performance
+
 - Use proper connection pooling
 - Implement proper caching
 - Use proper query optimization
@@ -70,6 +78,7 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Monitor performance metrics
 
 ## Security
+
 - Use proper authentication
 - Implement proper authorization
 - Handle sensitive data properly
@@ -78,9 +87,10 @@ globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
 - Monitor security issues
 
 ## Best Practices
+
 - Follow database conventions
 - Use proper migrations
 - Implement proper versioning
 - Handle errors properly
 - Document schema properly
-- Monitor database health 
+- Monitor database health

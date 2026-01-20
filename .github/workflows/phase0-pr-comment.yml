@@ -2,7 +2,7 @@ name: Phase 0 PR Comment
 
 on:
   workflow_run:
-    workflows: ["Phase 0 Validation"]
+    workflows: ['Phase 0 Validation']
     types:
       - completed
 
@@ -31,17 +31,17 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            
+
             const pulls = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
               head: `${context.repo.owner}:${context.payload.workflow_run.head_branch}`
             });
-            
+
             if (pulls.data.length === 0) return;
             const pr = pulls.data[0];
-            
+
             let body = '## 🤖 Phase 0 Validation Results\n\n';
             try {
               const report = JSON.parse(fs.readFileSync('reports/validation-report.json', 'utf8'));
@@ -55,17 +55,17 @@ jobs:
             } catch (e) {
               body += `⚠️ Report unavailable: ${e.message}`;
             }
-            
+
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.number
             });
-            
+
             const existing = comments.data.find(c => 
               c.user.type === 'Bot' && c.body.includes('Phase 0 Validation')
             );
-            
+
             if (existing) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,

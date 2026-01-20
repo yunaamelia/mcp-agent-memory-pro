@@ -33,87 +33,92 @@ if __name__ == '__main__':
 const SERVER_PATH = join(process.cwd(), 'poc/temp_server.py');
 
 async function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function waitForServer(url: string, maxAttempts = 20): Promise<boolean> {
-    for (let i = 0; i < maxAttempts; i++) {
-        try {
-            const response = await fetch(url);
-            if (response.ok) return true;
-        } catch {
-            await sleep(250);
-        }
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) return true;
+    } catch {
+      await sleep(250);
     }
-    return false;
+  }
+  return false;
 }
 
 async function main(): Promise<void> {
-    let pyProcess: ChildProcess | null = null;
+  let pyProcess: ChildProcess | null = null;
 
-    try {
-        // Write temporary Python server
-        writeFileSync(SERVER_PATH, PYTHON_SERVER);
+  try {
+    // Write temporary Python server
+    writeFileSync(SERVER_PATH, PYTHON_SERVER);
 
-        console.log('✓ Starting Python test server...');
-        pyProcess = spawn('python', [SERVER_PATH], {
-            stdio: ['ignore', 'pipe', 'pipe'],
-        });
+    console.log('✓ Starting Python test server...');
+    pyProcess = spawn('python', [SERVER_PATH], {
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
 
-        pyProcess.stderr?.on('data', data => {
-            // Flask logs to stderr
-        });
+    pyProcess.stderr?.on('data', data => {
+      // Flask logs to stderr
+    });
 
-        // Wait for server to start
-        console.log('  Waiting for server...');
-        const serverReady = await waitForServer('http://127.0.0.1:5555/health');
+    // Wait for server to start
+    console.log('  Waiting for server...');
+    const serverReady = await waitForServer('http://127.0.0.1:5555/health');
 
-        if (!serverReady) {
-            throw new Error('Server failed to start within timeout');
-        }
-
-        console.log('✓ Testing HTTP communication...');
-
-        // Test 1: Health check
-        const healthResponse = await fetch('http://127.0.0.1:5555/health');
-        const healthData = await healthResponse.json();
-        console.log('  Health check:', healthData);
-
-        // Test 2: Embedding generation
-        const embedResponse = await fetch('http://127.0.0.1:5555/embed', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: 'Test message for embedding' }),
-        });
-
-        const embedData = (await embedResponse.json()) as {
-            dimensions: number;
-            embedding: number[];
-            text_length: number;
-        };
-        console.log(`  Embedding generated: ${embedData.dimensions} dimensions`);
-        console.log(`  First 5 values: [${embedData.embedding.slice(0, 5).map(v => v.toFixed(4)).join(', ')}]`);
-        console.log(`  Text length received: ${embedData.text_length}`);
-
-        // Verify response structure
-        if (embedData.dimensions === 384 && embedData.embedding.length === 384) {
-            console.log('\n✅ TypeScript ↔ Python communication works!');
-        } else {
-            throw new Error('Invalid response structure');
-        }
-    } catch (error) {
-        console.error('❌ Communication failed:', error);
-        process.exit(1);
-    } finally {
-        if (pyProcess) {
-            pyProcess.kill();
-        }
-        try {
-            unlinkSync(SERVER_PATH);
-        } catch {
-            // Ignore cleanup errors
-        }
+    if (!serverReady) {
+      throw new Error('Server failed to start within timeout');
     }
+
+    console.log('✓ Testing HTTP communication...');
+
+    // Test 1: Health check
+    const healthResponse = await fetch('http://127.0.0.1:5555/health');
+    const healthData = await healthResponse.json();
+    console.log('  Health check:', healthData);
+
+    // Test 2: Embedding generation
+    const embedResponse = await fetch('http://127.0.0.1:5555/embed', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: 'Test message for embedding' }),
+    });
+
+    const embedData = (await embedResponse.json()) as {
+      dimensions: number;
+      embedding: number[];
+      text_length: number;
+    };
+    console.log(`  Embedding generated: ${embedData.dimensions} dimensions`);
+    console.log(
+      `  First 5 values: [${embedData.embedding
+        .slice(0, 5)
+        .map(v => v.toFixed(4))
+        .join(', ')}]`
+    );
+    console.log(`  Text length received: ${embedData.text_length}`);
+
+    // Verify response structure
+    if (embedData.dimensions === 384 && embedData.embedding.length === 384) {
+      console.log('\n✅ TypeScript ↔ Python communication works!');
+    } else {
+      throw new Error('Invalid response structure');
+    }
+  } catch (error) {
+    console.error('❌ Communication failed:', error);
+    process.exit(1);
+  } finally {
+    if (pyProcess) {
+      pyProcess.kill();
+    }
+    try {
+      unlinkSync(SERVER_PATH);
+    } catch {
+      // Ignore cleanup errors
+    }
+  }
 }
 
 main();

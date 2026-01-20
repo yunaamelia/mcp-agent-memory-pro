@@ -6,6 +6,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 # Python Best Practices
 
 ## Project Structure
+
 - Use src-layout with `src/your_package_name/`
 - Place tests in `tests/` directory parallel to `src/`
 - Keep configuration in `config/` or as environment variables
@@ -14,6 +15,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Use `templates/` for Jinja2 templates
 
 ## Code Style
+
 - Follow Black code formatting
 - Use isort for import sorting
 - Follow PEP 8 naming conventions:
@@ -24,6 +26,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Use absolute imports over relative imports
 
 ## Type Hints
+
 - Use type hints for all function parameters and returns
 - Import types from `typing` module
 - Use `Optional[Type]` instead of `Type | None`
@@ -32,6 +35,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Use `Protocol` for duck typing
 
 ## Flask Structure
+
 - Use Flask factory pattern
 - Organize routes using Blueprints
 - Use Flask-SQLAlchemy for database
@@ -40,6 +44,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Structure views with proper separation of concerns
 
 ## Database
+
 - Use SQLAlchemy ORM
 - Implement database migrations with Alembic
 - Use proper connection pooling
@@ -48,6 +53,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Use proper indexing strategies
 
 ## Authentication
+
 - Use Flask-Login for session management
 - Implement Google OAuth using Flask-OAuth
 - Hash passwords with bcrypt
@@ -56,6 +62,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Use proper role-based access control
 
 ## API Design
+
 - Use Flask-RESTful for REST APIs
 - Implement proper request validation
 - Use proper HTTP status codes
@@ -64,6 +71,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Implement proper rate limiting
 
 ## Testing
+
 - Use pytest for testing
 - Write tests for all routes
 - Use pytest-cov for coverage
@@ -72,6 +80,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Test all error scenarios
 
 ## Security
+
 - Use HTTPS in production
 - Implement proper CORS
 - Sanitize all user inputs
@@ -80,6 +89,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Follow OWASP guidelines
 
 ## Performance
+
 - Use proper caching with Flask-Caching
 - Implement database query optimization
 - Use proper connection pooling
@@ -88,6 +98,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Monitor application performance
 
 ## Error Handling
+
 - Create custom exception classes
 - Use proper try-except blocks
 - Implement proper logging
@@ -96,6 +107,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Use proper error messages
 
 ## Documentation
+
 - Use Google-style docstrings
 - Document all public APIs
 - Keep README.md updated
@@ -104,6 +116,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Document environment setup
 
 ## Development Workflow
+
 - Use virtual environments (venv)
 - Implement pre-commit hooks
 - Use proper Git workflow
@@ -112,6 +125,7 @@ globs: **/*.py, src/**/*.py, tests/**/*.py
 - Implement proper logging
 
 ## Dependencies
+
 - Pin dependency versions
 - Use requirements.txt for production
 - Separate dev dependencies

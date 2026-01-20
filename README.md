@@ -9,13 +9,13 @@ Intelligent memory management for AI agents using Model Context Protocol (MCP).
 
 ## Technology Stack
 
-| Component | Technology | Status |
-|-----------|-----------|--------|
-| **MCP Server** | `@modelcontextprotocol/sdk` | 🔄 Validating |
-| **Metadata Storage** | SQLite + FTS5 | 🔄 Validating |
-| **Vector Storage** | LanceDB | 🔄 Validating |
-| **Embeddings** | Sentence Transformers | 🔄 Validating |
-| **Runtime** | Node.js 20 + Python 3.11 | ✅ Ready |
+| Component            | Technology                  | Status        |
+| -------------------- | --------------------------- | ------------- |
+| **MCP Server**       | `@modelcontextprotocol/sdk` | 🔄 Validating |
+| **Metadata Storage** | SQLite + FTS5               | 🔄 Validating |
+| **Vector Storage**   | LanceDB                     | 🔄 Validating |
+| **Embeddings**       | Sentence Transformers       | 🔄 Validating |
+| **Runtime**          | Node.js 20 + Python 3.11    | ✅ Ready      |
 
 ## Quick Start
 
@@ -54,7 +54,7 @@ npm run poc:mcp         # MCP Hello World
 
 ## Project Structure
 
-```
+```text
 mcp-agent-memory-pro/
 ├── poc/                      # Proof of Concept tests
 │   ├── 01-mcp-hello.ts       # MCP server basics
@@ -86,12 +86,14 @@ npm run typecheck
 ## Troubleshooting
 
 ### LanceDB installation fails
+
 ```bash
 # May need build tools on Linux
 sudo apt-get install -y python3-dev build-essential
 ```
 
 ### Python version issues
+
 ```bash
 # Use pyenv
 pyenv install 3.11

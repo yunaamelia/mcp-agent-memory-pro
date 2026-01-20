@@ -35,23 +35,23 @@ console.log('  Inserted and retrieved:', rows);
 // Test 2: FTS5 availability
 console.log('✓ Testing FTS5...');
 try {
-    db.exec(`
+  db.exec(`
     CREATE VIRTUAL TABLE IF NOT EXISTS test_fts USING fts5(content);
     INSERT INTO test_fts(content) VALUES ('TypeScript is great');
     INSERT INTO test_fts(content) VALUES ('JavaScript is flexible');
     INSERT INTO test_fts(content) VALUES ('Python for machine learning');
   `);
 
-    const ftsSearch = db.prepare('SELECT * FROM test_fts WHERE test_fts MATCH ?');
-    const ftsResults = ftsSearch.all('TypeScript');
-    console.log('  FTS5 search results:', ftsResults);
+  const ftsSearch = db.prepare('SELECT * FROM test_fts WHERE test_fts MATCH ?');
+  const ftsResults = ftsSearch.all('TypeScript');
+  console.log('  FTS5 search results:', ftsResults);
 
-    if (ftsResults.length > 0) {
-        console.log('  ✅ FTS5 is working!');
-    }
+  if (ftsResults.length > 0) {
+    console.log('  ✅ FTS5 is working!');
+  }
 } catch (error) {
-    console.error('❌ FTS5 not available:', error);
-    process.exit(1);
+  console.error('❌ FTS5 not available:', error);
+  process.exit(1);
 }
 
 // Test 3: JSON support

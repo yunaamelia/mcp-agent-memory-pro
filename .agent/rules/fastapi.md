@@ -6,6 +6,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 # FastAPI Best Practices
 
 ## Project Structure
+
 - Use proper directory structure
 - Implement proper module organization
 - Use proper dependency injection
@@ -14,6 +15,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Use proper configuration management
 
 ## API Design
+
 - Use proper HTTP methods
 - Implement proper status codes
 - Use proper request/response models
@@ -22,6 +24,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Document APIs with OpenAPI
 
 ## Models
+
 - Use Pydantic models
 - Implement proper validation
 - Use proper type hints
@@ -30,6 +33,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Implement proper serialization
 
 ## Database
+
 - Use proper ORM (SQLAlchemy)
 - Implement proper migrations
 - Use proper connection pooling
@@ -38,6 +42,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Handle database errors properly
 
 ## Authentication
+
 - Implement proper JWT authentication
 - Use proper password hashing
 - Implement proper role-based access
@@ -46,6 +51,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Handle authentication errors properly
 
 ## Security
+
 - Implement proper CORS
 - Use proper rate limiting
 - Implement proper input validation
@@ -54,6 +60,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Implement proper logging
 
 ## Performance
+
 - Use proper caching
 - Implement proper async operations
 - Use proper background tasks
@@ -62,6 +69,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Monitor performance metrics
 
 ## Testing
+
 - Write proper unit tests
 - Implement proper integration tests
 - Use proper test fixtures
@@ -70,6 +78,7 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Use proper test coverage
 
 ## Deployment
+
 - Use proper Docker configuration
 - Implement proper CI/CD
 - Use proper environment variables
@@ -78,9 +87,10 @@ globs: **/*.py, app/**/*.py, api/**/*.py
 - Handle deployment errors properly
 
 ## Documentation
+
 - Use proper docstrings
 - Implement proper API documentation
 - Use proper type hints
 - Keep documentation updated
 - Document error scenarios
-- Use proper versioning 
+- Use proper versioning
