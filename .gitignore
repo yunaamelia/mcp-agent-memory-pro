@@ -36,3 +36,6 @@ npm-debug.log*
 # Data
 data/
 tests/data/
+
+# ML Models
+python/models/

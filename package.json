@@ -24,6 +24,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "clean": "rm -rf dist data/*.db data/vectors tests/data",
+    "validate:phase1": "./tests/validation/phase1-validate.sh",
     "reset": "./scripts/reset-data.sh",
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build",

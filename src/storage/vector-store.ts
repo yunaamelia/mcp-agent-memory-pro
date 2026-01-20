@@ -36,6 +36,7 @@ export async function initializeVectorStore(): Promise<void> {
           timestamp: Date.now(),
           type: 'init',
           tier: 'init',
+          project: 'init',
         },
       ];
       table = await db.createTable('memories', sampleData);
