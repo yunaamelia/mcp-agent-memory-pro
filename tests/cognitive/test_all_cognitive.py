@@ -10,6 +10,8 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
+
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
 
 from cognitive.clustering_service import ClusteringService
@@ -17,6 +19,12 @@ from cognitive.context_analyzer import ContextAnalyzer
 from cognitive.graph_engine import GraphQueryEngine
 from cognitive.pattern_detector import PatternDetector
 from cognitive.suggestion_engine import SuggestionEngine
+
+
+@pytest.fixture
+def db_path():
+    """Pytest fixture to create test database"""
+    return setup_comprehensive_test_db()
 
 
 def setup_comprehensive_test_db():
