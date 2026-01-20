@@ -1,47 +1,77 @@
 {
   "name": "mcp-agent-memory-pro",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "Autonomous Agent Memory MCP Server - Phase 1 Foundation",
   "type": "module",
-  "description": "Phase 0: Technical Foundation & Validation",
+  "main": "dist/index.js",
+  "bin": {
+    "mcp-memory": "./dist/index.js",
+    "mcp-memory-cli": "./dist/cli.js"
+  },
   "scripts": {
-    "prepare": "lefthook install",
-    "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "start:python": "cd python && source venv/bin/activate && python -m uvicorn embedding_service:app --host 127.0.0.1 --port 5001",
+    "start:all": "./scripts/start-services.sh",
+    "stop:all": "./scripts/stop-services.sh",
+    "cli": "node dist/cli.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "clean": "rm -rf dist data/*.db data/vectors",
+    "reset": "./scripts/reset-data.sh",
     "typecheck": "tsc --noEmit",
+    "prepare": "npm run build",
     "validate": "./poc/validate-all.sh",
     "validate:quick": "./scripts/check-env.sh",
-    "poc:mcp": "tsx poc/01-mcp-hello.ts",
     "poc:sqlite": "tsx poc/02-sqlite-test.ts",
     "poc:lance": "tsx poc/03-lancedb-test.ts",
-    "poc:embedding": "cd poc && source venv/bin/activate && python 04-embedding-test.py",
     "poc:bridge": "tsx poc/05-python-bridge-test.ts",
-    "poc:all": "npm run poc:sqlite && npm run poc:lance && npm run poc:bridge",
-    "clean": "./scripts/cleanup.sh"
+    "poc:all": "npm run poc:sqlite && npm run poc:lance && npm run poc:bridge"
   },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "agent-memory",
+    "rag",
+    "vector-database",
+    "ai",
+    "llm"
+  ],
+  "author": "ahmadrizal7",
+  "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
     "@lancedb/lancedb": "^0.13.0",
+    "@modelcontextprotocol/sdk": "^0.5.0",
     "better-sqlite3": "^11.0.0",
-    "zod": "^3.23.0"
+    "commander": "^11.1.0",
+    "dotenv": "^16.3.1",
+    "uuid": "^13.0.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.0.0",
-    "@commitlint/config-conventional": "^19.0.0",
+    "@eslint/js": "^9.39.2",
     "@types/better-sqlite3": "^7.6.11",
-    "@types/node": "^22.0.0",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^9.0.0",
-    "lefthook": "^1.6.0",
-    "markdownlint-cli": "^0.43.0",
-    "prettier": "^3.3.0",
-    "tsx": "^4.7.0",
-    "typescript": "^5.5.0",
-    "typescript-eslint": "^8.0.0"
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.1",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.53.1"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
   }
 }
