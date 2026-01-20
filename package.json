@@ -23,7 +23,7 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
-    "clean": "rm -rf dist data/*.db data/vectors",
+    "clean": "rm -rf dist data/*.db data/vectors tests/data",
     "reset": "./scripts/reset-data.sh",
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build",

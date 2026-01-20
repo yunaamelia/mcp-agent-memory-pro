@@ -219,3 +219,18 @@ export const dbManager = new DatabaseManager();
 export function getDatabase(): Database.Database {
   return dbManager.db;
 }
+
+export async function initializeDatabase(): Promise<void> {
+  // Database is initialized in constructor of singleton instance
+  // This function exists to satisfy the interface expected by consumers
+  // We could add connection verification here if needed
+  if (!dbManager.db.open) {
+    // Re-initialize if closed? 
+    // Current implementation doesn't support re-opening easily as constructor did it.
+    // But better-sqlite3 db object has .open boolean.
+  }
+}
+
+export function closeDatabase(): void {
+  dbManager.close();
+}

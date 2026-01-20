@@ -1,8 +1,9 @@
-// Jest setup file
-// Jest setup file
-// import { jest } from '@jest/globals';
+import { join } from 'path';
+import { jest } from '@jest/globals';
 
-// Global mocks if needed
-console.log('Test setup loaded');
+// Use separate test database
+process.env.MCP_MEMORY_DATA_DIR = join(process.cwd(), 'tests/data');
+process.env.LOG_LEVEL = 'error';
 
-// Mock specific Node.js globals if required for some libs
+// Mock embedding service for tests
+global.fetch = jest.fn() as unknown as typeof fetch;
