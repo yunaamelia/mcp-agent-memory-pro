@@ -2,6 +2,7 @@ import { getDatabase } from '../storage/database.js';
 import { searchVectors } from '../storage/vector-store.js';
 import { embeddingClient } from '../services/embedding-client.js';
 import { MemoryType, MemoryTier, SearchResult, Memory } from '../types/memory.js';
+import { MemorySource } from '../types/memory.js';
 import { SearchMemorySchema } from '../utils/validators.js';
 import { logger } from '../utils/logger.js';
 
@@ -164,7 +165,27 @@ export async function handleSearchMemory(args: unknown) {
   }
 
   // Retrieve raw rows
-  const rows = db.prepare(sqlQuery).all(...sqlParams) as any[];
+  const rows = db.prepare(sqlQuery).all(...sqlParams) as {
+    id: string;
+    tier: string;
+    type: string;
+    source: string;
+    content: string;
+    content_hash?: string;
+    timestamp: number;
+    importance?: string;
+    importance_score: number;
+    created_at: string;
+    updated_at: string;
+    access_count: number;
+    last_accessed?: number;
+    archived: number;
+    project?: string;
+    file_path?: string;
+    language?: string;
+    tags?: string;
+    entities?: string;
+  }[];
 
   // Update access counts in background
   const updateStmt = db.prepare(`
@@ -191,16 +212,16 @@ export async function handleSearchMemory(args: unknown) {
       id: row.id,
       tier: row.tier as MemoryTier,
       type: row.type as MemoryType,
-      source: row.source,
+      source: row.source as MemorySource,
       content: row.content,
       content_hash: row.content_hash,
       timestamp: row.timestamp,
-      importance: row.importance || 'medium',
+      importance: (row.importance || 'medium') as Memory['importance'],
       importance_score: row.importance_score,
       created_at: row.created_at,
       updated_at: row.updated_at,
       access_count: row.access_count,
-      last_accessed: row.last_accessed,
+      last_accessed: row.last_accessed ? new Date(row.last_accessed).toISOString() : undefined,
       archived: Boolean(row.archived),
       context: {
         project: row.project || undefined,
@@ -214,7 +235,7 @@ export async function handleSearchMemory(args: unknown) {
     return {
       memory: memory,
       score: vectorResult ? 1 - vectorResult._distance : 0,
-      distance: vectorResult?._distance || 999,
+      distance: (vectorResult?._distance || 999) as unknown as number,
     };
   });
 

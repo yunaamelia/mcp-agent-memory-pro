@@ -58,7 +58,7 @@ export class ContextClient {
         FROM memories
         WHERE timestamp > ? AND archived = 0
       `;
-      const params: any[] = [cutoffTime];
+      const params: (string | number)[] = [cutoffTime];
 
       if (projectHint) {
         query += ' AND project = ?';
@@ -72,7 +72,15 @@ export class ContextClient {
 
       query += ' ORDER BY timestamp DESC LIMIT 50';
 
-      const recentMemories = db.prepare(query).all(...params) as any[];
+      const recentMemories = db.prepare(query).all(...params) as {
+        id: string;
+        type: string;
+        project: string | null;
+        file_path: string | null;
+        tags: string | null;
+        entities: string | null;
+        content: string | null;
+      }[];
 
       if (recentMemories.length === 0) {
         return {
@@ -176,7 +184,7 @@ export class ContextClient {
 
     try {
       const conditions: string[] = [];
-      const params: any[] = [];
+      const params: (string | number)[] = [];
 
       // Match active projects
       if (context.active_projects.length > 0) {
@@ -213,7 +221,16 @@ export class ContextClient {
       `;
       params.push(effectiveLimit * 2);
 
-      const memories = db.prepare(query).all(...params) as any[];
+      const memories = db.prepare(query).all(...params) as {
+        id: string;
+        type: string;
+        content: string | null;
+        project: string | null;
+        file_path: string | null;
+        entities: string | null;
+        importance_score: number;
+        access_count: number;
+      }[];
 
       // Score and format
       const scored = memories.map((memory) => ({
@@ -238,7 +255,10 @@ export class ContextClient {
   /**
    * Infer context type from memory types and content
    */
-  private inferContextType(typeCounts: Record<string, number>, recentMemories: any[]): string {
+  private inferContextType(
+    typeCounts: Record<string, number>,
+    recentMemories: { type: string; content: string | null }[]
+  ): string {
     const primaryType = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
 
     // Check content for debugging patterns
@@ -268,7 +288,7 @@ export class ContextClient {
    * Infer current focus area
    */
   private inferFocus(
-    recentMemories: any[],
+    recentMemories: unknown[],
     fileCounts: Record<string, number>,
     entityCounts: Record<string, number>
   ): string | null {
@@ -294,13 +314,21 @@ export class ContextClient {
   /**
    * Calculate relevance score
    */
-  private calculateRelevance(memory: any, context: ContextAnalysis): number {
+  private calculateRelevance(
+    memory: {
+      project: string | null;
+      entities: string | null;
+      importance_score: number;
+      access_count: number;
+    },
+    context: ContextAnalysis
+  ): number {
     let score = 0;
 
     // Project match
     if (memory.project === context.primary_project) {
       score += 0.35;
-    } else if (context.active_projects.includes(memory.project)) {
+    } else if (memory.project && context.active_projects.includes(memory.project)) {
       score += 0.2;
     }
 
@@ -328,7 +356,14 @@ export class ContextClient {
   /**
    * Get recall reason
    */
-  private getRecallReason(memory: any, context: ContextAnalysis): string {
+  private getRecallReason(
+    memory: {
+      project: string | null;
+      entities: string | null;
+      importance_score: number;
+    },
+    context: ContextAnalysis
+  ): string {
     const reasons: string[] = [];
 
     if (memory.project === context.primary_project) {

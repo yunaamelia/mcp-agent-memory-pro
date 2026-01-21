@@ -204,7 +204,6 @@ def setup_comprehensive_test_db():
     return str(test_db)
 
 
-
 @pytest.fixture
 def db_path():
     path = setup_comprehensive_test_db()
@@ -243,7 +242,7 @@ def test_graph_engine(db_path):
     print("  ✓ Central entities identified")
 
     print("\n✅ Graph Engine: PASSED\n")
-    return True
+    print("\n✅ Graph Engine: PASSED\n")
 
 
 def test_context_analyzer(db_path):
@@ -262,7 +261,7 @@ def test_context_analyzer(db_path):
     print("  ✓ Context analyzed")
 
     print("\n✅ Context Analyzer: PASSED\n")
-    return True
+    print("\n✅ Context Analyzer: PASSED\n")
 
 
 def test_suggestion_engine(db_path):
@@ -288,7 +287,7 @@ def test_suggestion_engine(db_path):
     print("  ✓ Issues detected")
 
     print("\n✅ Suggestion Engine: PASSED\n")
-    return True
+    print("\n✅ Suggestion Engine: PASSED\n")
 
 
 def test_pattern_detector(db_path):
@@ -315,7 +314,7 @@ def test_pattern_detector(db_path):
     print("  ✓ Statistics retrieved")
 
     print("\n✅ Pattern Detector: PASSED\n")
-    return True
+    print("\n✅ Pattern Detector: PASSED\n")
 
 
 def test_clustering_service(db_path):
@@ -332,7 +331,7 @@ def test_clustering_service(db_path):
     print("  ✓ Representatives retrieved")
 
     print("\n✅ Clustering Service: PASSED\n")
-    return True
+    print("\n✅ Clustering Service: PASSED\n")
 
 
 def main():
@@ -345,33 +344,15 @@ def main():
     db_path = setup_comprehensive_test_db()
 
     try:
-        results = []
-        results.append(("Graph Engine", test_graph_engine(db_path)))
-        results.append(("Context Analyzer", test_context_analyzer(db_path)))
-        results.append(("Suggestion Engine", test_suggestion_engine(db_path)))
-        results.append(("Pattern Detector", test_pattern_detector(db_path)))
-        results.append(("Clustering Service", test_clustering_service(db_path)))
+        test_graph_engine(db_path)
+        test_context_analyzer(db_path)
+        test_suggestion_engine(db_path)
+        test_pattern_detector(db_path)
+        test_clustering_service(db_path)
 
-        # Summary
-        print("=" * 60)
-        print("VALIDATION SUMMARY")
-        print("=" * 60)
-
-        passed = sum(1 for _, result in results if result)
-        total = len(results)
-
-        for name, result in results:
-            status = "✅" if result else "❌"
-            print(f"  {status} {name}")
-
-        print(f"\nResults: {passed}/{total} passed")
-
-        if passed == total:
-            print("\n✅ ALL COGNITIVE SERVICES VALIDATED")
-            return 0
-        else:
-            print("\n❌ SOME TESTS FAILED")
-            return 1
+        print("\n" + "=" * 60)
+        print("✅ ALL COGNITIVE SERVICES VALIDATED")
+        return 0
 
     finally:
         # Cleanup

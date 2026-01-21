@@ -17,7 +17,7 @@ export const MEMORY_HEALTH_TOOL = {
 };
 
 export async function handleMemoryHealth(args: unknown) {
-  const params = (args as any) || {};
+  const params = (args as { detailed?: boolean }) || {};
   const detailed = params.detailed || false;
 
   logger.info('Checking system health');
@@ -48,7 +48,7 @@ conn.close()
     const result = await runPythonScript(script);
     const health = JSON.parse(result);
 
-    const summary: any = {
+    const summary: Record<string, unknown> = {
       overall_status: health.overall_status,
       database_status: health.database.status,
       storage_percent: health.storage.percent_used,

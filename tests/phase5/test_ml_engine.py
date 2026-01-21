@@ -156,8 +156,6 @@ def test_importance_predictor():
 
         print("\n✅ ML Importance Predictor: TESTS PASSED")
 
-        return True
-
     finally:
         conn.close()
         test_db.unlink()
@@ -215,7 +213,7 @@ def test_auto_tagger():
 
     print("\n✅ Auto-Tagger: ALL TESTS PASSED")
 
-    return True
+    print("\n✅ Auto-Tagger: ALL TESTS PASSED")
 
 
 def main():

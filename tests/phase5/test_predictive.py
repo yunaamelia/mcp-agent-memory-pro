@@ -167,7 +167,7 @@ def test_task_predictor():
 
         print("\n✅ Task Predictor: ALL TESTS PASSED")
 
-        return True
+        print("\n✅ Task Predictor: ALL TESTS PASSED")
 
     finally:
         conn.close()

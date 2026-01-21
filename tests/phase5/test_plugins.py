@@ -130,7 +130,7 @@ def test_plugin_manager():
 
         print("\n✅ Plugin Manager: ALL TESTS PASSED")
 
-        return True
+        print("\n✅ Plugin Manager: ALL TESTS PASSED")
 
     finally:
         # Cleanup
@@ -181,7 +181,7 @@ def test_existing_plugins():
 
     print("  ✓ Example plugin hooks working")
 
-    return True
+    print("  ✓ Example plugin hooks working")
 
 
 def main():

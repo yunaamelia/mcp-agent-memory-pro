@@ -158,7 +158,7 @@ export class DatabaseManager {
         WHERE memories_fts MATCH ?
       `;
 
-      const params: any[] = [query];
+      const params: (string | number)[] = [query];
 
       if (filters) {
         if (filters.types && filters.types.length > 0) {
@@ -226,7 +226,7 @@ export class DatabaseManager {
         language: row.language || undefined,
         tags: row.tags ? JSON.parse(row.tags) : undefined,
       },
-      importance: row.importance as any,
+      importance: row.importance as 'low' | 'medium' | 'high' | 'critical',
       created_at: row.created_at,
       updated_at: row.updated_at,
       last_accessed: row.last_accessed,

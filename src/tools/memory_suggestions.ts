@@ -6,6 +6,7 @@
 import { z } from 'zod';
 import { logger } from '../utils/logger.js';
 import { getDatabase } from '../storage/database.js';
+import Database from 'better-sqlite3';
 
 // Input schema for the tool
 export const memorySuggestionsSchema = z.object({
@@ -37,7 +38,7 @@ export interface PotentialIssue {
 export interface SuggestionsResult {
   suggestions: Suggestion[];
   potential_issues: PotentialIssue[];
-  forgotten_knowledge: any[];
+  forgotten_knowledge: Record<string, unknown>[];
   summary: string;
 }
 
@@ -50,7 +51,7 @@ export async function getSuggestions(input: MemorySuggestionsInput): Promise<Sug
   try {
     const suggestions: Suggestion[] = [];
     const potentialIssues: PotentialIssue[] = [];
-    const forgottenKnowledge: any[] = [];
+    const forgottenKnowledge: Record<string, unknown>[] = [];
 
     // Get forgotten knowledge
     const forgotten = await getForgottenKnowledge(db, input.project);
@@ -92,7 +93,7 @@ export async function getSuggestions(input: MemorySuggestionsInput): Promise<Sug
       suggestions.push({
         type: 'best_practice',
         title: 'Relevant past insight',
-        description: practice.content,
+        description: practice.content || '',
         priority: 5,
         action: 'review',
         memory_id: practice.id,
@@ -135,7 +136,19 @@ export async function getSuggestions(input: MemorySuggestionsInput): Promise<Sug
 /**
  * Get forgotten but important memories
  */
-async function getForgottenKnowledge(db: any, project?: string): Promise<any[]> {
+async function getForgottenKnowledge(
+  db: Database.Database,
+  project?: string
+): Promise<
+  {
+    memory_id: string;
+    content_preview: string;
+    project: string | null;
+    importance_score: number;
+    days_since_access: number;
+    reason: string;
+  }[]
+> {
   const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
 
   let query = `
@@ -145,7 +158,7 @@ async function getForgottenKnowledge(db: any, project?: string): Promise<any[]> 
       AND (last_accessed < ? OR last_accessed IS NULL)
       AND archived = 0
   `;
-  const params: any[] = [fourteenDaysAgo];
+  const params: (string | number)[] = [fourteenDaysAgo];
 
   if (project) {
     query += ' AND project = ?';
@@ -154,7 +167,13 @@ async function getForgottenKnowledge(db: any, project?: string): Promise<any[]> 
 
   query += ' ORDER BY importance_score DESC LIMIT 10';
 
-  const memories = db.prepare(query).all(...params) as any[];
+  const memories = db.prepare(query).all(...params) as {
+    id: string;
+    content: string | null;
+    project: string | null;
+    importance_score: number;
+    last_accessed: number | null;
+  }[];
 
   return memories.map((m) => {
     const daysSince = m.last_accessed
@@ -175,7 +194,10 @@ async function getForgottenKnowledge(db: any, project?: string): Promise<any[]> 
 /**
  * Detect potential issues
  */
-async function detectPotentialIssues(db: any, project?: string): Promise<PotentialIssue[]> {
+async function detectPotentialIssues(
+  db: Database.Database,
+  project?: string
+): Promise<PotentialIssue[]> {
   const issues: PotentialIssue[] = [];
 
   // Find unresolved TODOs
@@ -185,7 +207,7 @@ async function detectPotentialIssues(db: any, project?: string): Promise<Potenti
     WHERE (content LIKE '%TODO%' OR content LIKE '%FIXME%' OR content LIKE '%HACK%')
       AND archived = 0
   `;
-  const todoParams: any[] = [];
+  const todoParams: (string | number)[] = [];
 
   if (project) {
     todoQuery += ' AND project = ?';
@@ -194,7 +216,11 @@ async function detectPotentialIssues(db: any, project?: string): Promise<Potenti
 
   todoQuery += ' ORDER BY timestamp DESC LIMIT 10';
 
-  const todos = db.prepare(todoQuery).all(...todoParams) as any[];
+  const todos = db.prepare(todoQuery).all(...todoParams) as {
+    id: string;
+    content: string | null;
+    project: string | null;
+  }[];
 
   for (const todo of todos) {
     const content = todo.content || '';
@@ -225,7 +251,7 @@ async function detectPotentialIssues(db: any, project?: string): Promise<Potenti
       AND timestamp > ?
       AND archived = 0
   `;
-  const errorParams: any[] = [weekAgo];
+  const errorParams: (string | number)[] = [weekAgo];
 
   if (project) {
     errorQuery += ' AND project = ?';
@@ -234,7 +260,10 @@ async function detectPotentialIssues(db: any, project?: string): Promise<Potenti
 
   errorQuery += ' GROUP BY content_hash HAVING count > 1 LIMIT 5';
 
-  const errors = db.prepare(errorQuery).all(...errorParams) as any[];
+  const errors = db.prepare(errorQuery).all(...errorParams) as {
+    content: string | null;
+    count: number;
+  }[];
 
   for (const error of errors) {
     issues.push({
@@ -251,7 +280,18 @@ async function detectPotentialIssues(db: any, project?: string): Promise<Potenti
 /**
  * Get best practice recommendations
  */
-async function getBestPractices(db: any, project?: string): Promise<any[]> {
+async function getBestPractices(
+  db: Database.Database,
+  project?: string
+): Promise<
+  {
+    id: string;
+    type: string;
+    content: string | null;
+    project: string | null;
+    importance_score: number;
+  }[]
+> {
   let query = `
     SELECT id, type, content, project, importance_score
     FROM memories
@@ -259,7 +299,7 @@ async function getBestPractices(db: any, project?: string): Promise<any[]> {
       AND importance_score >= 0.7
       AND archived = 0
   `;
-  const params: any[] = [];
+  const params: (string | number)[] = [];
 
   if (project) {
     query += ' AND project = ?';
@@ -268,7 +308,13 @@ async function getBestPractices(db: any, project?: string): Promise<any[]> {
 
   query += ' ORDER BY importance_score DESC, timestamp DESC LIMIT 10';
 
-  return db.prepare(query).all(...params) as any[];
+  return db.prepare(query).all(...params) as {
+    id: string;
+    type: string;
+    content: string | null;
+    project: string | null;
+    importance_score: number;
+  }[];
 }
 
 /**
@@ -277,7 +323,7 @@ async function getBestPractices(db: any, project?: string): Promise<any[]> {
 function generateSummary(
   suggestions: Suggestion[],
   issues: PotentialIssue[],
-  forgotten: any[]
+  forgotten: Record<string, unknown>[]
 ): string {
   const parts: string[] = [];
 

@@ -6,6 +6,7 @@
 import { z } from 'zod';
 import { logger } from '../utils/logger.js';
 import { getDatabase } from '../storage/database.js';
+import Database from 'better-sqlite3';
 
 // Input schema for the tool
 export const memoryRecallContextSchema = z.object({
@@ -58,7 +59,7 @@ export async function recallContext(input: MemoryRecallContextInput): Promise<Re
       FROM memories
       WHERE timestamp > ? AND archived = 0
     `;
-    const params: any[] = [cutoffTime];
+    const params: (string | number)[] = [cutoffTime];
 
     if (input.project) {
       query += ' AND project = ?';
@@ -72,7 +73,13 @@ export async function recallContext(input: MemoryRecallContextInput): Promise<Re
 
     query += ' ORDER BY timestamp DESC LIMIT 50';
 
-    const recentMemories = db.prepare(query).all(...params) as any[];
+    const recentMemories = db.prepare(query).all(...params) as {
+      project: string | null;
+      type: string | null;
+      content: string | null;
+      entities: string | null;
+      file_path: string | null;
+    }[];
 
     // Analyze context
     const context = analyzeContext(recentMemories, input.recent_minutes);
@@ -107,7 +114,16 @@ export async function recallContext(input: MemoryRecallContextInput): Promise<Re
 /**
  * Analyze recent memories to understand current context
  */
-function analyzeContext(recentMemories: any[], _recentMinutes: number): ContextAnalysis {
+function analyzeContext(
+  recentMemories: {
+    project: string | null;
+    type: string | null;
+    content: string | null;
+    entities: string | null;
+    file_path: string | null;
+  }[],
+  _recentMinutes: number
+): ContextAnalysis {
   if (recentMemories.length === 0) {
     return {
       active: false,
@@ -179,7 +195,10 @@ function analyzeContext(recentMemories: any[], _recentMinutes: number): ContextA
 /**
  * Infer context type from memory types and content
  */
-function inferContextType(typeCounts: Record<string, number>, recentMemories: any[]): string {
+function inferContextType(
+  typeCounts: Record<string, number>,
+  recentMemories: { content: string | null }[]
+): string {
   const primaryType = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
 
   // Check content for debugging patterns
@@ -208,7 +227,10 @@ function inferContextType(typeCounts: Record<string, number>, recentMemories: an
 /**
  * Infer current focus area
  */
-function inferFocus(recentMemories: any[], entityCounts: Record<string, number>): string | null {
+function inferFocus(
+  recentMemories: { file_path: string | null }[],
+  entityCounts: Record<string, number>
+): string | null {
   if (recentMemories.length === 0) return null;
 
   // Check top entity
@@ -239,13 +261,13 @@ function inferFocus(recentMemories: any[], entityCounts: Record<string, number>)
  * Recall memories relevant to current context
  */
 async function recallRelevantMemories(
-  db: any,
+  db: Database.Database,
   context: ContextAnalysis,
   excludeCutoff: number,
   limit: number
 ): Promise<RecalledMemory[]> {
   const conditions: string[] = [];
-  const params: any[] = [];
+  const params: (string | number)[] = [];
 
   // Match active projects
   if (context.active_projects.length > 0) {
@@ -282,7 +304,16 @@ async function recallRelevantMemories(
   `;
   params.push(limit * 2);
 
-  const memories = db.prepare(query).all(...params) as any[];
+  const memories = db.prepare(query).all(...params) as {
+    id: string;
+    type: string;
+    content: string | null;
+    project: string | null;
+    file_path: string | null;
+    entities: string | null;
+    importance_score: number;
+    access_count: number;
+  }[];
 
   // Score and format results
   const scored = memories.map((memory) => ({
@@ -303,13 +334,21 @@ async function recallRelevantMemories(
 /**
  * Calculate relevance score
  */
-function calculateRelevance(memory: any, context: ContextAnalysis): number {
+function calculateRelevance(
+  memory: {
+    project: string | null;
+    entities: string | null;
+    importance_score: number;
+    access_count: number;
+  },
+  context: ContextAnalysis
+): number {
   let score = 0;
 
   // Project match
   if (memory.project === context.primary_project) {
     score += 0.35;
-  } else if (context.active_projects.includes(memory.project)) {
+  } else if (memory.project && context.active_projects.includes(memory.project)) {
     score += 0.2;
   }
 
@@ -337,10 +376,17 @@ function calculateRelevance(memory: any, context: ContextAnalysis): number {
 /**
  * Generate recall reason
  */
-function getRecallReason(memory: any, context: ContextAnalysis): string {
+function getRecallReason(
+  memory: {
+    project: string | null;
+    entities: string | null;
+    importance_score: number;
+  },
+  context: ContextAnalysis
+): string {
   const reasons: string[] = [];
 
-  if (memory.project === context.primary_project) {
+  if (memory.project && memory.project === context.primary_project) {
     reasons.push(`Same project: ${memory.project}`);
   }
 

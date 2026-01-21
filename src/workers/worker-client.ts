@@ -7,16 +7,16 @@ export interface WorkerStatus {
     name: string;
     next_run: string | null;
   }>;
-  last_results: Record<string, any>;
-  worker_metrics: Record<string, any>;
+  last_results: Record<string, unknown>;
+  worker_metrics: Record<string, unknown>;
 }
 
 export interface WorkerResult {
   success: boolean;
   duration: number;
-  result?: any;
+  result?: unknown;
   error?: string;
-  metrics: any;
+  metrics: Record<string, unknown>;
 }
 
 export class WorkerClient {

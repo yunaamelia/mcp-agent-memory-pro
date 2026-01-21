@@ -112,7 +112,7 @@ def test_auto_tagging_workflow():
 
         print("\n✅ Auto-tagging workflow test passed")
 
-        return True
+        print("\n✅ Auto-tagging workflow test passed")
 
     finally:
         conn.close()
@@ -182,7 +182,7 @@ def test_duplicate_detection():
 
         print("\n✅ Duplicate detection test passed")
 
-        return True
+        print("\n✅ Duplicate detection test passed")
 
     finally:
         conn.close()

@@ -129,7 +129,7 @@ export class SuggestionClient {
           AND (last_accessed < ? OR last_accessed IS NULL)
           AND archived = 0
       `;
-      const params: any[] = [thresholdTime];
+      const params: (string | number)[] = [thresholdTime];
 
       if (project) {
         query += ' AND project = ?';
@@ -138,7 +138,15 @@ export class SuggestionClient {
 
       query += ' ORDER BY importance_score DESC LIMIT 10';
 
-      const memories = db.prepare(query).all(...params) as any[];
+      const memories = db.prepare(query).all(...params) as {
+        id: string;
+        type: string;
+        content: string | null;
+        project: string | null;
+        importance_score: number;
+        last_accessed: number | null;
+        access_count: number;
+      }[];
 
       return memories.map((m) => {
         const daysSince = m.last_accessed
@@ -175,7 +183,7 @@ export class SuggestionClient {
         WHERE (content LIKE '%TODO%' OR content LIKE '%FIXME%' OR content LIKE '%HACK%')
           AND archived = 0
       `;
-      const todoParams: any[] = [];
+      const todoParams: (string | number)[] = [];
 
       if (project) {
         todoQuery += ' AND project = ?';
@@ -184,7 +192,11 @@ export class SuggestionClient {
 
       todoQuery += ' ORDER BY timestamp DESC LIMIT 10';
 
-      const todos = db.prepare(todoQuery).all(...todoParams) as any[];
+      const todos = db.prepare(todoQuery).all(...todoParams) as {
+        id: string;
+        content: string | null;
+        project: string | null;
+      }[];
 
       for (const todo of todos) {
         const content = todo.content || '';
@@ -219,7 +231,7 @@ export class SuggestionClient {
           AND timestamp > ?
           AND archived = 0
       `;
-      const errorParams: any[] = [weekAgo];
+      const errorParams: (string | number)[] = [weekAgo];
 
       if (project) {
         errorQuery += ' AND project = ?';
@@ -228,7 +240,11 @@ export class SuggestionClient {
 
       errorQuery += ' GROUP BY content_hash HAVING count > 1 LIMIT 5';
 
-      const errors = db.prepare(errorQuery).all(...errorParams) as any[];
+      const errors = db.prepare(errorQuery).all(...errorParams) as {
+        content_hash: string;
+        content: string | null;
+        count: number;
+      }[];
 
       for (const error of errors) {
         issues.push({
@@ -249,7 +265,18 @@ export class SuggestionClient {
   /**
    * Get best practice recommendations
    */
-  async getBestPractices(project?: string, limit: number = 5): Promise<any[]> {
+  async getBestPractices(
+    project?: string,
+    limit: number = 5
+  ): Promise<
+    {
+      id: string;
+      type: string;
+      content: string | null;
+      project: string | null;
+      importance_score: number;
+    }[]
+  > {
     const db = getDatabase();
 
     try {
@@ -260,7 +287,7 @@ export class SuggestionClient {
           AND importance_score >= 0.7
           AND archived = 0
       `;
-      const params: any[] = [];
+      const params: (string | number)[] = [];
 
       if (project) {
         query += ' AND project = ?';
@@ -270,7 +297,13 @@ export class SuggestionClient {
       query += ' ORDER BY importance_score DESC, timestamp DESC LIMIT ?';
       params.push(limit);
 
-      return db.prepare(query).all(...params) as any[];
+      return db.prepare(query).all(...params) as {
+        id: string;
+        type: string;
+        content: string | null;
+        project: string | null;
+        importance_score: number;
+      }[];
     } catch (error) {
       logger.error('Get best practices failed', { error });
       throw error;

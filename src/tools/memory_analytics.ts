@@ -1,3 +1,5 @@
+import Database from 'better-sqlite3';
+
 /**
  * Memory Analytics Tool
  * Provides advanced analytics on memory data including graph analysis and patterns
@@ -53,7 +55,7 @@ export interface TrendInfo {
 
 export interface AnalyticsResult {
   query_type: string;
-  data: any;
+  data: unknown;
   summary: string;
 }
 
@@ -98,12 +100,16 @@ export async function getAnalytics(input: MemoryAnalyticsInput): Promise<Analyti
 /**
  * Get graph analytics
  */
-async function getGraphAnalytics(db: any, limit: number): Promise<AnalyticsResult> {
+async function getGraphAnalytics(db: Database.Database, limit: number): Promise<AnalyticsResult> {
   // Get entity count
-  const entityCount = db.prepare('SELECT COUNT(*) as count FROM entities').get() as any;
+  const entityCount = db.prepare('SELECT COUNT(*) as count FROM entities').get() as {
+    count: number;
+  };
 
   // Get relationship count
-  const relCount = db.prepare('SELECT COUNT(*) as count FROM entity_relationships').get() as any;
+  const relCount = db.prepare('SELECT COUNT(*) as count FROM entity_relationships').get() as {
+    count: number;
+  };
 
   // Get central entities (by mention count)
   const centralEntities = db
@@ -115,7 +121,7 @@ async function getGraphAnalytics(db: any, limit: number): Promise<AnalyticsResul
     LIMIT ?
   `
     )
-    .all(limit) as any[];
+    .all(limit) as { id: string; name: string; type: string; mention_count: number }[];
 
   // Get bridging entities (entities with most relationships)
   const bridgingQuery = `
@@ -126,7 +132,12 @@ async function getGraphAnalytics(db: any, limit: number): Promise<AnalyticsResul
     ORDER BY rel_count DESC
     LIMIT ?
   `;
-  const bridgingEntities = db.prepare(bridgingQuery).all(limit) as any[];
+  const bridgingEntities = db.prepare(bridgingQuery).all(limit) as {
+    id: string;
+    name: string;
+    type: string;
+    rel_count: number;
+  }[];
 
   // Calculate density (if we can)
   const nodeCount = entityCount.count || 0;
@@ -163,7 +174,11 @@ async function getGraphAnalytics(db: any, limit: number): Promise<AnalyticsResul
 /**
  * Get pattern analytics
  */
-async function getPatternAnalytics(db: any, days: number, limit: number): Promise<AnalyticsResult> {
+async function getPatternAnalytics(
+  db: Database.Database,
+  days: number,
+  limit: number
+): Promise<AnalyticsResult> {
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
 
   // Get entity co-occurrence patterns
@@ -244,16 +259,16 @@ async function getPatternAnalytics(db: any, days: number, limit: number): Promis
 /**
  * Get overall statistics
  */
-async function getStatistics(db: any): Promise<AnalyticsResult> {
+async function getStatistics(db: Database.Database): Promise<AnalyticsResult> {
   // Total memories
   const totalMemories = db
     .prepare('SELECT COUNT(*) as count FROM memories WHERE archived = 0')
-    .get() as any;
+    .get() as { count: number };
 
   // Archived memories
   const archivedMemories = db
     .prepare('SELECT COUNT(*) as count FROM memories WHERE archived = 1')
-    .get() as any;
+    .get() as { count: number };
 
   // By type
   const byType = db
@@ -295,10 +310,14 @@ async function getStatistics(db: any): Promise<AnalyticsResult> {
     .all() as any[];
 
   // Entities
-  const entityCount = db.prepare('SELECT COUNT(*) as count FROM entities').get() as any;
+  const entityCount = db.prepare('SELECT COUNT(*) as count FROM entities').get() as {
+    count: number;
+  };
 
   // Relationships
-  const relCount = db.prepare('SELECT COUNT(*) as count FROM entity_relationships').get() as any;
+  const relCount = db.prepare('SELECT COUNT(*) as count FROM entity_relationships').get() as {
+    count: number;
+  };
 
   // Average importance
   const avgImportance = db
@@ -309,7 +328,7 @@ async function getStatistics(db: any): Promise<AnalyticsResult> {
     WHERE archived = 0
   `
     )
-    .get() as any;
+    .get() as { avg: number };
 
   // Last 24h activity
   const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
@@ -321,7 +340,7 @@ async function getStatistics(db: any): Promise<AnalyticsResult> {
     WHERE timestamp > ? AND archived = 0
   `
     )
-    .get(dayAgo) as any;
+    .get(dayAgo) as { count: number };
 
   const data = {
     total_active_memories: totalMemories.count,
@@ -346,7 +365,7 @@ async function getStatistics(db: any): Promise<AnalyticsResult> {
  * Get trend analytics
  */
 async function getTrendAnalytics(
-  db: any,
+  db: Database.Database,
   project?: string,
   entity?: string,
   days: number = 30
@@ -360,7 +379,7 @@ async function getTrendAnalytics(
 
     let query =
       'SELECT COUNT(*) as count FROM memories WHERE timestamp > ? AND timestamp <= ? AND archived = 0';
-    const params: any[] = [periodStart, periodEnd];
+    const params: (number | string)[] = [periodStart, periodEnd];
 
     if (entity) {
       query += ' AND entities LIKE ?';
@@ -372,7 +391,7 @@ async function getTrendAnalytics(
       params.push(project);
     }
 
-    const result = db.prepare(query).get(...params) as any;
+    const result = db.prepare(query).get(...params) as { count: number };
     periodCounts.push(result.count);
   }
 
@@ -415,7 +434,7 @@ async function getTrendAnalytics(
  * Get entity-specific analytics
  */
 async function getEntityAnalytics(
-  db: any,
+  db: Database.Database,
   entityName?: string,
   limit: number = 10
 ): Promise<AnalyticsResult> {
@@ -427,7 +446,7 @@ async function getEntityAnalytics(
       SELECT * FROM entities WHERE name LIKE ? LIMIT 1
     `
       )
-      .get(`%${entityName}%`) as any;
+      .get(`%${entityName}%`) as { id: string; name: string; type: string; mention_count: number };
 
     if (!entity) {
       return {
@@ -448,7 +467,13 @@ async function getEntityAnalytics(
       LIMIT ?
     `
       )
-      .all(`%${entity.name}%`, limit) as any[];
+      .all(`%${entity.name}%`, limit) as {
+      id: string;
+      type: string;
+      content: string;
+      project: string;
+      timestamp: string;
+    }[];
 
     // Get related entities
     const related = db
@@ -462,7 +487,12 @@ async function getEntityAnalytics(
       LIMIT ?
     `
       )
-      .all(entity.id, entity.id, entity.id, limit) as any[];
+      .all(entity.id, entity.id, entity.id, limit) as {
+      id: string;
+      name: string;
+      type: string;
+      strength: number;
+    }[];
 
     return {
       query_type: 'entities',
@@ -494,7 +524,7 @@ async function getEntityAnalytics(
       LIMIT ?
     `
       )
-      .all(limit) as any[];
+      .all(limit) as { id: string; name: string; type: string; mention_count: number }[];
 
     // Entity type distribution
     const typeDistribution = db
@@ -506,7 +536,7 @@ async function getEntityAnalytics(
       ORDER BY count DESC
     `
       )
-      .all() as any[];
+      .all() as { type: string; count: number }[];
 
     return {
       query_type: 'entities',

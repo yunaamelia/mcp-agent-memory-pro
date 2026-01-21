@@ -136,7 +136,7 @@ def test_cache_manager():
 
         print("\n✅ Cache Manager: ALL TESTS PASSED")
 
-        return True
+        print("\n✅ Cache Manager: ALL TESTS PASSED")
 
     finally:
         # Cleanup
