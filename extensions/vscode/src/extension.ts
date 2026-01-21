@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 
+import * as path from 'path';
+
 interface Memory {
   id: string;
   type: string;
@@ -12,9 +14,11 @@ interface Memory {
 
 let apiUrl: string;
 let statusBarItem: vscode.StatusBarItem;
+let extensionContext: vscode.ExtensionContext;
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('MCP Memory extension activated');
+  extensionContext = context;
 
   // Get configuration
   const config = vscode.workspace.getConfiguration('mcp-memory');
@@ -176,10 +180,15 @@ async function recallContext() {
       'mcpMemoryRecall',
       'Recalled Memories',
       vscode.ViewColumn.Two,
-      {}
+      {
+        enableScripts: true,
+        localResourceRoots: [
+          vscode.Uri.file(path.join(extensionContext.extensionPath, 'resources')),
+        ],
+      }
     );
 
-    panel.webview.html = generateRecallHtml(memories);
+    panel.webview.html = generateRecallHtml(memories, panel.webview.cspSource);
 
     statusBarItem.text = `$(lightbulb) ${memories.length} recalled`;
     setTimeout(() => {
@@ -222,12 +231,13 @@ async function openDashboard() {
     vscode.ViewColumn.One,
     {
       enableScripts: true,
+      localResourceRoots: [vscode.Uri.file(path.join(extensionContext.extensionPath, 'resources'))],
     }
   );
 
   try {
     const response = await axios.get(`${apiUrl}/analytics/overview`);
-    panel.webview.html = generateDashboardHtml(response.data);
+    panel.webview.html = generateDashboardHtml(response.data, panel.webview.cspSource);
   } catch (error) {
     panel.webview.html = '<h1>Error loading dashboard</h1>';
   }
@@ -243,16 +253,34 @@ function showMemoryDetail(memory: Memory) {
     'mcpMemoryDetail',
     'Memory Detail',
     vscode.ViewColumn.Two,
-    {}
+    {
+      enableScripts: true,
+      localResourceRoots: [vscode.Uri.file(path.join(extensionContext.extensionPath, 'resources'))],
+    }
   );
 
+  const cspSource = panel.webview.cspSource;
+
   panel.webview.html = `
+    <!DOCTYPE html>
     <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline'; script-src ${cspSource} 'unsafe-inline';">
+        <style>
+          body { font-family: var(--vscode-font-family); padding: 20px; color: var(--vscode-editor-foreground); background-color: var(--vscode-editor-background); }
+          h2 { color: var(--vscode-textLink-foreground); }
+          pre { background-color: var(--vscode-textBlockQuote-background); padding: 10px; border-radius: 4px; overflow-x: auto; }
+          .meta { margin-bottom: 20px; color: var(--vscode-descriptionForeground); }
+        </style>
+      </head>
       <body>
         <h2>${memory.type}</h2>
-        <p><strong>Project:</strong> ${memory.project || 'N/A'}</p>
-        <p><strong>Importance:</strong> ${memory.importance_score.toFixed(2)}</p>
-        <p><strong>Date:</strong> ${new Date(memory.timestamp).toLocaleString()}</p>
+        <div class="meta">
+          <p><strong>Project:</strong> ${memory.project || 'N/A'}</p>
+          <p><strong>Importance:</strong> ${memory.importance_score.toFixed(2)}</p>
+          <p><strong>Date:</strong> ${new Date(memory.timestamp).toLocaleString()}</p>
+        </div>
         <hr>
         <pre>${memory.content}</pre>
       </body>
@@ -260,13 +288,13 @@ function showMemoryDetail(memory: Memory) {
   `;
 }
 
-function generateRecallHtml(memories: Memory[]): string {
+function generateRecallHtml(memories: Memory[], cspSource: string): string {
   const items = memories
     .map(
       (m) => `
-    <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+    <div class="memory-card">
       <h3>${m.type}</h3>
-      <p><strong>Project:</strong> ${m.project || 'N/A'}</p>
+      <div class="meta"><strong>Project:</strong> ${m.project || 'N/A'}</div>
       <pre>${m.content.substring(0, 200)}...</pre>
     </div>
   `
@@ -274,11 +302,17 @@ function generateRecallHtml(memories: Memory[]): string {
     .join('');
 
   return `
+    <!DOCTYPE html>
     <html>
       <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline'; script-src ${cspSource} 'unsafe-inline';">
         <style>
-          body { font-family: Arial, sans-serif; padding: 20px; }
-          pre { background: #f4f4f4; padding: 10px; overflow-x: auto; }
+          body { font-family: var(--vscode-font-family); padding: 20px; color: var(--vscode-editor-foreground); background-color: var(--vscode-editor-background); }
+          .memory-card { margin-bottom: 20px; padding: 15px; border: 1px solid var(--vscode-widget-border); border-radius: 5px; background-color: var(--vscode-editor-inactiveSelectionBackground); }
+          h3 { margin-top: 0; color: var(--vscode-textLink-foreground); }
+          .meta { margin-bottom: 10px; color: var(--vscode-descriptionForeground); }
+          pre { background-color: var(--vscode-textBlockQuote-background); padding: 10px; overflow-x: auto; border-radius: 3px; }
         </style>
       </head>
       <body>
@@ -289,15 +323,19 @@ function generateRecallHtml(memories: Memory[]): string {
   `;
 }
 
-function generateDashboardHtml(data: any): string {
+function generateDashboardHtml(data: any, cspSource: string): string {
   return `
+    <!DOCTYPE html>
     <html>
       <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline'; script-src ${cspSource} 'unsafe-inline';">
         <style>
-          body { font-family: Arial, sans-serif; padding: 20px; }
-          .stat { display: inline-block; margin: 10px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-          .stat h3 { margin: 0; color: #666; }
-          .stat p { font-size: 24px; font-weight: bold; margin: 5px 0 0 0; }
+          body { font-family: var(--vscode-font-family); padding: 20px; color: var(--vscode-editor-foreground); }
+          .stat { display: inline-block; margin: 10px; padding: 15px; border: 1px solid var(--vscode-widget-border); border-radius: 5px; background-color: var(--vscode-editor-inactiveSelectionBackground); min-width: 150px; text-align: center; }
+          .stat h3 { margin: 0; color: var(--vscode-descriptionForeground); font-size: 14px; text-transform: uppercase; }
+          .stat p { font-size: 32px; font-weight: bold; margin: 10px 0 0 0; color: var(--vscode-textLink-foreground); }
+          h1 { color: var(--vscode-foreground); margin-bottom: 30px; }
         </style>
       </head>
       <body>
