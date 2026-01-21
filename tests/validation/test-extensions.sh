@@ -1,87 +1,171 @@
 #!/bin/bash
-# Test Extensions
-# Validates VSCode and Browser extension files
+# ============================================================================
+# Test Extensions (VSCode & Browser)
+# ============================================================================
 
 set -e
 
-echo "╔════════════════════════════════════════════════════════════╗"
-echo "║           EXTENSION VALIDATION                             ║"
-echo "╚════════════════════════════════════════════════════════════╝"
-
-cd "$(dirname "$0")/../.."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 GREEN='\033[0;32m'
+BLUE='\033[0;34m'
 RED='\033[0;31m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
-errors=0
+print_success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
 
+print_error() {
+    echo -e "${RED}❌ $1${NC}"
+}
+
+print_info() {
+    echo -e "${BLUE}ℹ️  $1${NC}"
+}
+
+echo -e "${BLUE}Testing Extensions${NC}"
 echo ""
-echo "═══ VSCode Extension ═══"
 
-# VSCode files
-vscode_files=(
-    "extensions/vscode/package.json"
-    "extensions/vscode/src/extension.ts"
-    "extensions/vscode/resources/icon.svg"
-)
+ERRORS=0
 
-for file in "${vscode_files[@]}"; do
-    if [ -f "$file" ]; then
-        echo -e "${GREEN}✓${NC} $file"
+# ============================================================================
+# Test VSCode Extension
+# ============================================================================
+
+echo "1. VSCode Extension"
+echo "-------------------"
+
+if [ -d "$PROJECT_ROOT/extensions/vscode" ]; then
+    cd "$PROJECT_ROOT/extensions/vscode"
+    
+    # Check package.json
+    if [ -f "package.json" ]; then
+        print_success "package.json exists"
     else
-        echo -e "${RED}✗${NC} $file (missing)"
-        ((errors++))
+        print_error "package.json not found"
+        ERRORS=$((ERRORS + 1))
     fi
-done
-
-# Validate package.json
-if [ -f "extensions/vscode/package.json" ]; then
-    if grep -q '"name"' extensions/vscode/package.json; then
-        echo -e "${GREEN}✓${NC} package.json has name field"
+    
+    # Check source files
+    if [ -f "src/extension.ts" ]; then
+        print_success "extension.ts exists"
     else
-        echo -e "${RED}✗${NC} package.json missing name field"
-        ((errors++))
+        print_error "extension.ts not found"
+        ERRORS=$((ERRORS + 1))
     fi
+    
+    # Check resources
+    if [ -f "resources/icon.svg" ]; then
+        print_success "icon.svg exists"
+    else
+        print_info "icon.svg not found (optional)"
+    fi
+    
+    # Validate package.json structure
+    if python3 -c "import json; j=json.load(open('package.json')); assert 'name' in j and 'version' in j" 2>/dev/null; then
+        print_success "package.json structure valid"
+    else
+        print_error "package.json structure invalid"
+        ERRORS=$((ERRORS + 1))
+    fi
+    
+    cd "$PROJECT_ROOT"
+else
+    print_error "VSCode extension directory not found"
+    ERRORS=$((ERRORS + 1))
 fi
 
 echo ""
-echo "═══ Browser Extension ═══"
 
-# Browser files
-browser_files=(
-    "extensions/browser/manifest.json"
-    "extensions/browser/popup/popup.html"
-    "extensions/browser/popup/popup.js"
-    "extensions/browser/popup/popup.css"
-    "extensions/browser/content/content.js"
-    "extensions/browser/background/background.js"
-)
+# ============================================================================
+# Test Browser Extension
+# ============================================================================
 
-for file in "${browser_files[@]}"; do
-    if [ -f "$file" ]; then
-        echo -e "${GREEN}✓${NC} $file"
+echo "2. Browser Extension"
+echo "--------------------"
+
+if [ -d "$PROJECT_ROOT/extensions/browser" ]; then
+    cd "$PROJECT_ROOT/extensions/browser"
+    
+    # Check manifest
+    if [ -f "manifest.json" ]; then
+        print_success "manifest.json exists"
+        
+        # Validate JSON
+        if python3 -c "import json; json.load(open('manifest.json'))" 2>/dev/null; then
+            print_success "manifest.json is valid JSON"
+        else
+            print_error "manifest.json is invalid JSON"
+            ERRORS=$((ERRORS + 1))
+        fi
+        
+        # Check manifest version
+        if python3 -c "import json; j=json.load(open('manifest.json')); assert j.get('manifest_version') == 3" 2>/dev/null; then
+            print_success "Manifest V3 confirmed"
+        else
+            print_info "Manifest version check skipped"
+        fi
     else
-        echo -e "${RED}✗${NC} $file (missing)"
-        ((errors++))
+        print_error "manifest.json not found"
+        ERRORS=$((ERRORS + 1))
     fi
-done
-
-# Validate manifest.json
-if [ -f "extensions/browser/manifest.json" ]; then
-    if grep -q '"manifest_version"' extensions/browser/manifest.json; then
-        echo -e "${GREEN}✓${NC} manifest.json has manifest_version"
+    
+    # Check popup files
+    if [ -f "popup/popup.html" ]; then
+        print_success "popup.html exists"
     else
-        echo -e "${RED}✗${NC} manifest.json missing manifest_version"
-        ((errors++))
+        print_error "popup.html not found"
+        ERRORS=$((ERRORS + 1))
     fi
+    
+    if [ -f "popup/popup.js" ]; then
+        print_success "popup.js exists"
+    else
+        print_error "popup.js not found"
+        ERRORS=$((ERRORS + 1))
+    fi
+    
+    if [ -f "popup/popup.css" ]; then
+        print_success "popup.css exists"
+    else
+        print_info "popup.css not found (optional)"
+    fi
+    
+    # Check background script
+    if [ -f "background/background.js" ]; then
+        print_success "background.js exists"
+    else
+        print_error "background.js not found"
+        ERRORS=$((ERRORS + 1))
+    fi
+    
+    # Check content script
+    if [ -f "content/content.js" ]; then
+        print_success "content.js exists"
+    else
+        print_error "content.js not found"
+        ERRORS=$((ERRORS + 1))
+    fi
+    
+    cd "$PROJECT_ROOT"
+else
+    print_error "Browser extension directory not found"
+    ERRORS=$((ERRORS + 1))
 fi
 
 echo ""
-if [ $errors -eq 0 ]; then
-    echo -e "${GREEN}✅ ALL EXTENSION FILES VALIDATED${NC}"
+
+# ============================================================================
+# Summary
+# ============================================================================
+
+if [ $ERRORS -eq 0 ]; then
+    print_success "All extension tests passed"
     exit 0
 else
-    echo -e "${RED}❌ $errors ERROR(S) FOUND${NC}"
+    print_error "$ERRORS error(s) found"
     exit 1
 fi

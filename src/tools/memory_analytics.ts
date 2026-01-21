@@ -11,7 +11,8 @@ import { getDatabase } from '../storage/database.js';
 export const memoryAnalyticsSchema = z.object({
   query_type: z
     .enum(['graph', 'patterns', 'statistics', 'trends', 'entities'])
-    .describe('Type of analytics query'),
+    .default('statistics')
+    .describe('Type of analytics query (default: statistics)'),
   project: z.string().optional().describe('Optional project filter'),
   entity: z.string().optional().describe('Entity for entity-specific queries'),
   days: z.number().default(30).describe('Number of days to analyze (default: 30)'),

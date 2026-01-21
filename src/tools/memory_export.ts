@@ -69,7 +69,8 @@ conn.row_factory = sqlite3.Row
 
 service = ExportService(conn)
 
-filters = ${JSON.stringify(params.filters || null)}
+filters_json = '''${JSON.stringify(params.filters || null)}'''
+filters = json.loads(filters_json)
 
 if '${params.format}' == 'json':
     result = service.export_to_json('${outputPath}', filters)

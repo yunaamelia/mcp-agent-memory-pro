@@ -17,11 +17,11 @@
 
 ## 📊 Status
 
-| Component | Status |
-|-----------|--------|
-| Phase 0 - Foundation | ✅ Complete |
-| Phase 1 - Implementation | ✅ Complete |
-| Phase 2 - Intelligence | 🚧 In Progress |
+| Component                | Status         |
+| :----------------------- | :------------- |
+| Phase 0 - Foundation     | ✅ Complete    |
+| Phase 1 - Implementation | ✅ Complete    |
+| Phase 2 - Intelligence   | 🚧 In Progress |
 
 ## 🚀 Quick Start
 
@@ -63,7 +63,7 @@ npm run build
 
 Add to your Claude Desktop config file:
 
-**macOS**:  `~/Library/Application Support/Claude/claude_desktop_config.json`
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ```json
 {
@@ -85,9 +85,11 @@ Restart Claude Desktop.
 Once configured, Claude can use the memory system:
 
 **Store a memory:**
-> "Remember this function:  `async function fetchUser(id) { return await db.users.findById(id); }`"
+
+> "Remember this function: `async function fetchUser(id) { return await db.users.findById(id); }`"
 
 **Search memories:**
+
 > "What do you remember about fetching users from the database?"
 
 ### CLI Usage
@@ -136,7 +138,7 @@ npm run format
 
 ## 🏗️ Architecture
 
-```
+```text
 ┌─────────────────────────────────────┐
 │      MCP Client (Claude Desktop)   │
 └────────────────┬────────────────────┘
@@ -178,12 +180,22 @@ npm run start:all      # Start all services
 - [x] Phase 0: Technical validation
 - [x] Phase 1: Foundation implementation
 - [ ] Phase 2: Intelligence layer (background workers)
-- [ ] Phase 3:  Cognitive features (graph, insights)
+- [ ] Phase 3: Cognitive features (graph, insights)
 - [ ] Phase 4: Analytics and patterns
 
 ## 🤝 Contributing
 
 Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
+
+## 📜 Development Rules (Tier 0)
+
+This project strictly adheres to the Global AI Rules defined in `~/.gemini/GEMINI.md`.
+**ALL AI AGENTS MUST READ AND FOLLOW THE GLOBAL RULES BEFORE PERFORMING ANY TASK.**
+
+Key Protocols (Tier 0):
+
+- **Super-Memory Mandate**: Always use `mcp-agent-memory` for context recall and storage.
+- **Quality Gate**: No memory = No push.
 
 ## 📄 License
 
@@ -191,8 +203,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## 👤 Author
 
-**ahmadrizal7**
+### Author: ahmadrizal7
 
 ---
 
-**Built with:**  TypeScript · Python · SQLite · LanceDB · FastAPI · MCP SDK
+**Built with:** TypeScript · Python · SQLite · LanceDB · FastAPI · MCP SDK

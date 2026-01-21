@@ -1,95 +1,307 @@
 #!/bin/bash
-# Phase 5 Validation Script
-# Runs all Phase 5 validation tests
+# ============================================================================
+# Phase 5 Implementation Validation Script
+# ============================================================================
 
 set -e
+set -o pipefail
 
-echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║           PHASE 5 VALIDATION - FULL SUITE                   ║"
-echo "╚══════════════════════════════════════════════════════════════╝"
-echo ""
-
-cd "$(dirname "$0")/../.."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+LOG_FILE="$SCRIPT_DIR/../phase5-validation.log"
 
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m'
+BOLD='\033[1m'
 
-passed=0
-failed=0
+CHECK="✅"
+CROSS="❌"
 
-run_test() {
-    local name=$1
-    local cmd=$2
+print_header() {
+    echo ""
+    echo -e "${BOLD}${BLUE}=====================================${NC}"
+    echo -e "${BOLD}${BLUE}$1${NC}"
+    echo -e "${BOLD}${BLUE}=====================================${NC}"
+    echo ""
+}
+
+print_success() {
+    echo -e "${GREEN}${CHECK} $1${NC}"
+}
+
+print_error() {
+    echo -e "${RED}${CROSS} $1${NC}"
+}
+
+print_info() {
+    echo -e "${CYAN}ℹ️  $1${NC}"
+}
+
+start_timer() {
+    START_TIME=$(date +%s)
+}
+
+end_timer() {
+    END_TIME=$(date +%s)
+    echo $((END_TIME - START_TIME))
+}
+
+# ============================================================================
+# COMPONENT TESTS
+# ============================================================================
+
+test_ml_engine() {
+    echo "Testing ML engine..."
+    start_timer
     
-    echo -n "Testing $name... "
-    
-    if eval "$cmd" > /tmp/phase5_test_output.txt 2>&1; then
-        echo -e "${GREEN}✓ PASSED${NC}"
-        ((passed++))
+    if python3 "$PROJECT_ROOT/tests/phase5/test_ml_engine.py" >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "ML engine tests passed (${duration}s)"
+        return 0
     else
-        echo -e "${RED}✗ FAILED${NC}"
-        ((failed++))
-        cat /tmp/phase5_test_output.txt
+        duration=$(end_timer)
+        print_error "ML engine tests failed (${duration}s)"
+        return 1
     fi
 }
 
-# 1. Python Tests
-echo ""
-echo "═══ Python Tests ═══"
+test_automation() {
+    echo "Testing automation system..."
+    start_timer
+    
+    if python3 "$PROJECT_ROOT/tests/phase5/test_automation.py" >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "Automation tests passed (${duration}s)"
+        return 0
+    else
+        duration=$(end_timer)
+        print_error "Automation tests failed (${duration}s)"
+        return 1
+    fi
+}
 
-run_test "ML Engine" "python3 tests/phase5/test_ml_engine.py"
-run_test "Automation" "python3 tests/phase5/test_automation.py"
-run_test "Predictive" "python3 tests/phase5/test_predictive.py"
-run_test "Caching" "python3 tests/phase5/test_caching.py"
-run_test "Plugins" "python3 tests/phase5/test_plugins.py"
+test_predictive() {
+    echo "Testing predictive analytics..."
+    start_timer
+    
+    if python3 "$PROJECT_ROOT/tests/phase5/test_predictive.py" >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "Predictive tests passed (${duration}s)"
+        return 0
+    else
+        duration=$(end_timer)
+        print_error "Predictive tests failed (${duration}s)"
+        return 1
+    fi
+}
 
-# 2. Plugin & Caching pytest
-echo ""
-echo "═══ Pytest Tests ═══"
+test_caching() {
+    echo "Testing caching system..."
+    start_timer
+    
+    if python3 "$PROJECT_ROOT/tests/phase5/test_caching.py" >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "Caching tests passed (${duration}s)"
+        return 0
+    else
+        duration=$(end_timer)
+        print_error "Caching tests failed (${duration}s)"
+        return 1
+    fi
+}
 
-run_test "Pytest Suite" "pytest tests/phase5/test_plugins_caching.py -v"
+test_plugins() {
+    echo "Testing plugin system..."
+    start_timer
+    
+    if python3 "$PROJECT_ROOT/tests/phase5/test_plugins.py" >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "Plugin tests passed (${duration}s)"
+        return 0
+    else
+        duration=$(end_timer)
+        print_error "Plugin tests failed (${duration}s)"
+        return 1
+    fi
+}
 
-# 3. TypeScript Build
-echo ""
-echo "═══ TypeScript Validation ═══"
+test_extensions() {
+    echo "Testing extensions..."
+    start_timer
+    
+    chmod +x "$SCRIPT_DIR/test-extensions.sh"
+    if "$SCRIPT_DIR/test-extensions.sh" >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "Extensions tests passed (${duration}s)"
+        return 0
+    else
+        duration=$(end_timer)
+        print_error "Extensions tests failed (${duration}s)"
+        return 1
+    fi
+}
 
-run_test "TypeScript Build" "npm run build"
+test_component_check() {
+    echo "Running component validation..."
+    start_timer
+    
+    if python3 "$PROJECT_ROOT/scripts/validate_phase5.py" >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "Component check passed (${duration}s)"
+        return 0
+    else
+        duration=$(end_timer)
+        print_error "Component check failed (${duration}s)"
+        return 1
+    fi
+}
 
-# 4. Existing Validation
-echo ""
-echo "═══ Phase 5 Component Check ═══"
+test_typescript_build() {
+    echo "Testing TypeScript build..."
+    start_timer
+    
+    cd "$PROJECT_ROOT"
+    if npm run build >> "$LOG_FILE" 2>&1; then
+        duration=$(end_timer)
+        print_success "TypeScript build passed (${duration}s)"
+        return 0
+    else
+        duration=$(end_timer)
+        print_error "TypeScript build failed (${duration}s)"
+        return 1
+    fi
+}
 
-run_test "Component Check" "python3 scripts/validate_phase5.py"
+# ============================================================================
+# MAIN VALIDATION FLOW
+# ============================================================================
 
-# 5. Extensions Check
-echo ""
-echo "═══ Extension Files ═══"
+main() {
+    > "$LOG_FILE"
+    
+    print_header "✨ Phase 5 Advanced Intelligence & Ecosystem Validation"
+    
+    echo -e "${BOLD}MCP Agent Memory Pro - Complete AI Ecosystem${NC}"
+    echo "Started at: $(date)"
+    echo ""
+    
+    cd "$PROJECT_ROOT"
+    
+    start_timer
+    TEST_FAILURES=0
+    TOTAL_TESTS=0
+    
+    # ========================================================================
+    # STEP 1: TypeScript Build
+    # ========================================================================
+    
+    print_header "Step 1: TypeScript Build"
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_typescript_build || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    # ========================================================================
+    # STEP 2: ML & Automation
+    # ========================================================================
+    
+    print_header "Step 2: ML Engine & Automation"
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_ml_engine || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_automation || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    # ========================================================================
+    # STEP 3: Predictive & Caching
+    # ========================================================================
+    
+    print_header "Step 3: Predictive Analytics & Caching"
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_predictive || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_caching || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    # ========================================================================
+    # STEP 4: Plugin System
+    # ========================================================================
+    
+    print_header "Step 4: Plugin System"
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_plugins || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    # ========================================================================
+    # STEP 5: Extensions
+    # ========================================================================
+    
+    print_header "Step 5: Extensions (VSCode & Browser)"
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_extensions || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    # ========================================================================
+    # STEP 6: Component Check
+    # ========================================================================
+    
+    print_header "Step 6: Component Validation"
+    
+    TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    test_component_check || TEST_FAILURES=$((TEST_FAILURES + 1))
+    
+    # ========================================================================
+    # Summary
+    # ========================================================================
+    
+    TOTAL_DURATION=$(end_timer)
+    PASSED=$((TOTAL_TESTS - TEST_FAILURES))
+    
+    print_header "Validation Summary"
+    
+    echo "Tests: $PASSED / $TOTAL_TESTS passed"
+    echo "Duration: ${TOTAL_DURATION}s"
+    echo ""
+    
+    if [ $TEST_FAILURES -eq 0 ]; then
+        echo -e "${GREEN}${BOLD}${CHECK} Phase 5 Validation PASSED!${NC}"
+        echo ""
+        echo "Advanced Intelligence Features:"
+        echo "  ✓ ML Importance Prediction"
+        echo "  ✓ Auto-Tagging with ML"
+        echo "  ✓ Task Prediction"
+        echo "  ✓ Smart Automation"
+        echo "  ✓ Multi-level Caching"
+        echo "  ✓ Plugin System"
+        echo "  ✓ 3 New MCP Tools"
+        echo "  ✓ VSCode Extension"
+        echo "  ✓ Browser Extension"
+        echo ""
+        echo "Complete System:"
+        echo "  • 13 MCP Tools (across 5 phases)"
+        echo "  • 7 Background Workers"
+        echo "  • 9 Cognitive Services"
+        echo "  • 2 Extensions"
+        echo "  • Plugin Architecture"
+        echo ""
+        exit 0
+    else
+        echo -e "${RED}${BOLD}${CROSS} Validation Failed${NC}"
+        echo ""
+        echo "$TEST_FAILURES test(s) failed"
+        echo ""
+        echo "Check log: $LOG_FILE"
+        exit 1
+    fi
+}
 
-if [ -f "extensions/vscode/package.json" ] && [ -f "extensions/browser/manifest.json" ]; then
-    echo -e "${GREEN}✓ Extension files exist${NC}"
-    ((passed++))
-else
-    echo -e "${RED}✗ Missing extension files${NC}"
-    ((failed++))
-fi
+trap 'echo -e "\n${RED}ERROR: Validation failed unexpectedly${NC}"; exit 3' ERR
 
-# Summary
-echo ""
-echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║                    VALIDATION SUMMARY                        ║"
-echo "╚══════════════════════════════════════════════════════════════╝"
-echo ""
-echo "  Passed: $passed"
-echo "  Failed: $failed"
-echo ""
-
-if [ $failed -eq 0 ]; then
-    echo -e "${GREEN}✅ PHASE 5 VALIDATION SUCCESSFUL${NC}"
-    exit 0
-else
-    echo -e "${RED}❌ PHASE 5 VALIDATION FAILED${NC}"
-    exit 1
-fi
+main

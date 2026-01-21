@@ -21,7 +21,7 @@ describe('Store Memory Tool', () => {
 
   it('should store a valid memory', async () => {
     const result = await handleStoreMemory({
-      content: 'Test memory content',
+      content: 'Test memory content ' + Date.now(),
       type: MemoryType.NOTE,
       source: MemorySource.MANUAL,
       importance: 'medium',
@@ -57,7 +57,7 @@ describe('Store Memory Tool', () => {
 
   it('should store memory with context', async () => {
     const result = await handleStoreMemory({
-      content: 'function test() { return true; }',
+      content: 'function test() { return true; } // ' + Date.now(),
       type: MemoryType.CODE,
       source: MemorySource.IDE,
       context: {

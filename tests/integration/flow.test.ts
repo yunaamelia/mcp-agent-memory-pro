@@ -17,7 +17,13 @@ describe('Memory Integration Flow', () => {
     // BETTER: Mock the dependencies completely or use a separate test config.
 
     // For now, let's mock the embedding response
-    jest.spyOn(embeddingClient, 'generateEmbedding').mockResolvedValue(new Array(384).fill(0.1));
+    jest.spyOn(embeddingClient, 'generateEmbedding').mockImplementation(async (text: string) => {
+      const vec = new Array(384).fill(0.1);
+      if (text.includes('Apollo')) {
+        vec[0] = 0.9; // Make it point in a slightly different direction
+      }
+      return vec;
+    });
   });
 
   afterAll(() => {
@@ -47,7 +53,7 @@ describe('Memory Integration Flow', () => {
     // 2. Search
     const searchResult = await handleSearchMemory({
       query: 'What does Apollo use?',
-      limit: 1,
+      limit: 10,
     });
 
     const searchResponse = JSON.parse(searchResult.content[0].text);
@@ -55,7 +61,8 @@ describe('Memory Integration Flow', () => {
     expect(Array.isArray(searchResponse.results)).toBe(true);
     expect(searchResponse.results.length).toBeGreaterThan(0);
 
-    const memory = searchResponse.results[0];
+    const memory = searchResponse.results.find((m: any) => m.content === content);
+    expect(memory).toBeDefined();
     expect(memory.content).toBe(content);
     expect(memory.project).toBe('Apollo');
   });

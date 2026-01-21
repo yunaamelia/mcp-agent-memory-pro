@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, existsSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
@@ -44,7 +45,26 @@ export class DatabaseManager {
 
   private init() {
     try {
-      const schemaPath = join(process.cwd(), 'src', 'storage', 'schemas.sql');
+      // Get the directory of the current module (works in ESM)
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+
+      // Schema is in the same directory as this file (storage/)
+      let schemaPath = join(__dirname, 'schemas.sql');
+
+      // Fallback: try from dist directory (compiled output)
+      if (!existsSync(schemaPath)) {
+        // When running from dist/, schemas.sql should be copied there or use src/
+        const projectRoot = dirname(dirname(__dirname)); // Go up from dist/storage/ to project root
+        schemaPath = join(projectRoot, 'src', 'storage', 'schemas.sql');
+      }
+
+      // Final fallback: try process.cwd() with src path
+      if (!existsSync(schemaPath)) {
+        schemaPath = join(process.cwd(), 'src', 'storage', 'schemas.sql');
+      }
+
+      logger.debug(`Loading schema from: ${schemaPath}`);
       const schema = readFileSync(schemaPath, 'utf-8');
       this.db.exec(schema);
       logger.info('Database initialized successfully');

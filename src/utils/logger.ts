@@ -41,18 +41,22 @@ class Logger {
 
     const formatted = this.formatMessage(level, ...args);
 
-    // Console output
-    const consoleMethod =
-      level === 'error' ? console.error : level === 'warn' ? console.warn : console.log;
-    consoleMethod(formatted);
-
-    // File output
+    // File output only (avoid stdio interference with MCP JSON-RPC protocol)
+    // MCP protocol uses stdio for communication, so console output breaks the protocol
     if (this.logFile) {
       try {
         appendFileSync(this.logFile, formatted + '\n');
-      } catch (error) {
-        console.error('Failed to write to log file:', error);
+      } catch {
+        // Silently fail - can't use console.error here
       }
+    }
+
+    // Only output to console if NOT running as MCP server (detected by checking if we have a TTY)
+    // In MCP mode, stdout/stderr must only contain JSON-RPC messages
+    if (process.stderr.isTTY) {
+      const consoleMethod =
+        level === 'error' ? console.error : level === 'warn' ? console.warn : console.error;
+      consoleMethod(formatted);
     }
   }
 
