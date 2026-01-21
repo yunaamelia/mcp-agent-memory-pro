@@ -18,8 +18,8 @@ We do not need comments most of the time.
 
 ```javascript
 // Bad: States the obvious
-let counter = 0;  // Initialize counter to zero
-counter++;  // Increment counter by one
+let counter = 0; // Initialize counter to zero
+counter++; // Increment counter by one
 ```
 
 **Redundant Comments**
@@ -27,7 +27,7 @@ counter++;  // Increment counter by one
 ```javascript
 // Bad: Comment repeats the code
 function getUserName() {
-    return user.name;  // Return the user's name
+  return user.name; // Return the user's name
 }
 ```
 
@@ -36,7 +36,7 @@ function getUserName() {
 ```javascript
 // Bad: Comment doesn't match the code
 // Calculate tax at 5% rate
-const tax = price * 0.08;  // Actually 8%
+const tax = price * 0.08; // Actually 8%
 ```
 
 ### ✅ WRITE These Comment Types
@@ -46,7 +46,7 @@ const tax = price * 0.08;  // Actually 8%
 ```javascript
 // Good: Explains WHY this specific calculation
 // Apply progressive tax brackets: 10% up to 10k, 20% above
-const tax = calculateProgressiveTax(income, [0.10, 0.20], [10000]);
+const tax = calculateProgressiveTax(income, [0.1, 0.2], [10000]);
 ```
 
 **Non-obvious Algorithms**
@@ -56,11 +56,11 @@ const tax = calculateProgressiveTax(income, [0.10, 0.20], [10000]);
 // Using Floyd-Warshall for all-pairs shortest paths
 // because we need distances between all nodes
 for (let k = 0; k < vertices; k++) {
-    for (let i = 0; i < vertices; i++) {
-        for (let j = 0; j < vertices; j++) {
-            // ... implementation
-        }
+  for (let i = 0; i < vertices; i++) {
+    for (let j = 0; j < vertices; j++) {
+      // ... implementation
     }
+  }
 }
 ```
 
@@ -97,7 +97,7 @@ Before writing a comment, ask:
 ```javascript
 /**
  * Calculate compound interest using the standard formula.
- * 
+ *
  * @param {number} principal - Initial amount invested
  * @param {number} rate - Annual interest rate (as decimal, e.g., 0.05 for 5%)
  * @param {number} time - Time period in years
@@ -105,7 +105,7 @@ Before writing a comment, ask:
  * @returns {number} Final amount after compound interest
  */
 function calculateCompoundInterest(principal, rate, time, compoundFrequency = 1) {
-    // ... implementation
+  // ... implementation
 }
 ```
 
@@ -113,8 +113,8 @@ function calculateCompoundInterest(principal, rate, time, compoundFrequency = 1)
 
 ```javascript
 // Good: Explains the source or reasoning
-const MAX_RETRIES = 3;  // Based on network reliability studies
-const API_TIMEOUT = 5000;  // AWS Lambda timeout is 15s, leaving buffer
+const MAX_RETRIES = 3; // Based on network reliability studies
+const API_TIMEOUT = 5000; // AWS Lambda timeout is 15s, leaving buffer
 ```
 
 ### Annotations
@@ -149,7 +149,7 @@ const newFunction = () => { ... };
 // Modified by John on 2023-01-15
 // Fixed bug reported by Sarah on 2023-02-03
 function processData() {
-    // ... implementation
+  // ... implementation
 }
 ```
 

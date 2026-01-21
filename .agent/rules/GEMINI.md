@@ -42,14 +42,14 @@ Agent activated → Check frontmatter "skills:" field
 
 **Before ANY action, classify the request:**
 
-| Request Type | Trigger Keywords | Active Tiers | Result |
-|--------------|------------------|--------------|--------|
-| **QUESTION** | "what is", "how does", "explain" | TIER 0 only | Text Response |
-| **SURVEY/INTEL**| "analyze", "list files", "overview" | TIER 0 + Explorer | Session Intel (No File) |
-| **SIMPLE CODE** | "fix", "add", "change" (single file) | TIER 0 + TIER 1 (lite) | Inline Edit |
-| **COMPLEX CODE**| "build", "create", "implement", "refactor" | TIER 0 + TIER 1 (full) + Agent | **{task-slug}.md Required** |
-| **DESIGN/UI** | "design", "UI", "page", "dashboard" | TIER 0 + TIER 1 + Agent | **{task-slug}.md Required** |
-| **SLASH CMD** | /create, /orchestrate, /debug | Command-specific flow | Variable |
+| Request Type     | Trigger Keywords                           | Active Tiers                   | Result                      |
+| ---------------- | ------------------------------------------ | ------------------------------ | --------------------------- |
+| **QUESTION**     | "what is", "how does", "explain"           | TIER 0 only                    | Text Response               |
+| **SURVEY/INTEL** | "analyze", "list files", "overview"        | TIER 0 + Explorer              | Session Intel (No File)     |
+| **SIMPLE CODE**  | "fix", "add", "change" (single file)       | TIER 0 + TIER 1 (lite)         | Inline Edit                 |
+| **COMPLEX CODE** | "build", "create", "implement", "refactor" | TIER 0 + TIER 1 (full) + Agent | **{task-slug}.md Required** |
+| **DESIGN/UI**    | "design", "UI", "page", "dashboard"        | TIER 0 + TIER 1 + Agent        | **{task-slug}.md Required** |
+| **SLASH CMD**    | /create, /orchestrate, /debug              | Command-specific flow          | Variable                    |
 
 ---
 
@@ -113,11 +113,11 @@ When user's prompt is NOT in English:
 
 ### 📱 Project Type Routing
 
-| Project Type | Primary Agent | Skills |
-|--------------|---------------|--------|
-| **MOBILE** (iOS, Android, RN, Flutter) | `mobile-developer` | mobile-design |
-| **WEB** (Next.js, React web) | `frontend-specialist` | frontend-design |
-| **BACKEND** (API, server, DB) | `backend-specialist` | api-patterns, database-design |
+| Project Type                           | Primary Agent         | Skills                        |
+| -------------------------------------- | --------------------- | ----------------------------- |
+| **MOBILE** (iOS, Android, RN, Flutter) | `mobile-developer`    | mobile-design                 |
+| **WEB** (Next.js, React web)           | `frontend-specialist` | frontend-design               |
+| **BACKEND** (API, server, DB)          | `backend-specialist`  | api-patterns, database-design |
 
 > 🔴 **Mobile + frontend-specialist = WRONG.** Mobile = mobile-developer ONLY.
 
@@ -129,13 +129,13 @@ When user's prompt is NOT in English:
 
 **MANDATORY: Every user request must pass through the Socratic Gate before ANY tool use or implementation.**
 
-| Request Type | Strategy | Required Action |
-|--------------|----------|-----------------|
-| **New Feature / Build** | Deep Discovery | ASK minimum 3 strategic questions |
-| **Code Edit / Bug Fix** | Context Check | Confirm understanding + ask impact questions |
-| **Vague / Simple** | Clarification | Ask Purpose, Users, and Scope |
-| **Full Orchestration** | Gatekeeper | **STOP** subagents until user confirms plan details |
-| **Direct "Proceed"** | Validation | **STOP** → Even if answers are given, ask 2 "Edge Case" questions |
+| Request Type            | Strategy       | Required Action                                                   |
+| ----------------------- | -------------- | ----------------------------------------------------------------- |
+| **New Feature / Build** | Deep Discovery | ASK minimum 3 strategic questions                                 |
+| **Code Edit / Bug Fix** | Context Check  | Confirm understanding + ask impact questions                      |
+| **Vague / Simple**      | Clarification  | Ask Purpose, Users, and Scope                                     |
+| **Full Orchestration**  | Gatekeeper     | **STOP** subagents until user confirms plan details               |
+| **Direct "Proceed"**    | Validation     | **STOP** → Even if answers are given, ask 2 "Edge Case" questions |
 
 **Protocol:**
 
@@ -148,10 +148,10 @@ When user's prompt is NOT in English:
 
 **Trigger:** When the user says "son kontrolleri yap", "final checks", "çalıştır tüm testleri", or similar phrases.
 
-| Task Stage | Command | Purpose |
-|------------|---------|---------|
-| **Manual Audit** | `python scripts/checklist.py .` | Priority-based project audit |
-| **Pre-Deploy** | `python scripts/checklist.py . --url <URL>` | Full Suite + Performance + E2E |
+| Task Stage       | Command                                     | Purpose                        |
+| ---------------- | ------------------------------------------- | ------------------------------ |
+| **Manual Audit** | `python scripts/checklist.py .`             | Priority-based project audit   |
+| **Pre-Deploy**   | `python scripts/checklist.py . --url <URL>` | Full Suite + Performance + E2E |
 
 **Priority Execution Order:**
 
@@ -164,30 +164,30 @@ When user's prompt is NOT in English:
 
 **Available Scripts (12 total):**
 
-| Script | Skill | When to Use |
-|--------|-------|-------------|
-| `security_scan.py` | vulnerability-scanner | Always on deploy |
-| `dependency_analyzer.py` | vulnerability-scanner | Weekly / Deploy |
-| `lint_runner.py` | lint-and-validate | Every code change |
-| `test_runner.py` | testing-patterns | After logic change |
-| `schema_validator.py` | database-design | After DB change |
-| `ux_audit.py` | frontend-design | After UI change |
-| `accessibility_checker.py` | frontend-design | After UI change |
-| `seo_checker.py` | seo-fundamentals | After page change |
-| `bundle_analyzer.py` | performance-profiling | Before deploy |
-| `mobile_audit.py` | mobile-design | After mobile change |
-| `lighthouse_audit.py` | performance-profiling | Before deploy |
-| `playwright_runner.py` | webapp-testing | Before deploy |
+| Script                     | Skill                 | When to Use         |
+| -------------------------- | --------------------- | ------------------- |
+| `security_scan.py`         | vulnerability-scanner | Always on deploy    |
+| `dependency_analyzer.py`   | vulnerability-scanner | Weekly / Deploy     |
+| `lint_runner.py`           | lint-and-validate     | Every code change   |
+| `test_runner.py`           | testing-patterns      | After logic change  |
+| `schema_validator.py`      | database-design       | After DB change     |
+| `ux_audit.py`              | frontend-design       | After UI change     |
+| `accessibility_checker.py` | frontend-design       | After UI change     |
+| `seo_checker.py`           | seo-fundamentals      | After page change   |
+| `bundle_analyzer.py`       | performance-profiling | Before deploy       |
+| `mobile_audit.py`          | mobile-design         | After mobile change |
+| `lighthouse_audit.py`      | performance-profiling | Before deploy       |
+| `playwright_runner.py`     | webapp-testing        | Before deploy       |
 
 > 🔴 **Agents & Skills can invoke ANY script** via `python .agent/skills/<skill>/scripts/<script>.py`
 
 ### 🎭 Gemini Mode Mapping
 
-| Mode | Agent | Behavior |
-|------|-------|----------|
+| Mode     | Agent             | Behavior                                     |
+| -------- | ----------------- | -------------------------------------------- |
 | **plan** | `project-planner` | 4-phase methodology. NO CODE before Phase 4. |
-| **ask** | - | Focus on understanding. Ask questions. |
-| **edit** | `orchestrator` | Execute. Check `{task-slug}.md` first. |
+| **ask**  | -                 | Focus on understanding. Ask questions.       |
+| **edit** | `orchestrator`    | Execute. Check `{task-slug}.md` first.       |
 
 **Plan Mode (4-Phase):**
 
@@ -204,10 +204,10 @@ When user's prompt is NOT in English:
 
 > **Design rules are in the specialist agents, NOT here.**
 
-| Task | Read |
-|------|------|
-| Web UI/UX | `.agent/frontend-specialist.md` |
-| Mobile UI/UX | `.agent/mobile-developer.md` |
+| Task         | Read                            |
+| ------------ | ------------------------------- |
+| Web UI/UX    | `.agent/frontend-specialist.md` |
+| Mobile UI/UX | `.agent/mobile-developer.md`    |
 
 **These agents contain:**
 
@@ -224,38 +224,38 @@ When user's prompt is NOT in English:
 
 ### Available Master Agents (8)
 
-| Agent | Domain & Focus |
-|-------|----------------|
-| `orchestrator` | Multi-agent coordination and synthesis |
-| `project-planner` | Discovery, Architecture, and Task Planning |
-| `security-auditor` | Master Cybersecurity (Audit + Pentest + Infra Hardening) |
-| `backend-specialist` | Backend Architect (API + Database + Server/Docker Deploy) |
-| `frontend-specialist` | Frontend & Growth (UI/UX + SEO + Edge/Static Deploy) |
-| `mobile-developer` | Mobile Specialist (Cross-platform + Mobile Performance)|
-| `debugger` | Systematic Root Cause Analysis & Bug Fixing |
-| `game-developer` | Specialized Game Logic & Assets & Performance |
+| Agent                 | Domain & Focus                                            |
+| --------------------- | --------------------------------------------------------- |
+| `orchestrator`        | Multi-agent coordination and synthesis                    |
+| `project-planner`     | Discovery, Architecture, and Task Planning                |
+| `security-auditor`    | Master Cybersecurity (Audit + Pentest + Infra Hardening)  |
+| `backend-specialist`  | Backend Architect (API + Database + Server/Docker Deploy) |
+| `frontend-specialist` | Frontend & Growth (UI/UX + SEO + Edge/Static Deploy)      |
+| `mobile-developer`    | Mobile Specialist (Cross-platform + Mobile Performance)   |
+| `debugger`            | Systematic Root Cause Analysis & Bug Fixing               |
+| `game-developer`      | Specialized Game Logic & Assets & Performance             |
 
 ### Key Skills
 
-| Skill | Purpose |
-|-------|---------|
-| `clean-code` | Coding standards (GLOBAL) |
-| `brainstorming` | Socratic questioning |
-| `app-builder` | Full-stack orchestration |
-| `frontend-design` | Web UI patterns |
-| `mobile-design` | Mobile UI patterns |
-| `plan-writing` | {task-slug}.md format |
-| `behavioral-modes` | Mode switching |
+| Skill              | Purpose                   |
+| ------------------ | ------------------------- |
+| `clean-code`       | Coding standards (GLOBAL) |
+| `brainstorming`    | Socratic questioning      |
+| `app-builder`      | Full-stack orchestration  |
+| `frontend-design`  | Web UI patterns           |
+| `mobile-design`    | Mobile UI patterns        |
+| `plan-writing`     | {task-slug}.md format     |
+| `behavioral-modes` | Mode switching            |
 
 ### Script Locations
 
-| Script | Path |
-|--------|------|
-| Full verify | `scripts/verify_all.py` |
-| Security scan | `.agent/skills/vulnerability-scanner/scripts/security_scan.py` |
-| UX audit | `.agent/skills/frontend-design/scripts/ux_audit.py` |
-| Mobile audit | `.agent/skills/mobile-design/scripts/mobile_audit.py` |
-| Lighthouse | `.agent/skills/performance-profiling/scripts/lighthouse_audit.py` |
-| Playwright | `.agent/skills/webapp-testing/scripts/playwright_runner.py` |
+| Script        | Path                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| Full verify   | `scripts/verify_all.py`                                           |
+| Security scan | `.agent/skills/vulnerability-scanner/scripts/security_scan.py`    |
+| UX audit      | `.agent/skills/frontend-design/scripts/ux_audit.py`               |
+| Mobile audit  | `.agent/skills/mobile-design/scripts/mobile_audit.py`             |
+| Lighthouse    | `.agent/skills/performance-profiling/scripts/lighthouse_audit.py` |
+| Playwright    | `.agent/skills/webapp-testing/scripts/playwright_runner.py`       |
 
 ---

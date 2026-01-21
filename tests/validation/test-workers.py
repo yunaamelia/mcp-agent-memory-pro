@@ -7,7 +7,7 @@ Tests each background worker independently
 import json
 import sqlite3
 import sys
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
@@ -83,8 +83,8 @@ def create_test_database():
 def insert_test_memories(conn):
     """Insert test memories"""
 
-    now = int(datetime.now().timestamp() * 1000)
-    old = int((datetime.now() - timedelta(days=7)).timestamp() * 1000)
+    now = int(datetime.now(UTC).timestamp() * 1000)
+    old = int((datetime.now(UTC) - timedelta(days=7)).timestamp() * 1000)
 
     test_memories = [
         (
@@ -267,7 +267,7 @@ def test_graph_builder():
     conn = create_test_database()
 
     # Insert some entity relationships
-    now = int(datetime.now().timestamp())
+    now = int(datetime.now(UTC).timestamp())
 
     conn.execute(
         """
@@ -340,7 +340,7 @@ def test_summarizer_logic():
     print(f"  Long-term memories: {long_count}")
 
     # Simulate adding a long-term memory
-    now = int(datetime.now().timestamp() * 1000)
+    now = int(datetime.now(UTC).timestamp() * 1000)
     conn.execute(
         """
         INSERT INTO memories (id, tier, type, source, content, timestamp, importance_score, access_count, created_at, archived)

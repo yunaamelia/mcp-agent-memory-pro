@@ -36,13 +36,14 @@ allowed-tools: Read, Glob, Grep, Bash
 - If no tool is configured: Check the project root for `.eslintrc`, `tsconfig.json`, `pyproject.toml` and suggest creating one.
 
 ---
+
 **Strict Rule:** No code should be committed or reported as "done" without passing these checks.
 
 ---
 
 ## Scripts
 
-| Script | Purpose | Command |
-|--------|---------|---------|
-| `scripts/lint_runner.py` | Unified lint check | `python scripts/lint_runner.py <project_path>` |
+| Script                     | Purpose                | Command                                          |
+| -------------------------- | ---------------------- | ------------------------------------------------ |
+| `scripts/lint_runner.py`   | Unified lint check     | `python scripts/lint_runner.py <project_path>`   |
 | `scripts/type_coverage.py` | Type coverage analysis | `python scripts/type_coverage.py <project_path>` |

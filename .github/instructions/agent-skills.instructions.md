@@ -22,11 +22,11 @@ Key characteristics:
 
 Skills are stored in specific locations:
 
-| Location | Scope | Recommendation |
-|----------|-------|----------------|
-| `.github/skills/<skill-name>/` | Project/repository | Recommended for project skills |
-| `.claude/skills/<skill-name>/` | Project/repository | Legacy, for backward compatibility |
-| `~/.github/skills/<skill-name>/` | Personal (user-wide) | Recommended for personal skills |
+| Location                         | Scope                | Recommendation                     |
+| -------------------------------- | -------------------- | ---------------------------------- |
+| `.github/skills/<skill-name>/`   | Project/repository   | Recommended for project skills     |
+| `.claude/skills/<skill-name>/`   | Project/repository   | Legacy, for backward compatibility |
+| `~/.github/skills/<skill-name>/` | Personal (user-wide) | Recommended for personal skills    |
 | `~/.claude/skills/<skill-name>/` | Personal (user-wide) | Legacy, for backward compatibility |
 
 Each skill **must** have its own subdirectory containing at minimum a `SKILL.md` file.
@@ -43,11 +43,11 @@ license: Complete terms in LICENSE.txt
 ---
 ```
 
-| Field | Required | Constraints |
-|-------|----------|-------------|
-| `name` | Yes | Lowercase, hyphens for spaces, max 64 characters (e.g., `webapp-testing`) |
-| `description` | Yes | Clear description of capabilities AND use cases, max 1024 characters |
-| `license` | No | Reference to LICENSE.txt (e.g., `Complete terms in LICENSE.txt`) or SPDX identifier |
+| Field         | Required | Constraints                                                                         |
+| ------------- | -------- | ----------------------------------------------------------------------------------- |
+| `name`        | Yes      | Lowercase, hyphens for spaces, max 64 characters (e.g., `webapp-testing`)           |
+| `description` | Yes      | Clear description of capabilities AND use cases, max 1024 characters                |
+| `license`     | No       | Reference to LICENSE.txt (e.g., `Complete terms in LICENSE.txt`) or SPDX identifier |
 
 ### Description Best Practices
 
@@ -81,14 +81,14 @@ The poor description fails because:
 
 The body contains detailed instructions that Copilot loads AFTER the skill is activated. Recommended sections:
 
-| Section | Purpose |
-|---------|---------|
-| `# Title` | Brief overview of what this skill enables |
+| Section                     | Purpose                                             |
+| --------------------------- | --------------------------------------------------- |
+| `# Title`                   | Brief overview of what this skill enables           |
 | `## When to Use This Skill` | List of scenarios (reinforces description triggers) |
-| `## Prerequisites` | Required tools, dependencies, environment setup |
-| `## Step-by-Step Workflows` | Numbered steps for common tasks |
-| `## Troubleshooting` | Common issues and solutions table |
-| `## References` | Links to bundled docs or external resources |
+| `## Prerequisites`          | Required tools, dependencies, environment setup     |
+| `## Step-by-Step Workflows` | Numbered steps for common tasks                     |
+| `## Troubleshooting`        | Common issues and solutions table                   |
+| `## References`             | Links to bundled docs or external resources         |
 
 ## Bundling Resources
 
@@ -96,12 +96,12 @@ Skills can include additional files that Copilot accesses on-demand:
 
 ### Supported Resource Types
 
-| Folder | Purpose | Loaded into Context? | Example Files |
-|--------|---------|---------------------|---------------|
-| `scripts/` | Executable automation that performs specific operations | When executed | `helper.py`, `validate.sh`, `build.ts` |
-| `references/` | Documentation the AI agent reads to inform decisions | Yes, when referenced | `api_reference.md`, `schema.md`, `workflow_guide.md` |
-| `assets/` | **Static files used AS-IS** in output (not modified by the AI agent) | No | `logo.png`, `brand-template.pptx`, `custom-font.ttf` |
-| `templates/` | **Starter code/scaffolds that the AI agent MODIFIES** and builds upon | Yes, when referenced | `viewer.html` (insert algorithm), `hello-world/` (extend) |
+| Folder        | Purpose                                                               | Loaded into Context? | Example Files                                             |
+| ------------- | --------------------------------------------------------------------- | -------------------- | --------------------------------------------------------- |
+| `scripts/`    | Executable automation that performs specific operations               | When executed        | `helper.py`, `validate.sh`, `build.ts`                    |
+| `references/` | Documentation the AI agent reads to inform decisions                  | Yes, when referenced | `api_reference.md`, `schema.md`, `workflow_guide.md`      |
+| `assets/`     | **Static files used AS-IS** in output (not modified by the AI agent)  | No                   | `logo.png`, `brand-template.pptx`, `custom-font.ttf`      |
+| `templates/`  | **Starter code/scaffolds that the AI agent MODIFIES** and builds upon | Yes, when referenced | `viewer.html` (insert algorithm), `hello-world/` (extend) |
 
 ### Directory Structure Example
 
@@ -160,11 +160,11 @@ Use the [scaffold](./templates/scaffold.py) as a starting point.
 
 Skills use three-level loading for efficiency:
 
-| Level | What Loads | When |
-|-------|------------|------|
-| 1. Discovery | `name` and `description` only | Always (lightweight metadata) |
-| 2. Instructions | Full `SKILL.md` body | When request matches description |
-| 3. Resources | Scripts, examples, docs | Only when Copilot references them |
+| Level           | What Loads                    | When                              |
+| --------------- | ----------------------------- | --------------------------------- |
+| 1. Discovery    | `name` and `description` only | Always (lightweight metadata)     |
+| 2. Instructions | Full `SKILL.md` body          | When request matches description  |
+| 3. Resources    | Scripts, examples, docs       | Only when Copilot references them |
 
 This means:
 
@@ -186,12 +186,12 @@ This means:
 
 When including scripts, prefer cross-platform languages:
 
-| Language | Use Case |
-|----------|----------|
-| Python | Complex automation, data processing |
-| pwsh | PowerShell Core scripting |
-| Node.js | JavaScript-based tooling |
-| Bash/Shell | Simple automation tasks |
+| Language   | Use Case                            |
+| ---------- | ----------------------------------- |
+| Python     | Complex automation, data processing |
+| pwsh       | PowerShell Core scripting           |
+| Node.js    | JavaScript-based tooling            |
+| Bash/Shell | Simple automation tasks             |
 
 Best practices:
 
@@ -227,11 +227,11 @@ Scripts enable evolution: even simple operations benefit from being implemented 
 Document parameters clearly:
 
 ```markdown
-| Parameter | Required | Default | Description |
-|-----------|----------|---------|-------------|
-| `--input` | Yes | - | Input file or URL to process |
-| `--action` | Yes | - | Action to perform |
-| `--verbose` | No | `false` | Enable verbose output |
+| Parameter   | Required | Default | Description                  |
+| ----------- | -------- | ------- | ---------------------------- |
+| `--input`   | Yes      | -       | Input file or URL to process |
+| `--action`  | Yes      | -       | Action to perform            |
+| `--verbose` | No       | `false` | Enable verbose output        |
 ```
 
 ## Validation Checklist
@@ -254,6 +254,7 @@ When executing multi-step workflows, create a TODO list where each step referenc
 
 ```markdown
 ## TODO
+
 - [ ] Step 1: Configure environment - see [workflow-setup.md](./references/workflow-setup.md#environment)
 - [ ] Step 2: Build project - see [workflow-setup.md](./references/workflow-setup.md#build)
 - [ ] Step 3: Deploy to staging - see [workflow-deployment.md](./references/workflow-deployment.md#staging)

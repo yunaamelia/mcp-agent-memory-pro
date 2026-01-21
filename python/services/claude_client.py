@@ -61,7 +61,7 @@ class ClaudeClient:
             return summary
 
         except Exception as e:
-            raise Exception(f"Claude API error: {e}")
+            raise Exception(f"Claude API error: {e}") from e
 
     def _build_code_summary_prompt(self, content: str, context: dict[str, Any]) -> str:
         """Build prompt for code summarization"""

@@ -72,7 +72,7 @@ class ImportanceScorerWorker(BaseWorker):
                     if memory_dict.get("tags") and isinstance(memory_dict["tags"], str):
                         try:
                             memory_dict["tags"] = json.loads(memory_dict["tags"])
-                        except:
+                        except Exception:
                             memory_dict["tags"] = []
 
                     # Calculate new importance

@@ -136,12 +136,12 @@ handoffs:
 
 Each handoff in the list must include the following properties:
 
-| Property | Type | Required | Description |
-| -------- | ------ | -------- | ----------- |
-| `label` | string | Yes | The display text shown on the handoff button in the chat interface |
-| `agent` | string | Yes | The target agent identifier to switch to (name or filename without `.agent.md`) |
-| `prompt` | string | No | The prompt text to pre-fill in the target agent's chat input |
-| `send` | boolean | No | If `true`, automatically submits the prompt to the target agent (default: `false`) |
+| Property | Type    | Required | Description                                                                        |
+| -------- | ------- | -------- | ---------------------------------------------------------------------------------- |
+| `label`  | string  | Yes      | The display text shown on the handoff button in the chat interface                 |
+| `agent`  | string  | Yes      | The target agent identifier to switch to (name or filename without `.agent.md`)    |
+| `prompt` | string  | No       | The prompt text to pre-fill in the target agent's chat input                       |
+| `send`   | boolean | No       | If `true`, automatically submits the prompt to the target agent (default: `false`) |
 
 ### Handoff Behavior
 
@@ -304,15 +304,15 @@ tools: []
 
 All aliases are case-insensitive:
 
-| Alias | Alternative Names | Category | Description |
-| ------- | ----------------- | ---------- | ----------- |
-| `execute` | shell, Bash, powershell | Shell execution | Execute commands in appropriate shell |
-| `read` | Read, NotebookRead, view | File reading | Read file contents |
-| `edit` | Edit, MultiEdit, Write, NotebookEdit | File editing | Edit and modify files |
-| `search` | Grep, Glob, search | Code search | Search for files or text in files |
-| `agent` | custom-agent, Task | Agent invocation | Invoke other custom agents |
-| `web` | WebSearch, WebFetch | Web access | Fetch web content and search |
-| `todo` | TodoWrite | Task management | Create and manage task lists (VS Code only) |
+| Alias     | Alternative Names                    | Category         | Description                                 |
+| --------- | ------------------------------------ | ---------------- | ------------------------------------------- |
+| `execute` | shell, Bash, powershell              | Shell execution  | Execute commands in appropriate shell       |
+| `read`    | Read, NotebookRead, view             | File reading     | Read file contents                          |
+| `edit`    | Edit, MultiEdit, Write, NotebookEdit | File editing     | Edit and modify files                       |
+| `search`  | Grep, Glob, search                   | Code search      | Search for files or text in files           |
+| `agent`   | custom-agent, Task                   | Agent invocation | Invoke other custom agents                  |
+| `web`     | WebSearch, WebFetch                  | Web access       | Fetch web content and search                |
+| `todo`    | TodoWrite                            | Task management  | Create and manage task lists (VS Code only) |
 
 ### Built-in MCP Server Tools
 
@@ -356,13 +356,13 @@ The recommended approach is **prompt-based orchestration**:
 
 ### How It Works
 
-1) Enable agent invocation by including `agent` in the orchestrator's tools list:
+1. Enable agent invocation by including `agent` in the orchestrator's tools list:
 
 ```yaml
 tools: ['read', 'edit', 'search', 'agent']
 ```
 
-1) For each step, invoke a sub-agent by providing:
+1. For each step, invoke a sub-agent by providing:
 
 - **Agent name** (the identifier users select/invoke)
 - **Agent spec path** (the `.agent.md` file to read and follow)
@@ -548,7 +548,9 @@ Ask the user to provide the variable if not detected in the prompt:
 Process the project by analyzing your codebase.
 
 ### Step 1: Identify Project
+
 If no project name is provided, **ASK THE USER** for:
+
 - Project name or identifier
 - Base path or directory location
 - Configuration type (if applicable)
@@ -562,7 +564,7 @@ Automatically extract variables from the user's natural language input:
 
 ```javascript
 // Example: Extract certification name from user input
-const userInput = "Process My Certification";
+const userInput = 'Process My Certification';
 
 // Extract key information
 const certificationName = extractCertificationName(userInput);
@@ -596,6 +598,7 @@ Use template variables in agent prompts to make them dynamic:
 # Agent Name
 
 ## Dynamic Parameters
+
 - **Project Name**: ${projectName}
 - **Base Path**: ${basePath}
 - **Output Directory**: ${outputDir}
@@ -649,12 +652,12 @@ placeholders.
 
 Example of a simple orchestrator that validates code through multiple specialized agents:
 
-1) Determine shared context:
+1. Determine shared context:
 
 - `repositoryName`, `prNumber`
 - `basePath` (e.g., `projects/${repositoryName}/pr-${prNumber}`)
 
-1) Invoke specialized agents sequentially (each agent reads its own `.agent.md` spec):
+1. Invoke specialized agents sequentially (each agent reads its own `.agent.md` spec):
 
 ```text
 Step 1: Security Review
@@ -696,13 +699,13 @@ and **required vs optional** behavior.
 
 **Step trigger conditions:**
 
-| Step | Status | Trigger Condition | On Failure |
-| ---- | ------ | ----------------- | ---------- |
-| 1: Security Review | **Required** | Always run | Stop pipeline |
-| 2: Dependency Audit | Optional | If a dependency manifest exists (`package.json`, `pom.xml`, etc.) | Continue |
-| 3: Test Coverage Check | Optional | If test projects/files are present | Continue |
-| 4: Performance Checks | Optional | If perf-sensitive code changed OR a perf config exists | Continue |
-| 5: Aggregate & Verdict | **Required** | Always run if Step 1 completed | Stop pipeline |
+| Step                   | Status       | Trigger Condition                                                 | On Failure    |
+| ---------------------- | ------------ | ----------------------------------------------------------------- | ------------- |
+| 1: Security Review     | **Required** | Always run                                                        | Stop pipeline |
+| 2: Dependency Audit    | Optional     | If a dependency manifest exists (`package.json`, `pom.xml`, etc.) | Continue      |
+| 3: Test Coverage Check | Optional     | If test projects/files are present                                | Continue      |
+| 4: Performance Checks  | Optional     | If perf-sensitive code changed OR a perf config exists            | Continue      |
+| 5: Aggregate & Verdict | **Required** | Always run if Step 1 completed                                    | Stop pipeline |
 
 **Execution flow (natural language):**
 
@@ -738,6 +741,7 @@ Task:
 
 ```markdown
 ## Step 2: Dependency Audit
+
 **Status:** ✅ SUCCESS / ⚠️ SKIPPED / ❌ FAILED
 **Trigger:** package.json present
 **Started:** 2026-01-16T10:30:15Z
@@ -757,14 +761,17 @@ Always document what variables are expected:
 
 ```markdown
 ## Required Variables
+
 - **projectName**: The name of the project (string, required)
 - **basePath**: Root directory for project files (path, required)
 
 ## Optional Variables
+
 - **mode**: Processing mode - quick/standard/detailed (enum, default: standard)
 - **outputFormat**: Output format - markdown/json/html (enum, default: markdown)
 
 ## Derived Variables
+
 - **outputDir**: Automatically set to ${basePath}/output
 - **logFile**: Automatically set to ${basePath}/.log.md
 ```
@@ -776,19 +783,19 @@ Use consistent variable naming conventions:
 ```javascript
 // Good: Clear, descriptive naming
 const variables = {
-  projectName,          // What project to work on
-  basePath,            // Where project files are located
-  outputDirectory,     // Where to save results
-  processingMode,      // How to process (detail level)
-  configurationPath    // Where config files are
+  projectName, // What project to work on
+  basePath, // Where project files are located
+  outputDirectory, // Where to save results
+  processingMode, // How to process (detail level)
+  configurationPath, // Where config files are
 };
 
 // Avoid: Ambiguous or inconsistent
 const bad_variables = {
-  name,     // Too generic
-  path,     // Unclear which path
-  mode,     // Too short
-  config    // Too vague
+  name, // Too generic
+  path, // Unclear which path
+  mode, // Too short
+  config, // Too vague
 };
 ```
 
@@ -800,12 +807,14 @@ Document valid values and constraints:
 ## Variable Constraints
 
 **projectName**:
+
 - Type: string (alphanumeric, hyphens, underscores allowed)
 - Length: 1-100 characters
 - Required: yes
 - Pattern: `/^[a-zA-Z0-9_-]+$/`
 
 **processingMode**:
+
 - Type: enum
 - Valid values: "quick" (< 5min), "standard" (5-15min), "detailed" (15+ min)
 - Default: "standard"
@@ -828,7 +837,7 @@ mcp-servers:
     type: 'local'
     command: 'some-command'
     args: ['--arg1', '--arg2']
-    tools: ["*"]
+    tools: ['*']
     env:
       ENV_VAR_NAME: ${{ secrets.API_KEY }}
 ---

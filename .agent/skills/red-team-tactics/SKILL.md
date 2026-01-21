@@ -24,20 +24,20 @@ LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
 
 ### Phase Objectives
 
-| Phase | Objective |
-|-------|-----------|
-| **Recon** | Map attack surface |
-| **Initial Access** | Get first foothold |
-| **Execution** | Run code on target |
-| **Persistence** | Survive reboots |
-| **Privilege Escalation** | Get admin/root |
-| **Defense Evasion** | Avoid detection |
-| **Credential Access** | Harvest credentials |
-| **Discovery** | Map internal network |
-| **Lateral Movement** | Spread to other systems |
-| **Collection** | Gather target data |
-| **C2** | Maintain command channel |
-| **Exfiltration** | Extract data |
+| Phase                    | Objective                |
+| ------------------------ | ------------------------ |
+| **Recon**                | Map attack surface       |
+| **Initial Access**       | Get first foothold       |
+| **Execution**            | Run code on target       |
+| **Persistence**          | Survive reboots          |
+| **Privilege Escalation** | Get admin/root           |
+| **Defense Evasion**      | Avoid detection          |
+| **Credential Access**    | Harvest credentials      |
+| **Discovery**            | Map internal network     |
+| **Lateral Movement**     | Spread to other systems  |
+| **Collection**           | Gather target data       |
+| **C2**                   | Maintain command channel |
+| **Exfiltration**         | Extract data             |
 
 ---
 
@@ -45,19 +45,19 @@ LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
 
 ### Passive vs Active
 
-| Type | Trade-off |
-|------|-----------|
-| **Passive** | No target contact, limited info |
-| **Active** | Direct contact, more detection risk |
+| Type        | Trade-off                           |
+| ----------- | ----------------------------------- |
+| **Passive** | No target contact, limited info     |
+| **Active**  | Direct contact, more detection risk |
 
 ### Information Targets
 
-| Category | Value |
-|----------|-------|
+| Category         | Value                   |
+| ---------------- | ----------------------- |
 | Technology stack | Attack vector selection |
-| Employee info | Social engineering |
-| Network ranges | Scanning scope |
-| Third parties | Supply chain attack |
+| Employee info    | Social engineering      |
+| Network ranges   | Scanning scope          |
+| Third parties    | Supply chain attack     |
 
 ---
 
@@ -65,12 +65,12 @@ LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
 
 ### Selection Criteria
 
-| Vector | When to Use |
-|--------|-------------|
-| **Phishing** | Human target, email access |
-| **Public exploits** | Vulnerable services exposed |
-| **Valid credentials** | Leaked or cracked |
-| **Supply chain** | Third-party access |
+| Vector                | When to Use                 |
+| --------------------- | --------------------------- |
+| **Phishing**          | Human target, email access  |
+| **Public exploits**   | Vulnerable services exposed |
+| **Valid credentials** | Leaked or cracked           |
+| **Supply chain**      | Third-party access          |
 
 ---
 
@@ -78,21 +78,21 @@ LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
 
 ### Windows Targets
 
-| Check | Opportunity |
-|-------|-------------|
-| Unquoted service paths | Write to path |
-| Weak service permissions | Modify service |
-| Token privileges | Abuse SeDebug, etc. |
-| Stored credentials | Harvest |
+| Check                    | Opportunity         |
+| ------------------------ | ------------------- |
+| Unquoted service paths   | Write to path       |
+| Weak service permissions | Modify service      |
+| Token privileges         | Abuse SeDebug, etc. |
+| Stored credentials       | Harvest             |
 
 ### Linux Targets
 
-| Check | Opportunity |
-|-------|-------------|
-| SUID binaries | Execute as owner |
-| Sudo misconfiguration | Command execution |
-| Kernel vulnerabilities | Kernel exploits |
-| Cron jobs | Writable scripts |
+| Check                  | Opportunity       |
+| ---------------------- | ----------------- |
+| SUID binaries          | Execute as owner  |
+| Sudo misconfiguration  | Command execution |
+| Kernel vulnerabilities | Kernel exploits   |
+| Cron jobs              | Writable scripts  |
 
 ---
 
@@ -100,12 +100,12 @@ LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
 
 ### Key Techniques
 
-| Technique | Purpose |
-|-----------|---------|
-| LOLBins | Use legitimate tools |
-| Obfuscation | Hide malicious code |
+| Technique    | Purpose                 |
+| ------------ | ----------------------- |
+| LOLBins      | Use legitimate tools    |
+| Obfuscation  | Hide malicious code     |
 | Timestomping | Hide file modifications |
-| Log clearing | Remove evidence |
+| Log clearing | Remove evidence         |
 
 ### Operational Security
 
@@ -120,11 +120,11 @@ LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
 
 ### Credential Types
 
-| Type | Use |
-|------|-----|
-| Password | Standard auth |
-| Hash | Pass-the-hash |
-| Ticket | Pass-the-ticket |
+| Type        | Use              |
+| ----------- | ---------------- |
+| Password    | Standard auth    |
+| Hash        | Pass-the-hash    |
+| Ticket      | Pass-the-ticket  |
 | Certificate | Certificate auth |
 
 ### Movement Paths
@@ -139,12 +139,12 @@ LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
 
 ### Attack Categories
 
-| Attack | Target |
-|--------|--------|
-| Kerberoasting | Service account passwords |
+| Attack          | Target                    |
+| --------------- | ------------------------- |
+| Kerberoasting   | Service account passwords |
 | AS-REP Roasting | Accounts without pre-auth |
-| DCSync | Domain credentials |
-| Golden Ticket | Persistent domain access |
+| DCSync          | Domain credentials        |
+| Golden Ticket   | Persistent domain access  |
 
 ---
 
@@ -189,12 +189,12 @@ For each successful technique:
 
 ## 10. Anti-Patterns
 
-| ❌ Don't | ✅ Do |
-|----------|-------|
-| Rush to exploitation | Follow methodology |
-| Cause damage | Minimize impact |
-| Skip reporting | Document everything |
-| Ignore scope | Stay within boundaries |
+| ❌ Don't             | ✅ Do                  |
+| -------------------- | ---------------------- |
+| Rush to exploitation | Follow methodology     |
+| Cause damage         | Minimize impact        |
+| Skip reporting       | Document everything    |
+| Ignore scope         | Stay within boundaries |
 
 ---
 

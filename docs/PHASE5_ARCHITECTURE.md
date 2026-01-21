@@ -12,19 +12,19 @@ Located in `python/ml/` and `python/predictive/`.
 
 ### Importance Predictor
 
-* **Model**: Gradient Boosting Regressor (sklearn/xgboost).
-* **Features**: Content length, source reliability, usage patterns, recency.
-* **Function**: Predicts an `importance_score` (0-1) for new memories.
+- **Model**: Gradient Boosting Regressor (sklearn/xgboost).
+- **Features**: Content length, source reliability, usage patterns, recency.
+- **Function**: Predicts an `importance_score` (0-1) for new memories.
 
 ### Auto-Tagger
 
-* **Technique**: Keyword extraction + Simple NLP + History-based learning.
-* **Function**: Automatically assigns tags based on content (e.g., "python", "bug", "react").
+- **Technique**: Keyword extraction + Simple NLP + History-based learning.
+- **Function**: Automatically assigns tags based on content (e.g., "python", "bug", "react").
 
 ### Task Predictor
 
-* **Technique**: Pattern matching (Temporal, Sequential).
-* **Function**: Suggests next tasks based on current context and history.
+- **Technique**: Pattern matching (Temporal, Sequential).
+- **Function**: Suggests next tasks based on current context and history.
 
 ## 2. Ecosystem Extensions
 
@@ -32,13 +32,13 @@ Scaffolding provided for integration.
 
 ### VSCode Extension
 
-* **Commands**: `Save Selection`, `Search Memories`.
-* **Integration**: Connects to REST API (`http://localhost:8000`).
+- **Commands**: `Save Selection`, `Search Memories`.
+- **Integration**: Connects to REST API (`http://localhost:8000`).
 
 ### Browser Extension
 
-* **Features**: Popup to save current page, Context menu to save selection.
-* **Integration**: Connects to REST API.
+- **Features**: Popup to save current page, Context menu to save selection.
+- **Integration**: Connects to REST API.
 
 ## 3. MCP Tools
 
@@ -52,10 +52,10 @@ New tools exposed to the agent.
 
 ## 4. Automation Workflows
 
-* **Auto-Tagging**: Can be run periodically via `memory_automate` or triggered on new memory insertion (future).
-* **Lifecycle Management**: `cleanup` action placeholder for archiving old low-importance memories.
+- **Auto-Tagging**: Can be run periodically via `memory_automate` or triggered on new memory insertion (future).
+- **Lifecycle Management**: `cleanup` action placeholder for archiving old low-importance memories.
 
 ## Verification
 
-* Run `tests/validation/phase5-validate.sh` to verify ML models and Tools.
-* See `tests/validation/test-phase5-tools.ts` for usage examples.
+- Run `tests/validation/phase5-validate.sh` to verify ML models and Tools.
+- See `tests/validation/test-phase5-tools.ts` for usage examples.

@@ -45,11 +45,11 @@ This skill provides a framework for breaking down work into clear, actionable ta
 
 ### Principle 1: Keep It SHORT
 
-| ❌ Wrong | ✅ Right |
-|----------|----------|
-| 50 tasks with sub-sub-tasks | 5-10 clear tasks max |
-| Every micro-step listed | Only actionable items |
-| Verbose descriptions | One-line per task |
+| ❌ Wrong                    | ✅ Right              |
+| --------------------------- | --------------------- |
+| 50 tasks with sub-sub-tasks | 5-10 clear tasks max  |
+| Every micro-step listed     | Only actionable items |
+| Verbose descriptions        | One-line per task     |
 
 > **Rule:** If plan is longer than 1 page, it's too long. Simplify.
 
@@ -57,11 +57,11 @@ This skill provides a framework for breaking down work into clear, actionable ta
 
 ### Principle 2: Be SPECIFIC, Not Generic
 
-| ❌ Wrong | ✅ Right |
-|----------|----------|
-| "Set up project" | "Run `npx create-next-app`" |
+| ❌ Wrong             | ✅ Right                                                 |
+| -------------------- | -------------------------------------------------------- |
+| "Set up project"     | "Run `npx create-next-app`"                              |
 | "Add authentication" | "Install next-auth, create `/api/auth/[...nextauth].ts`" |
-| "Style the UI" | "Add Tailwind classes to `Header.tsx`" |
+| "Style the UI"       | "Add Tailwind classes to `Header.tsx`"                   |
 
 > **Rule:** Each task should have a clear, verifiable outcome.
 
@@ -93,13 +93,13 @@ This skill provides a framework for breaking down work into clear, actionable ta
 
 > 🔴 **DO NOT copy-paste script commands. Choose based on project type.**
 
-| Project Type | Relevant Scripts |
-|--------------|------------------|
+| Project Type   | Relevant Scripts                          |
+| -------------- | ----------------------------------------- |
 | Frontend/React | `ux_audit.py`, `accessibility_checker.py` |
-| Backend/API | `api_validator.py`, `security_scan.py` |
-| Mobile | `mobile_audit.py` |
-| Database | `schema_validator.py` |
-| Full-stack | Mix of above based on what you touched |
+| Backend/API    | `api_validator.py`, `security_scan.py`    |
+| Mobile         | `mobile_audit.py`                         |
+| Database       | `schema_validator.py`                     |
+| Full-stack     | Mix of above based on what you touched    |
 
 **Wrong:** Adding all scripts to every plan
 **Right:** Only scripts relevant to THIS task
@@ -108,11 +108,11 @@ This skill provides a framework for breaking down work into clear, actionable ta
 
 ### Principle 5: Verification is Simple
 
-| ❌ Wrong | ✅ Right |
-|----------|----------|
-| "Verify the component works correctly" | "Run `npm run dev`, click button, see toast" |
-| "Test the API" | "curl localhost:3000/api/users returns 200" |
-| "Check styles" | "Open browser, verify dark mode toggle works" |
+| ❌ Wrong                               | ✅ Right                                      |
+| -------------------------------------- | --------------------------------------------- |
+| "Verify the component works correctly" | "Run `npm run dev`, click button, see toast"  |
+| "Test the API"                         | "curl localhost:3000/api/users returns 200"   |
+| "Check styles"                         | "Open browser, verify dark mode toggle works" |
 
 ---
 
@@ -160,3 +160,4 @@ One sentence: What are we building/fixing?
 - Adding a feature
 - Fixing a bug (if complex)
 - Refactoring multiple files
+```

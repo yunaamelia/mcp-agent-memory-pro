@@ -76,7 +76,7 @@ type UserId = Brand<string, 'UserId'>;
 type OrderId = Brand<string, 'OrderId'>;
 
 // Prevents accidental mixing of domain primitives
-function processOrder(orderId: OrderId, userId: UserId) { }
+function processOrder(orderId: OrderId, userId: UserId) {}
 ```
 
 - Use for: Critical domain primitives, API boundaries, currency/units
@@ -86,16 +86,18 @@ function processOrder(orderId: OrderId, userId: UserId) { }
 
 ```typescript
 // Recursive type manipulation
-type DeepReadonly<T> = T extends (...args: any[]) => any 
-  ? T 
-  : T extends object 
+type DeepReadonly<T> = T extends (...args: any[]) => any
+  ? T
+  : T extends object
     ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
     : T;
 
 // Template literal type magic
 type PropEventSource<Type> = {
-  on<Key extends string & keyof Type>
-    (eventName: `${Key}Changed`, callback: (newValue: Type[Key]) => void): void;
+  on<Key extends string & keyof Type>(
+    eventName: `${Key}Changed`,
+    callback: (newValue: Type[Key]) => void
+  ): void;
 };
 ```
 
@@ -107,14 +109,14 @@ type PropEventSource<Type> = {
 ```typescript
 // Use 'satisfies' for constraint validation (TS 5.0+)
 const config = {
-  api: "https://api.example.com",
-  timeout: 5000
+  api: 'https://api.example.com',
+  timeout: 5000,
 } satisfies Record<string, string | number>;
 // Preserves literal types while ensuring constraints
 
 // Const assertions for maximum inference
 const routes = ['/home', '/about', '/contact'] as const;
-type Route = typeof routes[number]; // '/home' | '/about' | '/contact'
+type Route = (typeof routes)[number]; // '/home' | '/about' | '/contact'
 ```
 
 ### Performance Optimization Strategies
@@ -180,8 +182,9 @@ declare module 'some-untyped-package' {
 type InfiniteArray<T> = T | InfiniteArray<T>[];
 
 // Good: Limited recursion
-type NestedArray<T, D extends number = 5> = 
-  D extends 0 ? T : T | NestedArray<T, [-1, 0, 1, 2, 3, 4][D]>[];
+type NestedArray<T, D extends number = 5> = D extends 0
+  ? T
+  : T | NestedArray<T, [-1, 0, 1, 2, 3, 4][D]>[];
 ```
 
 **Module Resolution Mysteries**
@@ -189,7 +192,7 @@ type NestedArray<T, D extends number = 5> =
 - "Cannot find module" despite file existing:
   1. Check `moduleResolution` matches your bundler
   2. Verify `baseUrl` and `paths` alignment
-  3. For monorepos: Ensure workspace protocol (workspace:*)
+  3. For monorepos: Ensure workspace protocol (workspace:\*)
   4. Try clearing cache: `rm -rf node_modules/.cache .tsbuildinfo`
 
 **Path Mapping at Runtime**
@@ -226,12 +229,12 @@ command -v typesync >/dev/null 2>&1 && npx typesync  # Install missing @types pa
 
 **Tool Migration Decisions**
 
-| From | To | When | Migration Effort |
-|------|-----|------|-----------------|
-| ESLint + Prettier | Biome | Need much faster speed, okay with fewer rules | Low (1 day) |
-| TSC for linting | Type-check only | Have 100+ files, need faster feedback | Medium (2-3 days) |
-| Lerna | Nx/Turborepo | Need caching, parallel builds | High (1 week) |
-| CJS | ESM | Node 18+, modern tooling | High (varies) |
+| From              | To              | When                                          | Migration Effort  |
+| ----------------- | --------------- | --------------------------------------------- | ----------------- |
+| ESLint + Prettier | Biome           | Need much faster speed, okay with fewer rules | Low (1 day)       |
+| TSC for linting   | Type-check only | Have 100+ files, need faster feedback         | Medium (2-3 days) |
+| Lerna             | Nx/Turborepo    | Need caching, parallel builds                 | High (1 week)     |
+| CJS               | ESM             | Node 18+, modern tooling                      | High (varies)     |
 
 ### Monorepo Management
 
@@ -283,13 +286,13 @@ command -v typesync >/dev/null 2>&1 && npx typesync  # Install missing @types pa
 
 ```typescript
 // in avatar.test-d.ts
-import { expectTypeOf } from 'vitest'
-import type { Avatar } from './avatar'
+import { expectTypeOf } from 'vitest';
+import type { Avatar } from './avatar';
 
 test('Avatar props are correctly typed', () => {
-  expectTypeOf<Avatar>().toHaveProperty('size')
-  expectTypeOf<Avatar['size']>().toEqualTypeOf<'sm' | 'md' | 'lg'>()
-})
+  expectTypeOf<Avatar>().toHaveProperty('size');
+  expectTypeOf<Avatar['size']>().toEqualTypeOf<'sm' | 'md' | 'lg'>();
+});
 ```
 
 **When to Test Types:**
@@ -428,7 +431,7 @@ When reviewing TypeScript/JavaScript code, focus on these domain-specific aspect
 
 ```
 Type checking only? → tsc
-Type checking + linting speed critical? → Biome  
+Type checking + linting speed critical? → Biome
 Type checking + comprehensive linting? → ESLint + typescript-eslint
 Type testing? → Vitest expectTypeOf
 Build tool? → Project size <10 packages? Turborepo. Else? Nx

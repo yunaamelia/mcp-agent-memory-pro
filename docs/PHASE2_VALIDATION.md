@@ -19,23 +19,23 @@ npm run validate:phase2
 
 ## Individual Test Components
 
-| Test | Command | What it Tests |
-|------|---------|---------------|
-| Services | `npm run test:services` | Scoring, NER, Summarization |
-| Workers | `npm run test:workers` | All 5 workers |
-| Scheduler | `npm run test:scheduler` | Job scheduling, lifecycle |
-| Insights | `npm run test:insights` | memory_insights MCP tool |
-| Integration | `npm run test:worker-integration` | End-to-end workflows |
-| Performance | `npm run test:worker-perf` | Benchmarks |
+| Test        | Command                           | What it Tests               |
+| ----------- | --------------------------------- | --------------------------- |
+| Services    | `npm run test:services`           | Scoring, NER, Summarization |
+| Workers     | `npm run test:workers`            | All 5 workers               |
+| Scheduler   | `npm run test:scheduler`          | Job scheduling, lifecycle   |
+| Insights    | `npm run test:insights`           | memory_insights MCP tool    |
+| Integration | `npm run test:worker-integration` | End-to-end workflows        |
+| Performance | `npm run test:worker-perf`        | Benchmarks                  |
 
 ## Performance Targets
 
-| Worker | Target | Acceptable |
-|--------|--------|------------|
-| Importance Scorer | < 5s | < 10s |
-| Entity Extractor | < 10s | < 15s |
-| Memory Promoter | < 3s | < 5s |
-| Graph Builder | < 5s | < 10s |
+| Worker            | Target | Acceptable |
+| ----------------- | ------ | ---------- |
+| Importance Scorer | < 5s   | < 10s      |
+| Entity Extractor  | < 10s  | < 15s      |
+| Memory Promoter   | < 3s   | < 5s       |
+| Graph Builder     | < 5s   | < 10s      |
 
 ## Success Criteria
 

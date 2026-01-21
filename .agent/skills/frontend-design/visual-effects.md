@@ -24,15 +24,15 @@ Key Properties:
   /* Transparency: adjust opacity based on content readability */
   background: rgba(R, G, B, OPACITY);
   /* OPACITY: 0.1-0.3 for dark bg, 0.5-0.8 for light bg */
-  
+
   /* Blur: higher = more frosted */
   backdrop-filter: blur(AMOUNT);
   /* AMOUNT: 8-12px subtle, 16-24px strong */
-  
+
   /* Border: defines edges */
   border: 1px solid rgba(255, 255, 255, OPACITY);
   /* OPACITY: 0.1-0.3 typically */
-  
+
   /* Radius: match your design system */
   border-radius: YOUR_RADIUS;
 }
@@ -71,19 +71,19 @@ Key Concept: Soft, extruded elements using DUAL shadows
 .neo-raised {
   /* Background MUST match parent */
   background: SAME_AS_PARENT;
-  
+
   /* Two shadows: light direction + dark direction */
-  box-shadow: 
+  box-shadow:
     OFFSET OFFSET BLUR rgba(light-color),
     -OFFSET -OFFSET BLUR rgba(dark-color);
-  
+
   /* OFFSET: typically 6-12px */
   /* BLUR: typically 12-20px */
 }
 
 .neo-pressed {
   /* Inset creates "pushed in" effect */
-  box-shadow: 
+  box-shadow:
     inset OFFSET OFFSET BLUR rgba(dark-color),
     inset -OFFSET -OFFSET BLUR rgba(light-color);
 }
@@ -144,11 +144,11 @@ box-shadow: OFFSET-X OFFSET-Y BLUR SPREAD COLOR;
 
 ### Types and When to Use
 
-| Type | Pattern | Use Case |
-|------|---------|----------|
+| Type       | Pattern                      | Use Case                      |
+| ---------- | ---------------------------- | ----------------------------- |
 | **Linear** | Color A → Color B along line | Backgrounds, buttons, headers |
-| **Radial** | Center → outward | Spotlights, focal points |
-| **Conic** | Around center | Pie charts, creative effects |
+| **Radial** | Center → outward             | Spotlights, focal points      |
+| **Conic**  | Around center                | Pie charts, creative effects  |
 
 ### Creating Harmonious Gradients
 
@@ -165,10 +165,9 @@ Good Gradient Rules:
 ```css
 .gradient {
   background: linear-gradient(
-    DIRECTION,           /* angle or to-keyword */
-    COLOR-STOP-1,        /* color + optional position */
-    COLOR-STOP-2,
-    /* ... more stops */
+    DIRECTION,
+    /* angle or to-keyword */ COLOR-STOP-1,
+    /* color + optional position */ COLOR-STOP-2 /* ... more stops */
   );
 }
 
@@ -227,7 +226,7 @@ box-shadow:
 ### Text Glow
 
 ```css
-text-shadow: 
+text-shadow:
   0 0 BLUR-1 COLOR,
   0 0 BLUR-2 COLOR,
   0 0 BLUR-3 COLOR;
@@ -251,8 +250,13 @@ box-shadow:
 
 ```css
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 SMALL-BLUR COLOR; }
-  50% { box-shadow: 0 0 LARGE-BLUR COLOR; }
+  0%,
+  100% {
+    box-shadow: 0 0 SMALL-BLUR COLOR;
+  }
+  50% {
+    box-shadow: 0 0 LARGE-BLUR COLOR;
+  }
 }
 
 /* Easing and duration affect feel */
@@ -275,11 +279,7 @@ Position: Where text will appear
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    DIRECTION,
-    transparent PERCENTAGE,
-    rgba(0,0,0,OPACITY) 100%
-  );
+  background: linear-gradient(DIRECTION, transparent PERCENTAGE, rgba(0, 0, 0, OPACITY) 100%);
 }
 ```
 
@@ -287,9 +287,7 @@ Position: Where text will appear
 
 ```css
 /* Blend mode or layered gradient */
-background: 
-  linear-gradient(YOUR-COLOR-WITH-OPACITY),
-  url('image.jpg');
+background: linear-gradient(YOUR-COLOR-WITH-OPACITY), url('image.jpg');
 ```
 
 ---

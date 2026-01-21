@@ -22,10 +22,10 @@ Analyzes your current work context and recalls relevant memories without explici
 {
   "tool": "memory_recall_context",
   "arguments": {
-    "project": "my-project",      // Optional: focus on specific project
-    "file_path": "src/auth.ts",   // Optional: focus on specific file
-    "recent_minutes": 30,         // Optional: context window (default: 30)
-    "limit": 10                   // Optional: max memories (default: 10)
+    "project": "my-project", // Optional: focus on specific project
+    "file_path": "src/auth.ts", // Optional: focus on specific file
+    "recent_minutes": 30, // Optional: context window (default: 30)
+    "limit": 10 // Optional: max memories (default: 10)
   }
 }
 ```
@@ -46,9 +46,9 @@ Generates proactive suggestions based on memory patterns.
 {
   "tool": "memory_suggestions",
   "arguments": {
-    "project": "my-project",       // Optional: project filter
-    "context_type": "debugging",   // Optional: hint current activity
-    "limit": 5                     // Optional: max suggestions (default: 5)
+    "project": "my-project", // Optional: project filter
+    "context_type": "debugging", // Optional: hint current activity
+    "limit": 5 // Optional: max suggestions (default: 5)
   }
 }
 ```
@@ -65,13 +65,13 @@ Provides advanced analytics on memory data.
 
 **Query types:**
 
-| Type | Description |
-|------|-------------|
-| `graph` | Knowledge graph statistics and central entities |
-| `patterns` | Detected recurring patterns |
-| `statistics` | Overall memory statistics |
-| `trends` | Activity trends over time |
-| `entities` | Entity-specific analysis |
+| Type         | Description                                     |
+| ------------ | ----------------------------------------------- |
+| `graph`      | Knowledge graph statistics and central entities |
+| `patterns`   | Detected recurring patterns                     |
+| `statistics` | Overall memory statistics                       |
+| `trends`     | Activity trends over time                       |
+| `entities`   | Entity-specific analysis                        |
 
 **Usage:**
 
@@ -79,11 +79,11 @@ Provides advanced analytics on memory data.
 {
   "tool": "memory_analytics",
   "arguments": {
-    "query_type": "graph",    // Required: type of analysis
-    "project": "my-project",  // Optional: project filter
-    "entity": "UserService",  // Optional: for entity queries
-    "days": 30,               // Optional: analysis period (default: 30)
-    "limit": 10               // Optional: max results (default: 10)
+    "query_type": "graph", // Required: type of analysis
+    "project": "my-project", // Optional: project filter
+    "entity": "UserService", // Optional: for entity queries
+    "days": 30, // Optional: analysis period (default: 30)
+    "limit": 10 // Optional: max results (default: 10)
   }
 }
 ```
@@ -125,10 +125,10 @@ trends = detector.track_trends(project="my-project")
 
 Two workers run automatically:
 
-| Worker | Frequency | Purpose |
-|--------|-----------|---------|
-| MemoryConsolidator | Daily | Deduplicates and cleans up memories |
-| PatternAnalyzer | Hourly | Detects patterns and stores insights |
+| Worker             | Frequency | Purpose                              |
+| ------------------ | --------- | ------------------------------------ |
+| MemoryConsolidator | Daily     | Deduplicates and cleans up memories  |
+| PatternAnalyzer    | Hourly    | Detects patterns and stores insights |
 
 ## Tips
 

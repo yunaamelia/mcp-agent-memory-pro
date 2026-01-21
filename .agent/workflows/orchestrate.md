@@ -26,26 +26,26 @@ $ARGUMENTS
 
 ### Agent Selection Matrix
 
-| Task Type | REQUIRED Agents (minimum) |
-|-----------|---------------------------|
-| **Web App** | frontend-specialist, backend-specialist, test-engineer |
-| **API** | backend-specialist, security-auditor, test-engineer |
-| **UI/Design** | frontend-specialist, seo-specialist, performance-optimizer |
-| **Database** | database-architect, backend-specialist, security-auditor |
+| Task Type      | REQUIRED Agents (minimum)                                                 |
+| -------------- | ------------------------------------------------------------------------- |
+| **Web App**    | frontend-specialist, backend-specialist, test-engineer                    |
+| **API**        | backend-specialist, security-auditor, test-engineer                       |
+| **UI/Design**  | frontend-specialist, seo-specialist, performance-optimizer                |
+| **Database**   | database-architect, backend-specialist, security-auditor                  |
 | **Full Stack** | project-planner, frontend-specialist, backend-specialist, devops-engineer |
-| **Debug** | debugger, explorer-agent, test-engineer |
-| **Security** | security-auditor, penetration-tester, devops-engineer |
+| **Debug**      | debugger, explorer-agent, test-engineer                                   |
+| **Security**   | security-auditor, penetration-tester, devops-engineer                     |
 
 ---
 
 ## Pre-Flight: Mode Check
 
-| Current Mode | Task Type | Action |
-|--------------|-----------|--------|
-| **plan** | Any | ✅ Proceed with planning-first approach |
-| **edit** | Simple execution | ✅ Proceed directly |
-| **edit** | Complex/multi-file | ⚠️ Ask: "This task requires planning. Switch to plan mode?" |
-| **ask** | Any | ⚠️ Ask: "Ready to orchestrate. Switch to edit or plan mode?" |
+| Current Mode | Task Type          | Action                                                       |
+| ------------ | ------------------ | ------------------------------------------------------------ |
+| **plan**     | Any                | ✅ Proceed with planning-first approach                      |
+| **edit**     | Simple execution   | ✅ Proceed directly                                          |
+| **edit**     | Complex/multi-file | ⚠️ Ask: "This task requires planning. Switch to plan mode?"  |
+| **ask**      | Any                | ⚠️ Ask: "Ready to orchestrate. Switch to edit or plan mode?" |
 
 ---
 
@@ -53,10 +53,10 @@ $ARGUMENTS
 
 ### PHASE 1: PLANNING (Sequential - NO parallel agents)
 
-| Step | Agent | Action |
-|------|-------|--------|
-| 1 | `project-planner` | Create docs/PLAN.md |
-| 2 | (optional) `explorer-agent` | Codebase discovery if needed |
+| Step | Agent                       | Action                       |
+| ---- | --------------------------- | ---------------------------- |
+| 1    | `project-planner`           | Create docs/PLAN.md          |
+| 2    | (optional) `explorer-agent` | Codebase discovery if needed |
 
 > 🔴 **NO OTHER AGENTS during planning!** Only project-planner and explorer-agent.
 
@@ -76,34 +76,34 @@ Onaylıyor musunuz? (Y/N)
 
 ### PHASE 2: IMPLEMENTATION (Parallel agents after approval)
 
-| Parallel Group | Agents |
-|----------------|--------|
-| Foundation | `database-architect`, `security-auditor` |
-| Core | `backend-specialist`, `frontend-specialist` |
-| Polish | `test-engineer`, `devops-engineer` |
+| Parallel Group | Agents                                      |
+| -------------- | ------------------------------------------- |
+| Foundation     | `database-architect`, `security-auditor`    |
+| Core           | `backend-specialist`, `frontend-specialist` |
+| Polish         | `test-engineer`, `devops-engineer`          |
 
 > ✅ After user approval, invoke multiple agents in PARALLEL.
 
 ## Available Agents (17 total)
 
-| Agent | Domain | Use When |
-|-------|--------|----------|
-| `project-planner` | Planning | Task breakdown, PLAN.md |
-| `explorer-agent` | Discovery | Codebase mapping |
-| `frontend-specialist` | UI/UX | React, Vue, CSS, HTML |
-| `backend-specialist` | Server | API, Node.js, Python |
-| `database-architect` | Data | SQL, NoSQL, Schema |
-| `security-auditor` | Security | Vulnerabilities, Auth |
-| `penetration-tester` | Security | Active testing |
-| `test-engineer` | Testing | Unit, E2E, Coverage |
-| `devops-engineer` | Ops | CI/CD, Docker, Deploy |
-| `mobile-developer` | Mobile | React Native, Flutter |
-| `performance-optimizer` | Speed | Lighthouse, Profiling |
-| `seo-specialist` | SEO | Meta, Schema, Rankings |
-| `documentation-writer` | Docs | README, API docs |
-| `debugger` | Debug | Error analysis |
-| `game-developer` | Games | Unity, Godot |
-| `orchestrator` | Meta | Coordination |
+| Agent                   | Domain    | Use When                |
+| ----------------------- | --------- | ----------------------- |
+| `project-planner`       | Planning  | Task breakdown, PLAN.md |
+| `explorer-agent`        | Discovery | Codebase mapping        |
+| `frontend-specialist`   | UI/UX     | React, Vue, CSS, HTML   |
+| `backend-specialist`    | Server    | API, Node.js, Python    |
+| `database-architect`    | Data      | SQL, NoSQL, Schema      |
+| `security-auditor`      | Security  | Vulnerabilities, Auth   |
+| `penetration-tester`    | Security  | Active testing          |
+| `test-engineer`         | Testing   | Unit, E2E, Coverage     |
+| `devops-engineer`       | Ops       | CI/CD, Docker, Deploy   |
+| `mobile-developer`      | Mobile    | React Native, Flutter   |
+| `performance-optimizer` | Speed     | Lighthouse, Profiling   |
+| `seo-specialist`        | SEO       | Meta, Schema, Rankings  |
+| `documentation-writer`  | Docs      | README, API docs        |
+| `debugger`              | Debug     | Error analysis          |
+| `game-developer`        | Games     | Unity, Godot            |
+| `orchestrator`          | Meta      | Coordination            |
 
 ---
 
@@ -128,9 +128,9 @@ Identify ALL domains this task touches:
 
 ### Step 2: Phase Detection
 
-| If Plan Exists | Action |
-|----------------|--------|
-| NO `docs/PLAN.md` | → Go to PHASE 1 (planning only) |
+| If Plan Exists                     | Action                           |
+| ---------------------------------- | -------------------------------- |
+| NO `docs/PLAN.md`                  | → Go to PHASE 1 (planning only)  |
 | YES `docs/PLAN.md` + user approved | → Go to PHASE 2 (implementation) |
 
 ### Step 3: Execute Based on Phase
@@ -198,34 +198,41 @@ Combine all agent outputs into unified report.
 ## 🎼 Orchestration Report
 
 ### Task
+
 [Original task summary]
 
 ### Mode
+
 [Current Claude Code mode: plan/edit/ask]
 
 ### Agents Invoked (MINIMUM 3)
-| # | Agent | Focus Area | Status |
-|---|-------|------------|--------|
-| 1 | project-planner | Task breakdown | ✅ |
-| 2 | frontend-specialist | UI implementation | ✅ |
-| 3 | test-engineer | Verification scripts | ✅ |
+
+| #   | Agent               | Focus Area           | Status |
+| --- | ------------------- | -------------------- | ------ |
+| 1   | project-planner     | Task breakdown       | ✅     |
+| 2   | frontend-specialist | UI implementation    | ✅     |
+| 3   | test-engineer       | Verification scripts | ✅     |
 
 ### Verification Scripts Executed
+
 - [x] security_scan.py → Pass/Fail
 - [x] lint_runner.py → Pass/Fail
 
 ### Key Findings
+
 1. **[Agent 1]**: Finding
 2. **[Agent 2]**: Finding
 3. **[Agent 3]**: Finding
 
 ### Deliverables
+
 - [ ] PLAN.md created
 - [ ] Code implemented
 - [ ] Tests passing
 - [ ] Scripts verified
 
 ### Summary
+
 [One paragraph synthesis of all agent work]
 ```
 

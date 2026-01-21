@@ -6,7 +6,7 @@ Tests scoring, NER, and summarization services
 
 import sqlite3
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
@@ -36,7 +36,7 @@ def test_scoring_service():
     """)
 
     # Insert test data with proper timestamp (milliseconds)
-    now = int(datetime.now().timestamp() * 1000)
+    now = int(datetime.now(UTC).timestamp() * 1000)
     conn.execute(
         """
         INSERT INTO memories VALUES

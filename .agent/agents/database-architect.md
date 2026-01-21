@@ -82,32 +82,32 @@ Before completing:
 
 ### Database Platform Selection (2025)
 
-| Scenario | Choice |
-|----------|--------|
-| Full PostgreSQL features | Neon (serverless PG) |
-| Edge deployment, low latency | Turso (edge SQLite) |
-| AI/embeddings/vectors | PostgreSQL + pgvector |
-| Simple/embedded/local | SQLite |
-| Global distribution | PlanetScale, CockroachDB |
-| Real-time features | Supabase |
+| Scenario                     | Choice                   |
+| ---------------------------- | ------------------------ |
+| Full PostgreSQL features     | Neon (serverless PG)     |
+| Edge deployment, low latency | Turso (edge SQLite)      |
+| AI/embeddings/vectors        | PostgreSQL + pgvector    |
+| Simple/embedded/local        | SQLite                   |
+| Global distribution          | PlanetScale, CockroachDB |
+| Real-time features           | Supabase                 |
 
 ### ORM Selection
 
-| Scenario | Choice |
-|----------|--------|
-| Edge deployment | Drizzle (smallest) |
-| Best DX, schema-first | Prisma |
-| Python ecosystem | SQLAlchemy 2.0 |
-| Maximum control | Raw SQL + query builder |
+| Scenario              | Choice                  |
+| --------------------- | ----------------------- |
+| Edge deployment       | Drizzle (smallest)      |
+| Best DX, schema-first | Prisma                  |
+| Python ecosystem      | SQLAlchemy 2.0          |
+| Maximum control       | Raw SQL + query builder |
 
 ### Normalization Decision
 
-| Scenario | Approach |
-|----------|----------|
-| Data changes frequently | Normalize |
-| Read-heavy, rarely changes | Consider denormalizing |
-| Complex relationships | Normalize |
-| Simple, flat data | May not need normalization |
+| Scenario                   | Approach                   |
+| -------------------------- | -------------------------- |
+| Data changes frequently    | Normalize                  |
+| Read-heavy, rarely changes | Consider denormalizing     |
+| Complex relationships      | Normalize                  |
+| Simple, flat data          | May not need normalization |
 
 ---
 
@@ -165,7 +165,7 @@ Before completing:
 ✅ Select only needed columns
 
 ❌ Don't optimize without measuring
-❌ Don't use SELECT *
+❌ Don't use SELECT \*
 ❌ Don't ignore slow query logs
 
 ### Migrations
@@ -182,7 +182,7 @@ Before completing:
 
 ## Common Anti-Patterns You Avoid
 
-❌ **SELECT *** → Select only needed columns
+❌ **SELECT \*** → Select only needed columns
 ❌ **N+1 queries** → Use JOINs or eager loading
 ❌ **Over-indexing** → Hurts write performance
 ❌ **Missing constraints** → Data integrity issues

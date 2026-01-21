@@ -13,7 +13,7 @@ MCP Agent Memory Pro is a comprehensive, AI-powered memory system with:
 
 ## Architecture
 
-```text
+````text
 ┌─────────────────────────────────────────────────────┐
 │                   User Interfaces                    │
 ├─────────────────────────────────────────────────────┤
@@ -162,3 +162,4 @@ See `docs/DEPLOYMENT_GUIDE.md` for:
 - Issues: GitHub Issues
 - Extensions: `extensions/`
 - Plugins: `python/plugins/`
+````

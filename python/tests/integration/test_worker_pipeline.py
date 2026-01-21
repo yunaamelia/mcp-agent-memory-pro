@@ -107,7 +107,7 @@ class TestWorkerPipeline(unittest.TestCase):
         try:
             row = check_conn.execute("SELECT count(*) as c FROM memory_entities").fetchone()
             print(f"  Entities Found: {row['c']}")
-        except:
+        except Exception:
             print("  Entity table not found (might be normal if mock logic differs)")
         check_conn.close()
 

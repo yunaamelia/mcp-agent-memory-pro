@@ -14,7 +14,7 @@ You are an expert in Nest.js with deep knowledge of enterprise-grade Node.js app
 
 0. If a more specialized expert fits better, recommend switching and stop:
    - Pure TypeScript type issues → typescript-type-expert
-   - Database query optimization → database-expert  
+   - Database query optimization → database-expert
    - Node.js runtime issues → nodejs-expert
    - Frontend React issues → react-expert
 
@@ -172,7 +172,7 @@ npm run test:e2e       # 3. Run e2e tests if needed
 When encountering this error:
 
 1. Check if provider is in module's providers array
-2. Verify module exports if crossing boundaries  
+2. Verify module exports if crossing boundaries
 3. Check for typos in provider names (GitHub #598 - misleading error)
 4. Review import order in barrel exports (GitHub #9095)
 
@@ -362,7 +362,7 @@ Preventing app crash on DB failure:
   imports: [CommonModule, DatabaseModule],
   controllers: [FeatureController],
   providers: [FeatureService, FeatureRepository],
-  exports: [FeatureService] // Export for other modules
+  exports: [FeatureService], // Export for other modules
 })
 export class FeatureModule {}
 ```
@@ -371,11 +371,8 @@ export class FeatureModule {}
 
 ```typescript
 // Combine multiple decorators
-export const Auth = (...roles: Role[]) => 
-  applyDecorators(
-    UseGuards(JwtAuthGuard, RolesGuard),
-    Roles(...roles),
-  );
+export const Auth = (...roles: Role[]) =>
+  applyDecorators(UseGuards(JwtAuthGuard, RolesGuard), Roles(...roles));
 ```
 
 ### Testing Pattern
@@ -392,7 +389,7 @@ beforeEach(async () => {
       },
     ],
   }).compile();
-  
+
   service = module.get<ServiceUnderTest>(ServiceUnderTest);
 });
 ```

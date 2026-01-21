@@ -13,7 +13,7 @@ import json
 import os
 import sys
 import tempfile
-from datetime import datetime
+from datetime import UTC, datetime
 
 # Fix Windows console encoding for Unicode output
 try:
@@ -38,7 +38,7 @@ def run_basic_test(url: str, take_screenshot: bool = False) -> dict:
             "fix": "pip install playwright && playwright install chromium",
         }
 
-    result = {"url": url, "timestamp": datetime.now().isoformat(), "status": "pending"}
+    result = {"url": url, "timestamp": datetime.now(UTC).isoformat(), "status": "pending"}
 
     try:
         with sync_playwright() as p:
@@ -91,7 +91,7 @@ def run_basic_test(url: str, take_screenshot: bool = False) -> dict:
                 screenshot_dir = os.path.join(tempfile.gettempdir(), "maestro_screenshots")
                 os.makedirs(screenshot_dir, exist_ok=True)
                 screenshot_path = os.path.join(
-                    screenshot_dir, f"screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                    screenshot_dir, f"screenshot_{datetime.now(UTC).strftime('%Y%m%d_%H%M%S')}.png"
                 )
                 page.screenshot(path=screenshot_path, full_page=True)
                 result["screenshot"] = screenshot_path
@@ -183,9 +183,6 @@ if __name__ == "__main__":
     take_screenshot = "--screenshot" in sys.argv
     check_a11y = "--a11y" in sys.argv
 
-    if check_a11y:
-        result = run_accessibility_check(url)
-    else:
-        result = run_basic_test(url, take_screenshot)
+    result = run_accessibility_check(url) if check_a11y else run_basic_test(url, take_screenshot)
 
     print(json.dumps(result, indent=2))

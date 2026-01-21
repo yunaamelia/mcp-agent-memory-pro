@@ -401,9 +401,12 @@ class ContextAnalyzer:
             except (json.JSONDecodeError, TypeError):
                 pass
 
-        if memory.get("file_path") and context.get("active_files"):
-            if memory["file_path"] in context["active_files"]:
-                reasons.append(f"Same file: {memory['file_path']}")
+        if (
+            memory.get("file_path")
+            and context.get("active_files")
+            and memory["file_path"] in context["active_files"]
+        ):
+            reasons.append(f"Same file: {memory['file_path']}")
 
         if memory.get("importance_score", 0) >= 0.7:
             reasons.append("High importance")

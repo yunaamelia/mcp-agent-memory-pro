@@ -65,6 +65,7 @@ Analyzes React Native / Flutter code for compliance with:
 Total: 50+ mobile-specific checks
 """
 
+import contextlib
 import json
 import os
 import re
@@ -83,7 +84,7 @@ class MobileAuditor:
         try:
             with open(filepath, encoding="utf-8", errors="replace") as f:
                 content = f.read()
-        except:
+        except Exception:
             return
 
         self.files_checked += 1
@@ -469,12 +470,12 @@ class MobileAuditor:
         # 9.1 iOS Type Scale Check
         if is_react_native:
             # Check for iOS text styles that match HIG
-            has_large_title = bool(
-                re.search(r'fontSize:\s*34|largeTitle|font-weight:\s*["\']?bold', content)
-            )
-            has_title_1 = bool(re.search(r"fontSize:\s*28", content))
-            has_headline = bool(re.search(r"fontSize:\s*17.*semibold|headline", content))
-            has_body = bool(re.search(r"fontSize:\s*17.*regular|body", content))
+            # has_large_title = bool(
+            #     re.search(r'fontSize:\s*34|largeTitle|font-weight:\s*["\']?bold', content)
+            # )
+            # has_title_1 = bool(re.search(r"fontSize:\s*28", content))
+            # has_headline = bool(re.search(r"fontSize:\s*17.*semibold|headline", content))
+            # has_body = bool(re.search(r"fontSize:\s*17.*regular|body", content))
 
             # Check if following iOS scale roughly
             font_sizes = re.findall(r"fontSize:\s*([\d.]+)", content)
@@ -495,23 +496,22 @@ class MobileAuditor:
             # Check for Material 3 text styles
             has_display = bool(re.search(r"fontSize:\s*[456][0-9]|display", content))
             has_headline_material = bool(re.search(r"fontSize:\s*[23][0-9]|headline", content))
-            has_title_material = bool(re.search(r"fontSize:\s*2[12][0-9].*medium|title", content))
-            has_body_material = bool(re.search(r"fontSize:\s*1[456].*regular|body", content))
-            has_label = bool(re.search(r"fontSize:\s*1[1234].*medium|label", content))
+            # has_title_material = bool(re.search(r"fontSize:\s*2[12][0-9].*medium|title", content))
+            # has_body_material = bool(re.search(r"fontSize:\s*1[456].*regular|body", content))
+            # has_label = bool(re.search(r"fontSize:\s*1[1234].*medium|label", content))
 
             # Check if using sp (scale-independent pixels)
             uses_sp = bool(re.search(r"\d+\s*sp\b", content))
-            if has_display or has_headline_material:
-                if not uses_sp:
-                    self.warnings.append(
-                        f"[Android Typography] {filename}: Material typography detected without sp units. Use sp for text to respect user font size preferences."
-                    )
+            if (has_display or has_headline_material) and not uses_sp:
+                self.warnings.append(
+                    f"[Android Typography] {filename}: Material typography detected without sp units. Use sp for text to respect user font size preferences."
+                )
 
         # 9.3 Modular Scale Check
         # Check if font sizes follow modular scale
         font_sizes = re.findall(r"fontSize:\s*(\d+(?:\.\d+)?)", content)
         if len(font_sizes) > 3:
-            sorted_sizes = sorted(set([float(s) for s in font_sizes]))
+            sorted_sizes = sorted({float(s) for s in font_sizes})
             ratios = []
             for i in range(1, len(sorted_sizes)):
                 if sorted_sizes[i - 1] > 0:
@@ -546,10 +546,8 @@ class MobileAuditor:
             numeric_weights = []
             for w in font_weights:
                 val = weight_map.get(w.lower(), w)
-                try:
+                with contextlib.suppress(Exception):
                     numeric_weights.append(int(val))
-                except:
-                    pass
 
             # Check if overusing bold (mobile should be regular-dominant)
             bold_count = sum(1 for w in numeric_weights if w >= 700)
@@ -589,7 +587,7 @@ class MobileAuditor:
                     saturation = (max_val - min_val) / max_val
                     if saturation > 0.8:  # Highly saturated
                         saturated_count += 1
-            except:
+            except Exception:
                 pass
 
         if saturated_count > 10:
@@ -599,7 +597,7 @@ class MobileAuditor:
 
         # 10.3 Outdoor Visibility Check
         # Low contrast combinations fail in outdoor sunlight
-        light_colors = re.findall(r"#[0-9A-Fa-f]{6}|rgba?\([^)]+\)", content)
+        # light_colors = re.findall(r"#[0-9A-Fa-f]{6}|rgba?\([^)]+\)", content)
         # Check for potential low contrast (light gray on white, dark gray on black)
         potential_low_contrast = bool(
             re.search(
@@ -640,7 +638,7 @@ class MobileAuditor:
             # Check for semantic color usage
             has_label = bool(re.search(r'color:\s*["\']?label|\.label', content))
             has_secondaryLabel = bool(re.search(r"secondaryLabel|\.secondaryLabel", content))
-            has_systemBackground = bool(re.search(r"systemBackground|\.systemBackground", content))
+            # has_systemBackground = bool(re.search(r"systemBackground|\.systemBackground", content))
 
             has_hardcoded_gray = bool(re.search(r"#[78]0{4}", content))
             if has_hardcoded_gray and not (has_label or has_secondaryLabel):
@@ -789,7 +787,7 @@ class MobileAuditor:
         # 14.1 Performance Profiling Check
         has_performance = bool(re.search(r"Performance|systrace|profile|Flipper", content))
         has_console_log = len(re.findall(r"console\.(log|warn|error|debug|info)", content))
-        has_debugger = bool(re.search(r"debugger|__DEV__|React\.DevTools", content))
+        # has_debugger = bool(re.search(r"debugger|__DEV__|React\.DevTools", content))
 
         if has_console_log > 10:
             self.warnings.append(

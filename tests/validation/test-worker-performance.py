@@ -7,7 +7,7 @@ Benchmarks worker execution times
 import sqlite3
 import sys
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
@@ -31,7 +31,7 @@ def create_test_database(num_memories=100):
         )
     """)
 
-    now = int(datetime.now().timestamp() * 1000)
+    now = int(datetime.now(UTC).timestamp() * 1000)
 
     for i in range(num_memories):
         conn.execute(

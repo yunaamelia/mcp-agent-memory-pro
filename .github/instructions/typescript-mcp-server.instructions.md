@@ -58,23 +58,23 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import express from 'express';
 
 const server = new McpServer({
-    name: 'my-server',
-    version: '1.0.0'
+  name: 'my-server',
+  version: '1.0.0',
 });
 
 const app = express();
 app.use(express.json());
 
 app.post('/mcp', async (req, res) => {
-    const transport = new StreamableHTTPServerTransport({
-        sessionIdGenerator: undefined,
-        enableJsonResponse: true
-    });
-    
-    res.on('close', () => transport.close());
-    
-    await server.connect(transport);
-    await transport.handleRequest(req, res, req.body);
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined,
+    enableJsonResponse: true,
+  });
+
+  res.on('close', () => transport.close());
+
+  await server.connect(transport);
+  await transport.handleRequest(req, res, req.body);
 });
 
 app.listen(3000);
@@ -87,8 +87,8 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
 const server = new McpServer({
-    name: 'my-server',
-    version: '1.0.0'
+  name: 'my-server',
+  version: '1.0.0',
 });
 
 // ... register tools, resources, prompts ...
@@ -103,22 +103,21 @@ await server.connect(transport);
 import { z } from 'zod';
 
 server.registerTool(
-    'calculate',
-    {
-        title: 'Calculator',
-        description: 'Perform basic calculations',
-        inputSchema: { a: z.number(), b: z.number(), op: z.enum(['+', '-', '*', '/']) },
-        outputSchema: { result: z.number() }
-    },
-    async ({ a, b, op }) => {
-        const result = op === '+' ? a + b : op === '-' ? a - b : 
-                      op === '*' ? a * b : a / b;
-        const output = { result };
-        return {
-            content: [{ type: 'text', text: JSON.stringify(output) }],
-            structuredContent: output
-        };
-    }
+  'calculate',
+  {
+    title: 'Calculator',
+    description: 'Perform basic calculations',
+    inputSchema: { a: z.number(), b: z.number(), op: z.enum(['+', '-', '*', '/']) },
+    outputSchema: { result: z.number() },
+  },
+  async ({ a, b, op }) => {
+    const result = op === '+' ? a + b : op === '-' ? a - b : op === '*' ? a * b : a / b;
+    const output = { result };
+    return {
+      content: [{ type: 'text', text: JSON.stringify(output) }],
+      structuredContent: output,
+    };
+  }
 );
 ```
 
@@ -128,18 +127,20 @@ server.registerTool(
 import { ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 server.registerResource(
-    'user',
-    new ResourceTemplate('users://{userId}', { list: undefined }),
-    {
-        title: 'User Profile',
-        description: 'Fetch user profile data'
-    },
-    async (uri, { userId }) => ({
-        contents: [{
-            uri: uri.href,
-            text: `User ${userId} data here`
-        }]
-    })
+  'user',
+  new ResourceTemplate('users://{userId}', { list: undefined }),
+  {
+    title: 'User Profile',
+    description: 'Fetch user profile data',
+  },
+  async (uri, { userId }) => ({
+    contents: [
+      {
+        uri: uri.href,
+        text: `User ${userId} data here`,
+      },
+    ],
+  })
 );
 ```
 
@@ -147,30 +148,32 @@ server.registerResource(
 
 ```typescript
 server.registerTool(
-    'summarize',
-    {
-        title: 'Text Summarizer',
-        description: 'Summarize text using LLM',
-        inputSchema: { text: z.string() },
-        outputSchema: { summary: z.string() }
-    },
-    async ({ text }) => {
-        const response = await server.server.createMessage({
-            messages: [{
-                role: 'user',
-                content: { type: 'text', text: `Summarize: ${text}` }
-            }],
-            maxTokens: 500
-        });
-        
-        const summary = response.content.type === 'text' ? 
-            response.content.text : 'Unable to summarize';
-        const output = { summary };
-        return {
-            content: [{ type: 'text', text: JSON.stringify(output) }],
-            structuredContent: output
-        };
-    }
+  'summarize',
+  {
+    title: 'Text Summarizer',
+    description: 'Summarize text using LLM',
+    inputSchema: { text: z.string() },
+    outputSchema: { summary: z.string() },
+  },
+  async ({ text }) => {
+    const response = await server.server.createMessage({
+      messages: [
+        {
+          role: 'user',
+          content: { type: 'text', text: `Summarize: ${text}` },
+        },
+      ],
+      maxTokens: 500,
+    });
+
+    const summary =
+      response.content.type === 'text' ? response.content.text : 'Unable to summarize';
+    const output = { summary };
+    return {
+      content: [{ type: 'text', text: JSON.stringify(output) }],
+      structuredContent: output,
+    };
+  }
 );
 ```
 
@@ -180,27 +183,28 @@ server.registerTool(
 import { completable } from '@modelcontextprotocol/sdk/server/completable.js';
 
 server.registerPrompt(
-    'review',
-    {
-        title: 'Code Review',
-        description: 'Review code with specific focus',
-        argsSchema: {
-            language: completable(z.string(), value => 
-                ['typescript', 'python', 'javascript', 'java']
-                    .filter(l => l.startsWith(value))
-            ),
-            code: z.string()
-        }
+  'review',
+  {
+    title: 'Code Review',
+    description: 'Review code with specific focus',
+    argsSchema: {
+      language: completable(z.string(), (value) =>
+        ['typescript', 'python', 'javascript', 'java'].filter((l) => l.startsWith(value))
+      ),
+      code: z.string(),
     },
-    ({ language, code }) => ({
-        messages: [{
-            role: 'user',
-            content: {
-                type: 'text',
-                text: `Review this ${language} code:\n\n${code}`
-            }
-        }]
-    })
+  },
+  ({ language, code }) => ({
+    messages: [
+      {
+        role: 'user',
+        content: {
+          type: 'text',
+          text: `Review this ${language} code:\n\n${code}`,
+        },
+      },
+    ],
+  })
 );
 ```
 
@@ -208,28 +212,28 @@ server.registerPrompt(
 
 ```typescript
 server.registerTool(
-    'risky-operation',
-    {
-        title: 'Risky Operation',
-        description: 'An operation that might fail',
-        inputSchema: { input: z.string() },
-        outputSchema: { result: z.string() }
-    },
-    async ({ input }) => {
-        try {
-            const result = await performRiskyOperation(input);
-            const output = { result };
-            return {
-                content: [{ type: 'text', text: JSON.stringify(output) }],
-                structuredContent: output
-            };
-        } catch (err: unknown) {
-            const error = err as Error;
-            return {
-                content: [{ type: 'text', text: `Error: ${error.message}` }],
-                isError: true
-            };
-        }
+  'risky-operation',
+  {
+    title: 'Risky Operation',
+    description: 'An operation that might fail',
+    inputSchema: { input: z.string() },
+    outputSchema: { result: z.string() },
+  },
+  async ({ input }) => {
+    try {
+      const result = await performRiskyOperation(input);
+      const output = { result };
+      return {
+        content: [{ type: 'text', text: JSON.stringify(output) }],
+        structuredContent: output,
+      };
+    } catch (err: unknown) {
+      const error = err as Error;
+      return {
+        content: [{ type: 'text', text: `Error: ${error.message}` }],
+        isError: true,
+      };
     }
+  }
 );
 ```

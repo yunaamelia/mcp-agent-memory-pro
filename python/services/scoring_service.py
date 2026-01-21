@@ -240,7 +240,7 @@ class ImportanceScoringService:
 
                     try:
                         memory["tags"] = json.loads(memory["tags"])
-                    except:
+                    except Exception:
                         memory["tags"] = []
 
                 importance = self.calculate_importance(memory)

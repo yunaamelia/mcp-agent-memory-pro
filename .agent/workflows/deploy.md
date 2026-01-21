@@ -34,21 +34,25 @@ Before any deployment:
 ## 🚀 Pre-Deploy Checklist
 
 ### Code Quality
+
 - [ ] No TypeScript errors (`npx tsc --noEmit`)
 - [ ] ESLint passing (`npx eslint .`)
 - [ ] All tests passing (`npm test`)
 
 ### Security
+
 - [ ] No hardcoded secrets
 - [ ] Environment variables documented
 - [ ] Dependencies audited (`npm audit`)
 
 ### Performance
+
 - [ ] Bundle size acceptable
 - [ ] No console.log statements
 - [ ] Images optimized
 
 ### Documentation
+
 - [ ] README updated
 - [ ] CHANGELOG updated
 - [ ] API docs current
@@ -109,21 +113,25 @@ Before any deployment:
 ## 🚀 Deployment Complete
 
 ### Summary
+
 - **Version:** v1.2.3
 - **Environment:** production
 - **Duration:** 47 seconds
 - **Platform:** Vercel
 
 ### URLs
+
 - 🌐 Production: https://app.example.com
 - 📊 Dashboard: https://vercel.com/project
 
 ### What Changed
+
 - Added user profile feature
 - Fixed login bug
 - Updated dependencies
 
 ### Health Check
+
 ✅ API responding (200 OK)
 ✅ Database connected
 ✅ All services healthy
@@ -135,6 +143,7 @@ Before any deployment:
 ## ❌ Deployment Failed
 
 ### Error
+
 Build failed at step: TypeScript compilation
 
 ### Details
@@ -158,12 +167,12 @@ Run `/deploy rollback` if needed.
 
 ## Platform Support
 
-| Platform | Command | Notes |
-|----------|---------|-------|
-| Vercel | `vercel --prod` | Auto-detected for Next.js |
-| Railway | `railway up` | Needs Railway CLI |
-| Fly.io | `fly deploy` | Needs flyctl |
-| Docker | `docker compose up -d` | For self-hosted |
+| Platform | Command                | Notes                     |
+| -------- | ---------------------- | ------------------------- |
+| Vercel   | `vercel --prod`        | Auto-detected for Next.js |
+| Railway  | `railway up`           | Needs Railway CLI         |
+| Fly.io   | `fly deploy`           | Needs flyctl              |
+| Docker   | `docker compose up -d` | For self-hosted           |
 
 ---
 

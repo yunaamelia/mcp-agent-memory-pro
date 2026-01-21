@@ -18,17 +18,16 @@ Usage:
     python seo_checker.py <project_path>
 """
 
+import contextlib
 import json
 import re
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 # Fix Windows console encoding
-try:
+with contextlib.suppress(Exception):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-except:
-    pass
 
 
 # Directories to skip
@@ -110,10 +109,7 @@ def is_page_file(file_path: Path) -> bool:
         return True
 
     # HTML files are usually pages
-    if file_path.suffix.lower() in [".html", ".htm"]:
-        return True
-
-    return False
+    return file_path.suffix.lower() in [".html", ".htm"]
 
 
 def find_pages(project_path: Path) -> list:
@@ -192,7 +188,7 @@ def main():
     print("  SEO CHECKER - Search Engine Optimization Audit")
     print(f"{'=' * 60}")
     print(f"Project: {project_path}")
-    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Time: {datetime.now(UTC).strftime('%Y-%m-%d %H:%M:%S')}")
     print("-" * 60)
 
     # Find pages

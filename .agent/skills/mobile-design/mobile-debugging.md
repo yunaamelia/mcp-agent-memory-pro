@@ -29,13 +29,13 @@ Web Debugging:      Mobile Debugging:
 
 ## 🚫 AI DEBUGGING ANTI-PATTERNS
 
-| ❌ Default | ✅ Mobile-Correct |
-|------------|-------------------|
-| "Add console.logs" | Use Flipper / Reactotron |
-| "Check network tab" | Use Charles Proxy / Proxyman |
-| "It works on simulator" | **Test on Real Device** (HW specific bugs) |
-| "Reinstall node_modules" | **Clean Native Build** (Gradle/Pod cache) |
-| Ignored native logs | Read `logcat` / Xcode logs |
+| ❌ Default               | ✅ Mobile-Correct                          |
+| ------------------------ | ------------------------------------------ |
+| "Add console.logs"       | Use Flipper / Reactotron                   |
+| "Check network tab"      | Use Charles Proxy / Proxyman               |
+| "It works on simulator"  | **Test on Real Device** (HW specific bugs) |
+| "Reinstall node_modules" | **Clean Native Build** (Gradle/Pod cache)  |
+| Ignored native logs      | Read `logcat` / Xcode logs                 |
 
 ---
 
@@ -43,20 +43,20 @@ Web Debugging:      Mobile Debugging:
 
 ### ⚡ React Native & Expo
 
-| Tool | Purpose | Best For |
-|------|---------|----------|
-| **Reactotron** | State/API/Redux | JS side debugging |
-| **Flipper** | Layout/Network/db | Native + JS bridge |
-| **Expo Tools** | Element inspector | Quick UI checks |
+| Tool           | Purpose           | Best For           |
+| -------------- | ----------------- | ------------------ |
+| **Reactotron** | State/API/Redux   | JS side debugging  |
+| **Flipper**    | Layout/Network/db | Native + JS bridge |
+| **Expo Tools** | Element inspector | Quick UI checks    |
 
 ### 🛠️ Native Layer (The Deep Dive)
 
-| Tool | Platform | Command | Why Use? |
-|------|----------|---------|----------|
-| **Logcat** | Android | `adb logcat` | Native crashes, ANRs |
-| **Console** | iOS | via Xcode | Native exceptions, memory |
-| **Layout Insp.** | Android | Android Studio | UI hierarchy bugs |
-| **View Insp.** | iOS | Xcode | UI hierarchy bugs |
+| Tool             | Platform | Command        | Why Use?                  |
+| ---------------- | -------- | -------------- | ------------------------- |
+| **Logcat**       | Android  | `adb logcat`   | Native crashes, ANRs      |
+| **Console**      | iOS      | via Xcode      | Native exceptions, memory |
+| **Layout Insp.** | Android  | Android Studio | UI hierarchy bugs         |
+| **View Insp.**   | iOS      | Xcode          | UI hierarchy bugs         |
 
 ---
 
@@ -81,7 +81,7 @@ Web Debugging:      Mobile Debugging:
 ### 🌐 "API Request Failed" (Network)
 
 **Web:** Open Chrome DevTools → Network.
-**Mobile:** *You usually can't see this easily.*
+**Mobile:** _You usually can't see this easily._
 
 **Solution 1: Reactotron/Flipper**
 

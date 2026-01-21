@@ -5,7 +5,7 @@ Test Importance Scorer Worker
 
 import sqlite3
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 # Add parent directory to path
@@ -42,7 +42,7 @@ def test_importance_scoring():
     """)
 
     # Insert test memories
-    now = int(datetime.now().timestamp() * 1000)
+    now = int(datetime.now(UTC).timestamp() * 1000)
 
     test_memories = [
         {
@@ -103,7 +103,7 @@ def test_importance_scoring():
 
             try:
                 memory["tags"] = json.loads(memory["tags"])
-            except:
+            except Exception:
                 memory["tags"] = []
 
         score = scorer.calculate_importance(memory)

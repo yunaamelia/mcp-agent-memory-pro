@@ -20,11 +20,13 @@ Before fixing, reliably reproduce the issue.
 
 ```markdown
 ## Reproduction Steps
+
 1. [Exact step to reproduce]
 2. [Next step]
 3. [Expected vs actual result]
 
 ## Reproduction Rate
+
 - [ ] Always (100%)
 - [ ] Often (50-90%)
 - [ ] Sometimes (10-50%)
@@ -37,6 +39,7 @@ Narrow down the source.
 
 ```markdown
 ## Isolation Questions
+
 - When did this start happening?
 - What changed recently?
 - Does it happen in all environments?
@@ -50,7 +53,9 @@ Find the root cause, not just symptoms.
 
 ```markdown
 ## Root Cause Analysis
+
 ### The 5 Whys
+
 1. Why: [First observation]
 2. Why: [Deeper reason]
 3. Why: [Still deeper]
@@ -64,6 +69,7 @@ Fix and verify it's truly fixed.
 
 ```markdown
 ## Fix Verification
+
 - [ ] Bug no longer reproduces
 - [ ] Related functionality still works
 - [ ] No new issues introduced
@@ -74,17 +80,20 @@ Fix and verify it's truly fixed.
 
 ```markdown
 ## Before Starting
+
 - [ ] Can reproduce consistently
 - [ ] Have minimal reproduction case
 - [ ] Understand expected behavior
 
 ## During Investigation
+
 - [ ] Check recent changes (git log)
 - [ ] Check logs for errors
 - [ ] Add logging if needed
 - [ ] Use debugger/breakpoints
 
 ## After Fix
+
 - [ ] Root cause documented
 - [ ] Fix verified
 - [ ] Regression test added

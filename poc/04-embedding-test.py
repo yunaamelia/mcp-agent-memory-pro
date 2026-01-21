@@ -6,6 +6,7 @@ Validates: Model downloads and generates embeddings
 import time
 
 from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 
 print("✓ Loading model...")
 start = time.time()
@@ -29,11 +30,10 @@ print(f"  Embedding dimensions: {embeddings.shape[1]}")
 
 # Test similarity
 print("\n✓ Testing similarity...")
-from sklearn.metrics.pairwise import cosine_similarity
 
 similarities = cosine_similarity([embeddings[0]], embeddings)[0]
 print(f"  Query: '{texts[0]}'")
-for i, (text, sim) in enumerate(zip(texts, similarities)):
+for i, (text, sim) in enumerate(zip(texts, similarities, strict=False)):
     print(f"    {i + 1}. {text[:40]:40s} | Similarity: {sim:.3f}")
 
 if similarities[1] > 0.5:

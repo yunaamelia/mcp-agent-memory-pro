@@ -11,17 +11,16 @@ Supports:
     - Python: pytest, unittest
 """
 
+import contextlib
 import json
 import subprocess
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 # Fix Windows console encoding
-try:
+with contextlib.suppress(Exception):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-except:
-    pass
 
 
 def detect_test_framework(project_path: Path) -> dict:
@@ -58,7 +57,7 @@ def detect_test_framework(project_path: Path) -> dict:
                 result["cmd"] = ["npx", "jest"]
                 result["coverage_cmd"] = ["npx", "jest", "--coverage"]
 
-        except:
+        except Exception:
             pass
 
     # Python project
@@ -143,7 +142,7 @@ def main():
     print(f"{'=' * 60}")
     print(f"Project: {project_path}")
     print(f"Coverage: {'enabled' if with_coverage else 'disabled'}")
-    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Time: {datetime.now(UTC).strftime('%Y-%m-%d %H:%M:%S')}")
 
     # Detect test framework
     test_info = detect_test_framework(project_path)

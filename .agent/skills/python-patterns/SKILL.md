@@ -46,13 +46,13 @@ What are you building?
 
 ### Comparison Principles
 
-| Factor | FastAPI | Django | Flask |
-|--------|---------|--------|-------|
-| **Best for** | APIs, microservices | Full-stack, CMS | Simple, learning |
-| **Async** | Native | Django 5.0+ | Via extensions |
-| **Admin** | Manual | Built-in | Via extensions |
-| **ORM** | Choose your own | Django ORM | Choose your own |
-| **Learning curve** | Low | Medium | Low |
+| Factor             | FastAPI             | Django          | Flask            |
+| ------------------ | ------------------- | --------------- | ---------------- |
+| **Best for**       | APIs, microservices | Full-stack, CMS | Simple, learning |
+| **Async**          | Native              | Django 5.0+     | Via extensions   |
+| **Admin**          | Manual              | Built-in        | Via extensions   |
+| **ORM**            | Choose your own     | Django ORM      | Choose your own  |
+| **Learning curve** | Low                 | Medium          | Low              |
 
 ### Selection Questions to Ask
 
@@ -97,12 +97,12 @@ Don't:
 
 ### Async Library Selection
 
-| Need | Async Library |
-|------|---------------|
-| HTTP client | httpx |
-| PostgreSQL | asyncpg |
-| Redis | aioredis / redis-py async |
-| File I/O | aiofiles |
+| Need         | Async Library                  |
+| ------------ | ------------------------------ |
+| HTTP client  | httpx                          |
+| PostgreSQL   | asyncpg                        |
+| Redis        | aioredis / redis-py async      |
+| File I/O     | aiofiles                       |
 | Database ORM | SQLAlchemy 2.0 async, Tortoise |
 
 ---
@@ -313,13 +313,13 @@ async def create(user: UserCreate) -> UserResponse:
 
 ### Selection Guide
 
-| Solution | Best For |
-|----------|----------|
-| **BackgroundTasks** | Simple, in-process tasks |
-| **Celery** | Distributed, complex workflows |
-| **ARQ** | Async, Redis-based |
-| **RQ** | Simple Redis queue |
-| **Dramatiq** | Actor-based, simpler than Celery |
+| Solution            | Best For                         |
+| ------------------- | -------------------------------- |
+| **BackgroundTasks** | Simple, in-process tasks         |
+| **Celery**          | Distributed, complex workflows   |
+| **ARQ**             | Async, Redis-based               |
+| **RQ**              | Simple Redis queue               |
+| **Dramatiq**        | Actor-based, simpler than Celery |
 
 ### When to Use Each
 
@@ -373,11 +373,11 @@ Include:
 
 ### Testing Strategy
 
-| Type | Purpose | Tools |
-|------|---------|-------|
-| **Unit** | Business logic | pytest |
-| **Integration** | API endpoints | pytest + httpx/TestClient |
-| **E2E** | Full workflows | pytest + DB |
+| Type            | Purpose        | Tools                     |
+| --------------- | -------------- | ------------------------- |
+| **Unit**        | Business logic | pytest                    |
+| **Integration** | API endpoints  | pytest + httpx/TestClient |
+| **E2E**         | Full workflows | pytest + DB               |
 
 ### Async Testing
 

@@ -79,10 +79,10 @@ model User {
   email     String   @unique
   posts     Post[]   @relation("UserPosts")
   profile   Profile? @relation("UserProfile")
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([email])
   @@map("users")
 }
@@ -92,7 +92,7 @@ model Post {
   title    String
   author   User   @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
-  
+
   @@index([authorId])
   @@map("posts")
 }
@@ -171,9 +171,7 @@ npx prisma migrate resolve --rolled-back "migration_name"
 ```typescript
 // Enable query events
 const prisma = new PrismaClient({
-  log: [
-    { emit: 'event', level: 'query' },
-  ],
+  log: [{ emit: 'event', level: 'query' }],
 });
 
 prisma.$on('query', (e) => {
@@ -199,7 +197,7 @@ for (const user of users) {
 
 // GOOD: Include relations
 const users = await prisma.user.findMany({
-  include: { posts: true }
+  include: { posts: true },
 });
 
 // BETTER: Select only needed fields
@@ -208,9 +206,9 @@ const users = await prisma.user.findMany({
     id: true,
     email: true,
     posts: {
-      select: { id: true, title: true }
-    }
-  }
+      select: { id: true, title: true },
+    },
+  },
 });
 
 // BEST for complex queries: Use $queryRaw
@@ -313,35 +311,38 @@ const [user, profile] = await prisma.$transaction([
 ]);
 
 // Interactive transaction with manual control
-const result = await prisma.$transaction(async (tx) => {
-  const user = await tx.user.create({ data: userData });
-  
-  // Business logic validation
-  if (user.email.endsWith('@blocked.com')) {
-    throw new Error('Email domain blocked');
+const result = await prisma.$transaction(
+  async (tx) => {
+    const user = await tx.user.create({ data: userData });
+
+    // Business logic validation
+    if (user.email.endsWith('@blocked.com')) {
+      throw new Error('Email domain blocked');
+    }
+
+    const profile = await tx.profile.create({
+      data: { ...profileData, userId: user.id },
+    });
+
+    return { user, profile };
+  },
+  {
+    maxWait: 5000, // Wait for transaction slot
+    timeout: 10000, // Transaction timeout
+    isolationLevel: 'Serializable', // Strictest isolation
   }
-  
-  const profile = await tx.profile.create({
-    data: { ...profileData, userId: user.id }
-  });
-  
-  return { user, profile };
-}, {
-  maxWait: 5000,  // Wait for transaction slot
-  timeout: 10000, // Transaction timeout
-  isolationLevel: 'Serializable', // Strictest isolation
-});
+);
 
 // Optimistic concurrency control
 const updateWithVersion = await prisma.post.update({
-  where: { 
+  where: {
     id: postId,
-    version: currentVersion  // Only update if version matches
+    version: currentVersion, // Only update if version matches
   },
   data: {
     content: newContent,
-    version: { increment: 1 }
-  }
+    version: { increment: 1 },
+  },
 });
 ```
 

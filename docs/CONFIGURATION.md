@@ -37,11 +37,9 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 ```json
 {
   "mcpServers": {
-    "agent-memory":  {
+    "agent-memory": {
       "command": "node",
-      "args": [
-        "/absolute/path/to/mcp-agent-memory-pro/dist/index.js"
-      ],
+      "args": ["/absolute/path/to/mcp-agent-memory-pro/dist/index.js"],
       "env": {
         "MCP_MEMORY_DATA_DIR": "/path/to/data",
         "LOG_LEVEL": "info"
@@ -51,7 +49,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 }
 ```
 
-Windows:  `%APPDATA%\Claude\claude_desktop_config.json`
+Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 Linux: `~/.config/Claude/claude_desktop_config.json`
 
@@ -61,15 +59,15 @@ The system uses SQLite with WAL mode for better performance:
 
 - **Database Path**: `$MCP_MEMORY_DATA_DIR/memories.db`
 - **Journal Mode**: WAL (Write-Ahead Logging)
-- **Synchronous**:  NORMAL
-- **Foreign Keys**:  Enabled
+- **Synchronous**: NORMAL
+- **Foreign Keys**: Enabled
 
 ## Vector Store Configuration
 
 LanceDB is used for vector storage:
 
 - **Storage Path**: `$MCP_MEMORY_DATA_DIR/vectors`
-- **Format**:  Disk-based (no separate server)
+- **Format**: Disk-based (no separate server)
 - **Dimensions**: 384 (all-MiniLM-L6-v2)
 
 ## Python Service Configuration

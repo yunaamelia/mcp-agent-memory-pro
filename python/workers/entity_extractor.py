@@ -65,7 +65,7 @@ class EntityExtractorWorker(BaseWorker):
                     if memory_dict.get("tags"):
                         try:
                             memory_dict["tags"] = json.loads(memory_dict["tags"])
-                        except:
+                        except Exception:
                             memory_dict["tags"] = []
 
                     # Build context

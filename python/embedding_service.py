@@ -130,7 +130,7 @@ async def embed_single(request: EmbedSingleRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Embedding generation failed: {e!s}",
-        )
+        ) from e
 
 
 @app.post("/embed/batch", response_model=EmbedBatchResponse)
@@ -177,7 +177,7 @@ async def embed_batch(request: EmbedBatchRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Batch embedding generation failed: {e!s}",
-        )
+        ) from e
 
 
 @app.get("/stats", response_model=dict)

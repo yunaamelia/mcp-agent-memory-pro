@@ -6,7 +6,7 @@ Tests APScheduler integration and job management
 
 import sys
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.parent / "python"))
@@ -61,7 +61,7 @@ def test_cron_triggers():
     for cron_expr, description in cron_tests:
         try:
             trigger = CronTrigger.from_crontab(cron_expr)
-            next_fire = trigger.get_next_fire_time(None, datetime.now())
+            next_fire = trigger.get_next_fire_time(None, datetime.now(UTC))
             print(f"  {description}: {cron_expr} → Next: {next_fire}")
         except Exception as e:
             print(f"  ❌ Failed to parse {cron_expr}: {e}")

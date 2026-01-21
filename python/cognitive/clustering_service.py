@@ -98,7 +98,7 @@ class ClusteringService:
             "algorithm": algorithm,
             "total_memories": len(vectors),
             "num_clusters": len([c for c in clusters if c["cluster_id"] >= 0]),
-            "noise_points": sum(1 for l in labels if l == -1),
+            "noise_points": sum(1 for label in labels if label == -1),
             "clusters": clusters,
         }
 

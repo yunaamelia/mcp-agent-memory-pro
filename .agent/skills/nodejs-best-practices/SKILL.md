@@ -46,13 +46,13 @@ What are you building?
 
 ### Comparison Principles
 
-| Factor | Hono | Fastify | Express |
-|--------|------|---------|---------|
-| **Best for** | Edge, serverless | Performance | Legacy, learning |
-| **Cold start** | Fastest | Fast | Moderate |
-| **Ecosystem** | Growing | Good | Largest |
-| **TypeScript** | Native | Excellent | Good |
-| **Learning curve** | Low | Medium | Low |
+| Factor             | Hono             | Fastify     | Express          |
+| ------------------ | ---------------- | ----------- | ---------------- |
+| **Best for**       | Edge, serverless | Performance | Legacy, learning |
+| **Cold start**     | Fastest          | Fast        | Moderate         |
+| **Ecosystem**      | Growing          | Good        | Largest          |
+| **TypeScript**     | Native           | Excellent   | Good             |
+| **Learning curve** | Low              | Medium      | Low              |
 
 ### Selection Questions to Ask
 
@@ -91,11 +91,11 @@ CommonJS (require)
 
 ### Runtime Selection
 
-| Runtime | Best For |
-|---------|----------|
-| **Node.js** | General purpose, largest ecosystem |
-| **Bun** | Performance, built-in bundler |
-| **Deno** | Security-first, built-in TypeScript |
+| Runtime     | Best For                            |
+| ----------- | ----------------------------------- |
+| **Node.js** | General purpose, largest ecosystem  |
+| **Bun**     | Performance, built-in bundler       |
+| **Deno**    | Security-first, built-in TypeScript |
 
 ---
 
@@ -166,15 +166,15 @@ Logs get:
 
 ### Status Code Selection
 
-| Situation | Status | When |
-|-----------|--------|------|
-| Bad input | 400 | Client sent invalid data |
-| No auth | 401 | Missing or invalid credentials |
-| No permission | 403 | Valid auth, but not allowed |
-| Not found | 404 | Resource doesn't exist |
-| Conflict | 409 | Duplicate or state conflict |
-| Validation | 422 | Schema valid but business rules fail |
-| Server error | 500 | Our fault, log everything |
+| Situation     | Status | When                                 |
+| ------------- | ------ | ------------------------------------ |
+| Bad input     | 400    | Client sent invalid data             |
+| No auth       | 401    | Missing or invalid credentials       |
+| No permission | 403    | Valid auth, but not allowed          |
+| Not found     | 404    | Resource doesn't exist               |
+| Conflict      | 409    | Duplicate or state conflict          |
+| Validation    | 422    | Schema valid but business rules fail |
+| Server error  | 500    | Our fault, log everything            |
 
 ---
 
@@ -182,12 +182,12 @@ Logs get:
 
 ### When to Use Each
 
-| Pattern | Use When |
-|---------|----------|
-| `async/await` | Sequential async operations |
-| `Promise.all` | Parallel independent operations |
-| `Promise.allSettled` | Parallel where some can fail |
-| `Promise.race` | Timeout or first response wins |
+| Pattern              | Use When                        |
+| -------------------- | ------------------------------- |
+| `async/await`        | Sequential async operations     |
+| `Promise.all`        | Parallel independent operations |
+| `Promise.allSettled` | Parallel where some can fail    |
+| `Promise.race`       | Timeout or first response wins  |
 
 ### Event Loop Awareness
 
@@ -227,12 +227,12 @@ Where to validate:
 
 ### Validation Library Selection
 
-| Library | Best For |
-|---------|----------|
-| **Zod** | TypeScript first, inference |
+| Library     | Best For                        |
+| ----------- | ------------------------------- |
+| **Zod**     | TypeScript first, inference     |
 | **Valibot** | Smaller bundle (tree-shakeable) |
-| **ArkType** | Performance critical |
-| **Yup** | Existing React Form usage |
+| **ArkType** | Performance critical            |
+| **Yup**     | Existing React Form usage       |
 
 ### Validation Philosophy
 
@@ -275,11 +275,11 @@ Trust nothing:
 
 ### Test Strategy Selection
 
-| Type | Purpose | Tools |
-|------|---------|-------|
-| **Unit** | Business logic | node:test, Vitest |
-| **Integration** | API endpoints | Supertest |
-| **E2E** | Full flows | Playwright |
+| Type            | Purpose        | Tools             |
+| --------------- | -------------- | ----------------- |
+| **Unit**        | Business logic | node:test, Vitest |
+| **Integration** | API endpoints  | Supertest         |
+| **E2E**         | Full flows     | Playwright        |
 
 ### What to Test (Priorities)
 

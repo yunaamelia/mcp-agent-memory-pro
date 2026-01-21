@@ -62,6 +62,7 @@ WORKERS_ENABLED=false
 ### Via MCP Tool
 
 In Claude Desktop:
+
 > "Show me memory health insights"
 > "What are the top entities in my memories?"
 

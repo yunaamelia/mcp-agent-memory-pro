@@ -8,13 +8,13 @@ Phase 2 adds autonomous intelligence to the memory system through background wor
 
 ### Background Workers
 
-| Worker | Schedule | Function |
-|--------|----------|----------|
-| **Importance Scorer** | Every 5 min | Recalculates importance scores based on content, source, engagement, and context |
-| **Entity Extractor** | Every 15 min | Extracts code entities (functions, classes, imports), file references, and technical terms |
-| **Memory Promoter** | Hourly | Promotes memories between tiers and archives low-value ones |
-| **Summarizer** | Daily 2 AM | Summarizes long-term memories using Claude API |
-| **Graph Builder** | Daily 3 AM | Builds entity relationships via co-occurrence analysis |
+| Worker                | Schedule     | Function                                                                                   |
+| --------------------- | ------------ | ------------------------------------------------------------------------------------------ |
+| **Importance Scorer** | Every 5 min  | Recalculates importance scores based on content, source, engagement, and context           |
+| **Entity Extractor**  | Every 15 min | Extracts code entities (functions, classes, imports), file references, and technical terms |
+| **Memory Promoter**   | Hourly       | Promotes memories between tiers and archives low-value ones                                |
+| **Summarizer**        | Daily 2 AM   | Summarizes long-term memories using Claude API                                             |
+| **Graph Builder**     | Daily 3 AM   | Builds entity relationships via co-occurrence analysis                                     |
 
 ## Data Flow
 

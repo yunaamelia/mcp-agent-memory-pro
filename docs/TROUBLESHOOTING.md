@@ -132,5 +132,5 @@ sqlite3 data/memories.db "SELECT * FROM memories LIMIT 5;"
 
 1. Check the logs
 2. Run health check
-3. Try resetting data:  `./scripts/reset-data.sh`
+3. Try resetting data: `./scripts/reset-data.sh`
 4. Open an issue on GitHub with logs attached

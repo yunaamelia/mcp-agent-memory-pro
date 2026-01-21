@@ -26,7 +26,7 @@ Where n = number of choices
 
 ```
 ❌ Bad: 15 menu items in one nav
-✅ Good: 5 main categories + "More" 
+✅ Good: 5 main categories + "More"
 
 ❌ Bad: 20 form fields at once
 ✅ Good: 3-step wizard with 5-7 fields each
@@ -54,13 +54,25 @@ Where D = distance, W = width
 
 ```css
 /* Size by importance */
-.btn-primary { height: 48px; padding: 0 24px; }
-.btn-secondary { height: 40px; padding: 0 16px; }
-.btn-tertiary { height: 36px; padding: 0 12px; }
+.btn-primary {
+  height: 48px;
+  padding: 0 24px;
+}
+.btn-secondary {
+  height: 40px;
+  padding: 0 16px;
+}
+.btn-tertiary {
+  height: 36px;
+  padding: 0 12px;
+}
 
 /* Mobile touch targets */
 @media (hover: none) {
-  .btn { min-height: 44px; min-width: 44px; }
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 ```
 
@@ -106,13 +118,19 @@ Where D = distance, W = width
 
 ```css
 /* All buttons gray, primary stands out */
-.btn { background: #E5E7EB; }
-.btn-primary { background: #3B82F6; }
+.btn {
+  background: #e5e7eb;
+}
+.btn-primary {
+  background: #3b82f6;
+}
 
 /* Recommended plan highlighted */
-.pricing-card { border: 1px solid #E5E7EB; }
-.pricing-card.popular { 
-  border: 2px solid #3B82F6;
+.pricing-card {
+  border: 1px solid #e5e7eb;
+}
+.pricing-card.popular {
+  border: 2px solid #3b82f6;
   box-shadow: var(--shadow-lg);
 }
 ```
@@ -197,9 +215,9 @@ Long landing page:
 button.onclick = () => {
   button.disabled = true;
   button.textContent = 'Saving...';
-  
+
   save().then(() => {
-    showSuccess('Saved!');  // Immediate confirmation
+    showSuccess('Saved!'); // Immediate confirmation
   });
 };
 ```
@@ -214,9 +232,7 @@ button.onclick = () => {
 </section>
 
 <!-- Social proof connecting to identity -->
-<blockquote>
-  "This tool helped me become the designer I wanted to be."
-</blockquote>
+<blockquote>"This tool helped me become the designer I wanted to be."</blockquote>
 ```
 
 ---
@@ -225,13 +241,13 @@ button.onclick = () => {
 
 ### Trust Signal Categories
 
-| Category | Elements | Implementation |
-|----------|----------|----------------|
-| **Security** | SSL, badges, encryption | Visible padlock, security logos on forms |
-| **Social Proof** | Reviews, testimonials, logos | Star ratings, customer photos, brand logos |
-| **Transparency** | Policies, pricing, contact | Clear links, no hidden fees, real address |
-| **Professional** | Design quality, consistency | No broken elements, consistent branding |
-| **Authority** | Certifications, awards, media | "As seen in...", industry certifications |
+| Category         | Elements                      | Implementation                             |
+| ---------------- | ----------------------------- | ------------------------------------------ |
+| **Security**     | SSL, badges, encryption       | Visible padlock, security logos on forms   |
+| **Social Proof** | Reviews, testimonials, logos  | Star ratings, customer photos, brand logos |
+| **Transparency** | Policies, pricing, contact    | Clear links, no hidden fees, real address  |
+| **Professional** | Design quality, consistency   | No broken elements, consistent branding    |
+| **Authority**    | Certifications, awards, media | "As seen in...", industry certifications   |
 
 ### Trust Signal Placement
 
@@ -259,7 +275,7 @@ button.onclick = () => {
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  background: #F0FDF4;  /* Light green = security */
+  background: #f0fdf4; /* Light green = security */
   border-radius: 2px; /* Sharp for trust = precision feel */
   font-size: 14px;
   color: #166534;
@@ -287,7 +303,7 @@ button.onclick = () => {
 .testimonial-avatar {
   width: 48px;
   height: 48px;
-  border-radius: 50%;  /* Real photos > initials */
+  border-radius: 50%; /* Real photos > initials */
 }
 ```
 
@@ -297,11 +313,11 @@ button.onclick = () => {
 
 ### Three Types of Cognitive Load
 
-| Type | Definition | Designer's Role |
-|------|------------|-----------------|
-| **Intrinsic** | Inherent complexity of task | Break into smaller steps |
-| **Extraneous** | Load from poor design | Eliminate this! |
-| **Germane** | Effort for learning | Support and encourage |
+| Type           | Definition                  | Designer's Role          |
+| -------------- | --------------------------- | ------------------------ |
+| **Intrinsic**  | Inherent complexity of task | Break into smaller steps |
+| **Extraneous** | Load from poor design       | Eliminate this!          |
+| **Germane**    | Effort for learning         | Support and encourage    |
 
 ### Reduction Strategies
 
@@ -312,14 +328,14 @@ button.onclick = () => {
 .card-busy {
   border: 2px solid red;
   background: linear-gradient(...);
-  box-shadow: 0 0 20px ...;
+  box-shadow: 0 0 20px...;
   /* Too much! */
 }
 
 .card-clean {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
   /* Calm, focused */
 }
 ```
@@ -353,9 +369,7 @@ button.onclick = () => {
   <div class="filters-basic">
     <!-- Common filters visible -->
   </div>
-  <button onclick="toggleAdvanced()">
-    Advanced Options ▼
-  </button>
+  <button onclick="toggleAdvanced()">Advanced Options ▼</button>
   <div class="filters-advanced" hidden>
     <!-- Complex filters hidden -->
   </div>
@@ -377,9 +391,12 @@ button.onclick = () => {
 <!-- Don't make users remember -->
 <label>
   Card Number
-  <input type="text" inputmode="numeric" 
-         autocomplete="cc-number" 
-         placeholder="1234 5678 9012 3456">
+  <input
+    type="text"
+    inputmode="numeric"
+    autocomplete="cc-number"
+    placeholder="1234 5678 9012 3456"
+  />
 </label>
 
 <!-- Show what they entered -->
@@ -395,13 +412,13 @@ button.onclick = () => {
 
 ### Ethical Persuasion Techniques
 
-| Technique | Ethical Use | Dark Pattern (Avoid) |
-|-----------|-------------|----------------------|
-| **Scarcity** | Real stock levels | Fake countdown timers |
-| **Social Proof** | Genuine reviews | Fake testimonials |
-| **Authority** | Real credentials | Misleading badges |
-| **Urgency** | Real deadlines | Manufactured FOMO |
-| **Commitment** | Progress saving | Guilt-tripping |
+| Technique        | Ethical Use       | Dark Pattern (Avoid)  |
+| ---------------- | ----------------- | --------------------- |
+| **Scarcity**     | Real stock levels | Fake countdown timers |
+| **Social Proof** | Genuine reviews   | Fake testimonials     |
+| **Authority**    | Real credentials  | Misleading badges     |
+| **Urgency**      | Real deadlines    | Manufactured FOMO     |
+| **Commitment**   | Progress saving   | Guilt-tripping        |
 
 ### Nudge Patterns
 
@@ -409,9 +426,9 @@ button.onclick = () => {
 
 ```html
 <!-- Pre-select the recommended option -->
-<input type="radio" name="plan" value="monthly">
-<input type="radio" name="plan" value="annual" checked>
-  Annual (Save 20%)
+<input type="radio" name="plan" value="monthly" />
+<input type="radio" name="plan" value="annual" checked />
+Annual (Save 20%)
 ```
 
 **Anchoring:**

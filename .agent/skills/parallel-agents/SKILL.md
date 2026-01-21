@@ -100,25 +100,25 @@ Agents: security-auditor → penetration-tester → synthesis
 
 ## Available Agents
 
-| Agent | Expertise | Trigger Phrases |
-|-------|-----------|-----------------|
-| `orchestrator` | Coordination | "comprehensive", "multi-perspective" |
-| `security-auditor` | Security | "security", "auth", "vulnerabilities" |
-| `penetration-tester` | Security Testing | "pentest", "red team", "exploit" |
-| `backend-specialist` | Backend | "API", "server", "Node.js", "Express" |
-| `frontend-specialist` | Frontend | "React", "UI", "components", "Next.js" |
-| `test-engineer` | Testing | "tests", "coverage", "TDD" |
-| `devops-engineer` | DevOps | "deploy", "CI/CD", "infrastructure" |
-| `database-architect` | Database | "schema", "Prisma", "migrations" |
-| `mobile-developer` | Mobile | "React Native", "Flutter", "mobile" |
-| `api-designer` | API Design | "REST", "GraphQL", "OpenAPI" |
-| `debugger` | Debugging | "bug", "error", "not working" |
-| `explorer-agent` | Discovery | "explore", "map", "structure" |
-| `documentation-writer` | Documentation | "write docs", "create README", "generate API docs" |
-| `performance-optimizer` | Performance | "slow", "optimize", "profiling" |
-| `project-planner` | Planning | "plan", "roadmap", "milestones" |
-| `seo-specialist` | SEO | "SEO", "meta tags", "search ranking" |
-| `game-developer` | Game Development | "game", "Unity", "Godot", "Phaser" |
+| Agent                   | Expertise        | Trigger Phrases                                    |
+| ----------------------- | ---------------- | -------------------------------------------------- |
+| `orchestrator`          | Coordination     | "comprehensive", "multi-perspective"               |
+| `security-auditor`      | Security         | "security", "auth", "vulnerabilities"              |
+| `penetration-tester`    | Security Testing | "pentest", "red team", "exploit"                   |
+| `backend-specialist`    | Backend          | "API", "server", "Node.js", "Express"              |
+| `frontend-specialist`   | Frontend         | "React", "UI", "components", "Next.js"             |
+| `test-engineer`         | Testing          | "tests", "coverage", "TDD"                         |
+| `devops-engineer`       | DevOps           | "deploy", "CI/CD", "infrastructure"                |
+| `database-architect`    | Database         | "schema", "Prisma", "migrations"                   |
+| `mobile-developer`      | Mobile           | "React Native", "Flutter", "mobile"                |
+| `api-designer`          | API Design       | "REST", "GraphQL", "OpenAPI"                       |
+| `debugger`              | Debugging        | "bug", "error", "not working"                      |
+| `explorer-agent`        | Discovery        | "explore", "map", "structure"                      |
+| `documentation-writer`  | Documentation    | "write docs", "create README", "generate API docs" |
+| `performance-optimizer` | Performance      | "slow", "optimize", "profiling"                    |
+| `project-planner`       | Planning         | "plan", "roadmap", "milestones"                    |
+| `seo-specialist`        | SEO              | "SEO", "meta tags", "search ranking"               |
+| `game-developer`        | Game Development | "game", "Unity", "Godot", "Phaser"                 |
 
 ---
 
@@ -126,10 +126,10 @@ Agents: security-auditor → penetration-tester → synthesis
 
 These work alongside custom agents:
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| **Explore** | Haiku | Fast read-only codebase search |
-| **Plan** | Sonnet | Research during plan mode |
+| Agent               | Model  | Purpose                          |
+| ------------------- | ------ | -------------------------------- |
+| **Explore**         | Haiku  | Fast read-only codebase search   |
+| **Plan**            | Sonnet | Research during plan mode        |
 | **General-purpose** | Sonnet | Complex multi-step modifications |
 
 Use **Explore** for quick searches, **custom agents** for domain expertise.
@@ -144,20 +144,24 @@ After all agents complete, synthesize:
 ## Orchestration Synthesis
 
 ### Task Summary
+
 [What was accomplished]
 
 ### Agent Contributions
-| Agent | Finding |
-|-------|---------|
-| security-auditor | Found X |
+
+| Agent              | Finding      |
+| ------------------ | ------------ |
+| security-auditor   | Found X      |
 | backend-specialist | Identified Y |
 
 ### Consolidated Recommendations
+
 1. **Critical**: [Issue from Agent A]
 2. **Important**: [Issue from Agent B]
 3. **Nice-to-have**: [Enhancement from Agent C]
 
 ### Action Items
+
 - [ ] Fix critical security issue
 - [ ] Refactor API endpoint
 - [ ] Add missing tests

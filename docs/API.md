@@ -46,7 +46,7 @@ Store a new memory in the system.
   "source": "ide",
   "context": {
     "project": "my-app",
-    "file_path":  "src/services/user. ts",
+    "file_path": "src/services/user. ts",
     "language": "typescript",
     "tags": ["database", "async"]
   },
@@ -72,7 +72,7 @@ Search memories using semantic similarity.
     },
     "types": ["code", "command", "conversation", "note", "event"],
     "projects": ["string"],
-    "min_importance":  0.5,
+    "min_importance": 0.5,
     "tiers": ["short", "working", "long"]
   },
   "limit": 10,
@@ -112,9 +112,9 @@ Search memories using semantic similarity.
   "filters": {
     "types": ["code"],
     "projects": ["my-app"],
-    "min_importance":  0.5
+    "min_importance": 0.5
   },
-  "limit":  5
+  "limit": 5
 }
 ```
 

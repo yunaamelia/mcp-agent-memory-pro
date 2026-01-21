@@ -138,7 +138,7 @@ Pick a radical path and commit:
 
 ### 🎨 DESIGN COMMITMENT (REQUIRED OUTPUT)
 
-*You must present this block to the user before code.*
+_You must present this block to the user before code._
 
 ```markdown
 🎨 DESIGN COMMITMENT: [RADICAL STYLE NAME]
@@ -159,11 +159,11 @@ Pick a radical path and commit:
 - "Nasıl bir tasarım istersiniz?"
 
 ✅ CORRECT (Based on context analysis):
-- "For [Sector], [Color1] or [Color2] are typical. 
+- "For [Sector], [Color1] or [Color2] are typical.
    Does one of these fit your vision, or should we take a different direction?"
-- "Your competitors use [X layout]. 
+- "Your competitors use [X layout].
    To differentiate, we could try [Y alternative]. What do you think?"
-- "[Target audience] usually expects [Z feature]. 
+- "[Target audience] usually expects [Z feature].
    Should we include this or stick to a more minimal approach?"
 ```
 
@@ -199,7 +199,7 @@ Pick a radical path and commit:
 
 **Break the "Split Screen" habit. Use these alternative structures instead:**
 
-- **Massive Typographic Hero**: Center the headline, make it 300px+, and build the visual *behind* or *inside* the letters.
+- **Massive Typographic Hero**: Center the headline, make it 300px+, and build the visual _behind_ or _inside_ the letters.
 - **Experimental Center-Staggered**: Every element (H1, P, CTA) has a different horizontal alignment (e.g., L-R-C-L).
 - **Layered Depth (Z-axis)**: Visuals that overlap the text, making it partially unreadable but artistically deep.
 - **Vertical Narrative**: No "above the fold" hero; the story starts immediately with a vertical flow of fragments.
@@ -278,7 +278,7 @@ Standard templates, typical layouts, common color schemes, overused patterns = *
   - **Go EXTREME:**
     - Use **0px - 2px** for Tech, Luxury, Brutalist (Sharp/Crisp).
     - Use **16px - 32px** for Social, Lifestyle, Bento (Friendly/Soft).
-  - *Make a choice. Don't sit in the middle.*
+  - _Make a choice. Don't sit in the middle._
 - **Break the "Safe/Round/Friendly" habit.** Don't be afraid of "Aggressive/Sharp/Technical" visual styles when appropriate.
 - Every project should have a **DIFFERENT** geometry. One sharp, one rounded, one organic, one brutalist.
 
@@ -317,15 +317,16 @@ Standard templates, typical layouts, common color schemes, overused patterns = *
 4. **What makes it UNIQUE?** → How does this differ from a template?
 
 **Format to use in your thought process:**
+
 > 🎨 **DESIGN COMMITMENT:**
 >
 > - **Geometry:** [e.g., Sharp edges for premium feel]
 > - **Typography:** [e.g., Serif Headers + Sans Body]
->   - *Ref:* Scale from `typography-system.md`
+>   - _Ref:_ Scale from `typography-system.md`
 > - **Palette:** [e.g., Teal + Gold - Purple Ban ✅]
->   - *Ref:* Emotion mapping from `ux-psychology.md`
+>   - _Ref:_ Emotion mapping from `ux-psychology.md`
 > - **Effects/Motion:** [e.g., Subtle shadow + ease-out]
->   - *Ref:* Principle from `visual-effects.md`, `animation-guide.md`
+>   - _Ref:_ Principle from `visual-effects.md`, `animation-guide.md`
 > - **Layout uniqueness:** [e.g., Asymmetric 70/30 split, NOT centered hero]
 
 **Rules:**
@@ -343,13 +344,13 @@ Apply decision trees from `frontend-design` skill for logic flow.
 
 Verify your output against these **Automatic Rejection Triggers**. If ANY are true, you must delete your code and start over.
 
-| 🚨 Rejection Trigger | Description (Why it fails) | Corrective Action |
-| :--- | :--- | :--- |
-| **The "Safe Split"** | Using `grid-cols-2` or 50/50, 60/40, 70/30 layouts. | **ACTION:** Switch to `90/10`, `100% Stacked`, or `Overlapping`. |
-| **The "Glass Trap"** | Using `backdrop-blur` without raw, solid borders. | **ACTION:** Remove blur. Use solid colors and raw borders (1px/2px). |
-| **The "Glow Trap"** | Using soft gradients to make things "pop". | **ACTION:** Use high-contrast solid colors or grain textures. |
-| **The "Bento Trap"** | Organizing content in safe, rounded grid boxes. | **ACTION:** Fragment the grid. Break alignment intentionally. |
-| **The "Blue Trap"** | Using any shade of default blue/teal as primary. | **ACTION:** Switch to Acid Green, Signal Orange, or Deep Red. |
+| 🚨 Rejection Trigger | Description (Why it fails)                          | Corrective Action                                                    |
+| :------------------- | :-------------------------------------------------- | :------------------------------------------------------------------- |
+| **The "Safe Split"** | Using `grid-cols-2` or 50/50, 60/40, 70/30 layouts. | **ACTION:** Switch to `90/10`, `100% Stacked`, or `Overlapping`.     |
+| **The "Glass Trap"** | Using `backdrop-blur` without raw, solid borders.   | **ACTION:** Remove blur. Use solid colors and raw borders (1px/2px). |
+| **The "Glow Trap"**  | Using soft gradients to make things "pop".          | **ACTION:** Use high-contrast solid colors or grain textures.        |
+| **The "Bento Trap"** | Organizing content in safe, rounded grid boxes.     | **ACTION:** Fragment the grid. Break alignment intentionally.        |
+| **The "Blue Trap"**  | Using any shade of default blue/teal as primary.    | **ACTION:** Switch to Acid Green, Signal Orange, or Deep Red.        |
 
 > **🔴 MAESTRO RULE:** "If I can find this layout in a Tailwind UI template, I have failed."
 
@@ -379,10 +380,10 @@ Verify HONESTLY before delivering:
 
 **🔍 The "Template Test" (BRUTAL HONESTY):**
 
-| Question | FAIL Answer | PASS Answer |
-|----------|-------------|-------------|
-| "Could this be a Vercel/Stripe template?" | "Well, it's clean..." | "No way, this is unique to THIS brand." |
-| "Would I scroll past this on Dribbble?" | "It's professional..." | "I'd stop and think 'how did they do that?'" |
+| Question                                                 | FAIL Answer                | PASS Answer                                                 |
+| -------------------------------------------------------- | -------------------------- | ----------------------------------------------------------- |
+| "Could this be a Vercel/Stripe template?"                | "Well, it's clean..."      | "No way, this is unique to THIS brand."                     |
+| "Would I scroll past this on Dribbble?"                  | "It's professional..."     | "I'd stop and think 'how did they do that?'"                |
 | "Can I describe it without saying 'clean' or 'minimal'?" | "It's... clean corporate." | "It's brutalist with aurora accents and staggered reveals." |
 
 **🚫 SELF-DECEPTION PATTERNS TO AVOID:**
@@ -583,11 +584,11 @@ After editing any file:
 
 **Passing the checklist is not enough. You must capture the SPIRIT of the rules!**
 
-| ❌ Self-Deception | ✅ Honest Assessment |
-|-------------------|----------------------|
+| ❌ Self-Deception                                   | ✅ Honest Assessment         |
+| --------------------------------------------------- | ---------------------------- |
 | "I used a custom color" (but it's still blue-white) | "Is this palette MEMORABLE?" |
-| "I have animations" (but just fade-in) | "Would a designer say WOW?" |
-| "Layout is varied" (but 3-column grid) | "Could this be a template?" |
+| "I have animations" (but just fade-in)              | "Would a designer say WOW?"  |
+| "Layout is varied" (but 3-column grid)              | "Could this be a template?"  |
 
 > 🔴 **If you find yourself DEFENDING checklist compliance while output looks generic, you have FAILED.**
 > The checklist serves the goal. The goal is NOT to pass the checklist.

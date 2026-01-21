@@ -101,10 +101,12 @@ class PatternAnalyzerWorker(BaseWorker):
                     results["trends_analyzed"] += 1
 
                     # Store significant trend changes
-                    if trend.get("trend_direction") in ["increasing", "decreasing"]:
-                        if abs(trend.get("trend_ratio", 0)) > 0.5:
-                            self._store_trend_insight(conn, project, trend)
-                            results["insights_stored"] += 1
+                    if (
+                        trend.get("trend_direction") in ["increasing", "decreasing"]
+                        and abs(trend.get("trend_ratio", 0)) > 0.5
+                    ):
+                        self._store_trend_insight(conn, project, trend)
+                        results["insights_stored"] += 1
 
                 self.logger.info(f"Analyzed trends for {len(projects)} projects")
 
@@ -203,7 +205,9 @@ class PatternAnalyzerWorker(BaseWorker):
         content += f"Direction: {direction} ({ratio:+.1%})\n"
         content += f"Activity: {trend.get('total_count', 0)} memories over {trend.get('period_days', 30)} days\n"
 
-        content_hash = hashlib.sha256((content + str(datetime.now(UTC).date())).encode()).hexdigest()
+        content_hash = hashlib.sha256(
+            (content + str(datetime.now(UTC).date())).encode()
+        ).hexdigest()
 
         # One trend insight per project per day
         existing = conn.execute(
