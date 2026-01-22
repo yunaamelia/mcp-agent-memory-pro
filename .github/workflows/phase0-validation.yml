@@ -166,8 +166,8 @@ jobs:
           cd poc
           python -m venv venv
           source venv/Scripts/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
 
       - name: 🧪 Run tests individually
         shell: bash
