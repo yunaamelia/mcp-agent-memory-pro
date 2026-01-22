@@ -172,6 +172,7 @@ jobs:
       - name: 🧪 Run tests individually
         shell: bash
         run: |
+          source poc/venv/Scripts/activate
           npx tsx poc/02-sqlite-test.ts
           npx tsx poc/03-lancedb-test.ts
           npx tsx poc/05-python-bridge-test.ts
