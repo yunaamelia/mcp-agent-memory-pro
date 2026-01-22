@@ -6,15 +6,17 @@ on:
     types:
       - completed
 
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+  issues: write
+
 jobs:
   comment:
     name: Comment on PR
     runs-on: ubuntu-latest
     if: github.event.workflow_run.event == 'pull_request'
-
-    permissions:
-      pull-requests: write
-      actions: read
 
     steps:
       - name: 📥 Download artifacts

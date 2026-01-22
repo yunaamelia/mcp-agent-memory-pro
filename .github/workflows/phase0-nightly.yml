@@ -5,6 +5,18 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: phase0-nightly-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.11'
+
 jobs:
   nightly-validation:
     name: Nightly Full Validation
@@ -15,12 +27,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: 'poc/requirements.txt'
 
       - name: 📦 Install dependencies
         run: |
@@ -28,6 +42,7 @@ jobs:
           cd poc
           python -m venv venv
           source venv/bin/activate
+          pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: 🧪 Run validation
@@ -60,7 +75,8 @@ jobs:
               body += `### Summary\n- Total: ${report.summary.total}\n`;
               body += `- ✅ Passed: ${report.summary.passed}\n`;
               body += `- ❌ Failed: ${report.summary.failed}\n\n`;
-              body += `[View logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+              const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+              body += `[View logs](${runUrl})`;
             } catch (e) {
               body += `Error: ${e.message}`;
             }
